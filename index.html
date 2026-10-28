@@ -384,7 +384,11 @@ async function sendMessage(text) {
     loadingMessage.textContent = reply;
     messages.scrollTop = messages.scrollHeight;
 
-    speak(reply);
+    if ("speechSynthesis" in window) {
+  const utterance = new SpeechSynthesisUtterance(reply);
+  utterance.lang = "en-US";
+  window.speechSynthesis.speak(utterance);
+}
     connectionStatus.textContent = "● AI connected";
     connectionStatus.style.color = "#a6f2cf";
   } catch (error) {
