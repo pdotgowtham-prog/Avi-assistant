@@ -1,160 +1,438 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Avi — Your Personal AI Companion</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#22204b,#080b18 60%);color:#f4f5ff;font-family:Arial,sans-serif}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:radial-gradient(ellipse at top,#22204b,#080b18 60%);
+  color:#f4f5ff;
+  font-family:Arial,sans-serif
+}
+
 .app{max-width:800px;margin:auto;padding:24px 16px}
-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:38px}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:38px
+}
+
 .brand{display:flex;align-items:center;gap:12px}
-.logo{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:23px;font-weight:bold;background:linear-gradient(135deg,#6d8dff,#a66bff);box-shadow:0 0 25px #8a65ff80}
+
+.logo{
+  width:44px;height:44px;border-radius:50%;
+  display:grid;place-items:center;
+  font-size:23px;font-weight:bold;
+  background:linear-gradient(135deg,#6d8dff,#a66bff);
+  box-shadow:0 0 25px #8a65ff80
+}
+
 .muted{color:#a3accb;font-size:13px}
 .status{color:#a6f2cf;font-size:12px}
+
 .hero{text-align:center;margin-bottom:30px}
-.orb{width:120px;height:120px;border-radius:50%;margin:0 auto 24px;display:grid;place-items:center;font-size:56px;font-weight:bold;background:radial-gradient(circle at 30% 25%,#c1d0ff,transparent 30%),linear-gradient(140deg,#568dff,#8861ff,#d18bff);box-shadow:0 0 45px #6d8dff80;animation:float 4s ease-in-out infinite}
-@keyframes float{50%{transform:translateY(-8px)}}
+
+.orb{
+  width:120px;height:120px;border-radius:50%;
+  margin:0 auto 24px;
+  display:grid;place-items:center;
+  font-size:56px;font-weight:bold;
+  background:
+    radial-gradient(circle at 30% 25%,#c1d0ff,transparent 30%),
+    linear-gradient(140deg,#568dff,#8861ff,#d18bff);
+  box-shadow:0 0 45px #6d8dff80;
+  animation:float 4s ease-in-out infinite
+}
+
+@keyframes float{
+  50%{transform:translateY(-8px)}
+}
+
 h1{font-size:clamp(32px,7vw,48px);margin:0}
-.gradient{background:linear-gradient(90deg,#7da9ff,#c19aff);color:#a8a9ff;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.subtitle{color:#a3accb;line-height:1.7;max-width:480px;margin:14px auto 0}
-.label{font-size:12px;color:#a3accb;letter-spacing:1.5px;margin:25px 0 12px}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
-.card{background:#151b31;color:#f4f5ff;border:1px solid #ffffff18;border-radius:14px;padding:15px;text-align:left;cursor:pointer}
+
+.gradient{
+  background:linear-gradient(90deg,#7da9ff,#c19aff);
+  color:#a8a9ff;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent
+}
+
+.subtitle{
+  color:#a3accb;
+  line-height:1.7;
+  max-width:480px;
+  margin:14px auto 0
+}
+
+.label{
+  font-size:12px;color:#a3accb;
+  letter-spacing:1.5px;
+  margin:25px 0 12px
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:22px
+}
+
+.card{
+  background:#151b31;color:#f4f5ff;
+  border:1px solid #ffffff18;
+  border-radius:14px;padding:15px;
+  text-align:left;cursor:pointer
+}
+
 .card:hover{border-color:#a66bff}
 .card strong,.card small{display:block}
 .card strong{margin:8px 0}
 .card small{color:#a3accb;line-height:1.5}
-.chat{border:1px solid #ffffff20;border-radius:18px;background:#101528;overflow:hidden}
-.chathead{padding:16px;border-bottom:1px solid #ffffff18}
-.messages{min-height:180px;max-height:340px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
-.message{padding:12px 14px;border-radius:14px;max-width:88%;font-size:14px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
+
+.chat{
+  border:1px solid #ffffff20;
+  border-radius:18px;
+  background:#101528;
+  overflow:hidden
+}
+
+.chathead{
+  padding:16px;
+  border-bottom:1px solid #ffffff18
+}
+
+.messages{
+  min-height:180px;
+  max-height:340px;
+  overflow-y:auto;
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:12px
+}
+
+.message{
+  padding:12px 14px;
+  border-radius:14px;
+  max-width:88%;
+  font-size:14px;
+  line-height:1.6;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere
+}
+
 .avi{align-self:flex-start;background:#1b223a}
 .user{align-self:flex-end;background:linear-gradient(135deg,#405fca,#7951cb)}
-form{display:flex;gap:8px;padding:12px;border-top:1px solid #ffffff18}
-input{min-width:0;flex:1;padding:13px;border:1px solid #ffffff20;border-radius:11px;background:#080c19;color:white;font-size:15px}
+
+form{
+  display:flex;
+  gap:8px;
+  padding:12px;
+  border-top:1px solid #ffffff18
+}
+
+input{
+  min-width:0;
+  flex:1;
+  padding:13px;
+  border:1px solid #ffffff20;
+  border-radius:11px;
+  background:#080c19;
+  color:white;
+  font-size:15px
+}
+
 button{font:inherit}
-.send,.mic{padding:12px 15px;border:0;border-radius:11px;color:white;background:linear-gradient(135deg,#547fff,#9259e9);cursor:pointer}
-.mic{display:block;width:calc(100% - 24px);margin:0 12px 12px;background:#252044;border:1px solid #8e80ff55}
+
+.send,.mic{
+  padding:12px 15px;
+  border:0;
+  border-radius:11px;
+  color:white;
+  background:linear-gradient(135deg,#547fff,#9259e9);
+  cursor:pointer
+}
+
+.mic{
+  display:block;
+  width:calc(100% - 24px);
+  margin:0 12px 12px;
+  background:#252044;
+  border:1px solid #8e80ff55
+}
+
 .mic.listening{background:#642e51}
-button:disabled{opacity:.5}
-.hint{text-align:center;color:#a3accb;font-size:12px;padding:0 12px 16px;line-height:1.6}
-.tribute{text-align:center;margin:28px 0 12px;color:#d0ccff;font-size:13px}
-.foot{text-align:center;color:#8993b1;font-size:11px;line-height:1.6}
-@media(max-width:540px){.cards{grid-template-columns:1fr}.card{display:flex;align-items:center;gap:12px}.card strong{margin:0 0 5px}form{flex-wrap:wrap}input{flex-basis:100%}.send{flex:1}}
+
+button:disabled{opacity:.5;cursor:not-allowed}
+
+.hint{
+  text-align:center;
+  color:#a3accb;
+  font-size:12px;
+  padding:0 12px 16px;
+  line-height:1.6
+}
+
+.tribute{
+  text-align:center;
+  margin:28px 0 12px;
+  color:#d0ccff;
+  font-size:13px
+}
+
+.foot{
+  text-align:center;
+  color:#8993b1;
+  font-size:11px;
+  line-height:1.6
+}
+
+@media(max-width:540px){
+  .cards{grid-template-columns:1fr}
+  .card{display:flex;align-items:center;gap:12px}
+  .card strong{margin:0 0 5px}
+  form{flex-wrap:wrap}
+  input{flex-basis:100%}
+  .send{flex:1}
+}
 </style>
 </head>
+
 <body>
 <main class="app">
+
 <header>
   <div class="brand">
     <div class="logo">A</div>
-    <div><strong style="font-size:22px">Avi</strong><div class="muted">Your personal companion</div></div>
+    <div>
+      <strong style="font-size:22px">Avi</strong>
+      <div class="muted">Your personal companion</div>
+    </div>
   </div>
-  <div class="status">● Demo mode</div>
+  <div class="status" id="connectionStatus">● Connecting...</div>
 </header>
 
 <section class="hero">
   <div class="orb">A</div>
   <h1>Your world, <span class="gradient">with Avi.</span></h1>
-  <p class="subtitle">Your ideas, your projects, your world. A personal space to think, explore, and build what's next.</p>
+  <p class="subtitle">
+    Your ideas, your projects, your world. A personal space to think,
+    explore, and build what's next.
+  </p>
 </section>
 
 <div class="label">WHAT WOULD YOU LIKE TO DO?</div>
+
 <section class="cards">
-  <button class="card" data-prompt="Help me organize my tasks"><span>✦</span><strong>Organize my day</strong><small>Plan tasks and priorities</small></button>
-  <button class="card" data-prompt="Help me brainstorm a new project"><span>⌘</span><strong>Explore an idea</strong><small>Think through something new</small></button>
-  <button class="card" data-prompt="Help me with my learning"><span>◇</span><strong>Learn something</strong><small>Practice and improve</small></button>
+  <button class="card" data-prompt="Help me organize my tasks">
+    <span>✦</span>
+    <div>
+      <strong>Organize my day</strong>
+      <small>Plan tasks and priorities</small>
+    </div>
+  </button>
+
+  <button class="card" data-prompt="Help me brainstorm a new project">
+    <span>⌘</span>
+    <div>
+      <strong>Explore an idea</strong>
+      <small>Think through something new</small>
+    </div>
+  </button>
+
+  <button class="card" data-prompt="Help me with my learning">
+    <span>◇</span>
+    <div>
+      <strong>Learn something</strong>
+      <small>Practice and improve</small>
+    </div>
+  </button>
 </section>
 
 <section class="chat">
-  <div class="chathead"><strong>Avi</strong><div class="muted" id="chatStatus">Ready to chat</div></div>
-  <div class="messages" id="messages" aria-live="polite">
-    <div class="message avi">Hi! I'm Avi. 💙 Type a message or try the microphone below.</div>
+  <div class="chathead">
+    <strong>Avi</strong>
+    <div class="muted" id="chatStatus">Ready to chat</div>
   </div>
+
+  <div class="messages" id="messages" aria-live="polite">
+    <div class="message avi">
+      Hi! I'm Avi. 💙 Type a message or try the microphone below.
+    </div>
+  </div>
+
   <form id="chatForm">
-    <input id="chatInput" type="text" placeholder="Message Avi..." autocomplete="off" aria-label="Message Avi" required>
-    <button class="send" type="submit">Send ↗</button>
+    <input
+      id="chatInput"
+      type="text"
+      placeholder="Message Avi..."
+      autocomplete="off"
+      aria-label="Message Avi"
+      required
+    >
+    <button class="send" id="sendButton" type="submit">Send ↗</button>
   </form>
+
   <button class="mic" id="micButton" type="button">🎤 Talk to Avi</button>
-  <div class="hint" id="micHint">Allow microphone access if your browser asks.</div>
+
+  <div class="hint" id="micHint">
+    Allow microphone access if your browser asks.
+  </div>
 </section>
 
 <div class="tribute">🐾 Forever remembered, Avicii ❤️</div>
-<div class="foot">This is a browser demo. A real AI service and cloud memory are not connected yet.</div>
+
+<div class="foot">
+  Avi — Your personal AI companion.
+</div>
+
 </main>
 
 <script>
+/*
+  IMPORTANT:
+  Replace these two placeholders with your Supabase project details.
+
+  Function URL format:
+  https://YOUR_PROJECT_REF.supabase.co/functions/v1/avi-chat
+
+  Use the Supabase publishable key (or legacy anon key),
+  NEVER the service-role key.
+*/
+
+const SUPABASE_FUNCTION_URL =
+  "YOUR_SUPABASE_FUNCTION_URL";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "YOUR_SUPABASE_PUBLISHABLE_KEY";
+
+
 const messages = document.getElementById("messages");
 const form = document.getElementById("chatForm");
 const input = document.getElementById("chatInput");
 const mic = document.getElementById("micButton");
 const hint = document.getElementById("micHint");
 const status = document.getElementById("chatStatus");
+const sendButton = document.getElementById("sendButton");
+const connectionStatus = document.getElementById("connectionStatus");
+
 
 function addMessage(text, who) {
   const div = document.createElement("div");
   div.className = "message " + who;
   div.textContent = text;
+
   messages.appendChild(div);
   messages.scrollTop = messages.scrollHeight;
+
+  return div;
 }
+
 
 async function respondToText(text) {
-  try {
-    const response = await fetch(
-      "YOUR_SUPABASE_FUNCTION_URL",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": "YOUR_SUPABASE_PUBLISHABLE_KEY",
-          "Authorization": "Bearer YOUR_SUPABASE_PUBLISHABLE_KEY"
-        },
-        body: JSON.stringify({
-          message: text
-        })
-      }
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.error("Avi AI error:", data);
-      return "I'm having trouble connecting to my AI right now. Please try again.";
-    }
-
-    return data.reply || "I couldn't generate a response. Please try again.";
-
-  } catch (error) {
-    console.error("Avi connection error:", error);
-    return "I couldn't connect to my AI service. Please check your connection.";
+  if (
+    SUPABASE_FUNCTION_URL === "YOUR_SUPABASE_FUNCTION_URL" ||
+    SUPABASE_PUBLISHABLE_KEY === "YOUR_SUPABASE_PUBLISHABLE_KEY"
+  ) {
+    throw new Error("Supabase settings have not been configured.");
   }
+
+  const response = await fetch(SUPABASE_FUNCTION_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": SUPABASE_PUBLISHABLE_KEY,
+      "Authorization": "Bearer " + SUPABASE_PUBLISHABLE_KEY
+    },
+    body: JSON.stringify({
+      message: text
+    })
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    console.error("Avi AI error:", response.status, data);
+    throw new Error(data.error || data.message || "AI request failed.");
+  }
+
+  if (!data.reply || typeof data.reply !== "string") {
+    console.error("Unexpected response from Avi function:", data);
+    throw new Error("The AI service returned no reply.");
+  }
+
+  return data.reply;
 }
+
+
 function speak(text) {
   if (!("speechSynthesis" in window)) return;
+
   window.speechSynthesis.cancel();
+
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "en-IN";
+  utterance.rate = 1;
+  utterance.pitch = 1;
+
   window.speechSynthesis.speak(utterance);
 }
 
-function sendMessage(text) {
+
+async function sendMessage(text) {
   text = text.trim();
-  if (!text) return;
+
+  if (!text || sendButton.disabled) return;
+
   addMessage(text, "user");
   input.value = "";
-  const reply = respondToText(text);
-  addMessage(reply, "avi");
-  speak(reply);
+
+  sendButton.disabled = true;
+  mic.disabled = true;
+  status.textContent = "Avi is thinking...";
+
+  const loadingMessage = addMessage("Thinking... 💙", "avi");
+
+  try {
+    const reply = await respondToText(text);
+
+    loadingMessage.textContent = reply;
+    messages.scrollTop = messages.scrollHeight;
+
+    speak(reply);
+    connectionStatus.textContent = "● AI connected";
+    connectionStatus.style.color = "#a6f2cf";
+  } catch (error) {
+    console.error("Avi connection error:", error);
+
+    loadingMessage.textContent =
+      "Sorry, I couldn't connect to my AI service. Please check the Supabase URL, publishable key, Edge Function deployment, and function logs.";
+
+    connectionStatus.textContent = "● Connection issue";
+    connectionStatus.style.color = "#ffb0b0";
+  } finally {
+    sendButton.disabled = false;
+    mic.disabled = false;
+    status.textContent = "Ready to chat";
+    input.focus();
+  }
 }
+
 
 form.addEventListener("submit", function(event) {
   event.preventDefault();
   sendMessage(input.value);
 });
+
 
 document.querySelectorAll("[data-prompt]").forEach(function(button) {
   button.addEventListener("click", function() {
@@ -162,13 +440,18 @@ document.querySelectorAll("[data-prompt]").forEach(function(button) {
   });
 });
 
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+
 
 if (SpeechRecognition) {
   const recognition = new SpeechRecognition();
+
   recognition.lang = "en-IN";
   recognition.continuous = false;
   recognition.interimResults = false;
+
   let listening = false;
 
   recognition.onstart = function() {
@@ -192,29 +475,51 @@ if (SpeechRecognition) {
       "audio-capture": "No microphone was detected.",
       "network": "Voice recognition had a network issue. Please try again."
     };
-    hint.textContent = errors[event.error] || "Microphone error. Please try again.";
+
+    hint.textContent =
+      errors[event.error] || "Microphone error. Please try again.";
   };
 
   recognition.onend = function() {
     listening = false;
     mic.classList.remove("listening");
     mic.textContent = "🎤 Talk to Avi";
-    status.textContent = "Ready to chat";
+
+    if (!sendButton.disabled) {
+      status.textContent = "Ready to chat";
+    }
   };
 
   mic.addEventListener("click", function() {
-    if (listening) return;
+    if (listening || mic.disabled) return;
+
     try {
       recognition.start();
     } catch (error) {
       hint.textContent = "Couldn't start the microphone. Please try again.";
     }
   });
+
 } else {
   mic.disabled = true;
   mic.textContent = "Voice input unavailable";
-  hint.textContent = "Speech recognition is not supported here. Try Google Chrome.";
+  hint.textContent =
+    "Speech recognition is not supported here. Try Google Chrome.";
+}
+
+
+// Initial status: this checks configuration only, not actual connectivity.
+if (
+  SUPABASE_FUNCTION_URL !== "YOUR_SUPABASE_FUNCTION_URL" &&
+  SUPABASE_PUBLISHABLE_KEY !== "YOUR_SUPABASE_PUBLISHABLE_KEY"
+) {
+  connectionStatus.textContent = "● Ready to connect";
+} else {
+  connectionStatus.textContent = "● Setup required";
+  connectionStatus.style.color = "#ffd28a";
 }
 </script>
+
 </body>
 </html>
+```
