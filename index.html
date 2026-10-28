@@ -2,369 +2,218 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Avi - Personal AI Assistant</title>
-  <style>
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-      background: radial-gradient(circle at top, #202b58, #080d1c 70%);
-      color: white;
-      display: flex;
-      justify-content: center;
-      padding: 24px 16px;
-    }
-
-    .app {
-      width: 100%;
-      max-width: 620px;
-      text-align: center;
-    }
-
-    .logo {
-      width: 100px;
-      height: 100px;
-      margin: 35px auto 20px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #65d8ff, #8065ff, #c58aff);
-      display: grid;
-      place-items: center;
-      font-size: 48px;
-      font-weight: bold;
-      box-shadow: 0 0 40px #8065ff80;
-    }
-
-    h1 { font-size: 40px; letter-spacing: 3px; }
-
-    .subtitle { color: #bbc5e5; line-height: 1.7; }
-
-    .chat {
-      margin-top: 30px;
-      padding: 20px;
-      border: 1px solid #ffffff25;
-      border-radius: 20px;
-      background: #ffffff0b;
-      text-align: left;
-    }
-
-    #messages {
-      min-height: 65px;
-      max-height: 300px;
-      overflow-y: auto;
-      line-height: 1.5;
-    }
-
-    .message {
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 12px;
-      background: #ffffff10;
-      overflow-wrap: anywhere;
-    }
-
-    .input-row { display: flex; gap: 8px; margin-top: 16px; }
-
-    input {
-      flex: 1;
-      min-width: 0;
-      padding: 14px;
-      border-radius: 12px;
-      border: 1px solid #ffffff30;
-      background: #101a31;
-      color: white;
-      font-size: 15px;
-    }
-
-    button {
-      padding: 13px 17px;
-      border: 0;
-      border-radius: 12px;
-      background: #7565f5;
-      color: white;
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-    .voice-row {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    .secondary { background: #ffffff20; }
-
-    #status {
-      min-height: 20px;
-      color: #bbc5e5;
-      text-align: center;
-      font-size: 14px;
-      margin-top: 16px;
-    }
-
-    .shortcuts {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 22px;
-    }
-
-    .shortcut {
-      padding: 18px 10px;
-      border: 1px solid #ffffff20;
-      border-radius: 15px;
-      background: #ffffff09;
-    }
-
-    .tribute { margin-top: 32px; color: #d0c6f4; }
-
-    @media (max-width: 420px) {
-      .input-row { flex-direction: column; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avi — Your Personal AI Companion</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#22204b,#080b18 60%);color:#f4f5ff;font-family:Arial,sans-serif}
+.app{max-width:800px;margin:auto;padding:24px 16px}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:38px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:23px;font-weight:bold;background:linear-gradient(135deg,#6d8dff,#a66bff);box-shadow:0 0 25px #8a65ff80}
+.muted{color:#a3accb;font-size:13px}
+.status{color:#a6f2cf;font-size:12px}
+.hero{text-align:center;margin-bottom:30px}
+.orb{width:120px;height:120px;border-radius:50%;margin:0 auto 24px;display:grid;place-items:center;font-size:56px;font-weight:bold;background:radial-gradient(circle at 30% 25%,#c1d0ff,transparent 30%),linear-gradient(140deg,#568dff,#8861ff,#d18bff);box-shadow:0 0 45px #6d8dff80;animation:float 4s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-8px)}}
+h1{font-size:clamp(32px,7vw,48px);margin:0}
+.gradient{background:linear-gradient(90deg,#7da9ff,#c19aff);color:#a8a9ff;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.subtitle{color:#a3accb;line-height:1.7;max-width:480px;margin:14px auto 0}
+.label{font-size:12px;color:#a3accb;letter-spacing:1.5px;margin:25px 0 12px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
+.card{background:#151b31;color:#f4f5ff;border:1px solid #ffffff18;border-radius:14px;padding:15px;text-align:left;cursor:pointer}
+.card:hover{border-color:#a66bff}
+.card strong,.card small{display:block}
+.card strong{margin:8px 0}
+.card small{color:#a3accb;line-height:1.5}
+.chat{border:1px solid #ffffff20;border-radius:18px;background:#101528;overflow:hidden}
+.chathead{padding:16px;border-bottom:1px solid #ffffff18}
+.messages{min-height:180px;max-height:340px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.message{padding:12px 14px;border-radius:14px;max-width:88%;font-size:14px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
+.avi{align-self:flex-start;background:#1b223a}
+.user{align-self:flex-end;background:linear-gradient(135deg,#405fca,#7951cb)}
+form{display:flex;gap:8px;padding:12px;border-top:1px solid #ffffff18}
+input{min-width:0;flex:1;padding:13px;border:1px solid #ffffff20;border-radius:11px;background:#080c19;color:white;font-size:15px}
+button{font:inherit}
+.send,.mic{padding:12px 15px;border:0;border-radius:11px;color:white;background:linear-gradient(135deg,#547fff,#9259e9);cursor:pointer}
+.mic{display:block;width:calc(100% - 24px);margin:0 12px 12px;background:#252044;border:1px solid #8e80ff55}
+.mic.listening{background:#642e51}
+button:disabled{opacity:.5}
+.hint{text-align:center;color:#a3accb;font-size:12px;padding:0 12px 16px;line-height:1.6}
+.tribute{text-align:center;margin:28px 0 12px;color:#d0ccff;font-size:13px}
+.foot{text-align:center;color:#8993b1;font-size:11px;line-height:1.6}
+@media(max-width:540px){.cards{grid-template-columns:1fr}.card{display:flex;align-items:center;gap:12px}.card strong{margin:0 0 5px}form{flex-wrap:wrap}input{flex-basis:100%}.send{flex:1}}
+</style>
 </head>
 <body>
-  <main class="app">
+<main class="app">
+<header>
+  <div class="brand">
     <div class="logo">A</div>
-    <h1>Avi</h1>
-    <p class="subtitle">
-      Your personal AI companion.<br>
-      Your ideas, your projects, your world.
-    </p>
+    <div><strong style="font-size:22px">Avi</strong><div class="muted">Your personal companion</div></div>
+  </div>
+  <div class="status">● Demo mode</div>
+</header>
 
-    <section class="chat">
-      <h2>Let's talk</h2>
-      <div id="messages" aria-live="polite">
-        <div class="message">
-          <strong>Avi:</strong> Hey! I'm Avi.
-          What can I help you with today?
-        </div>
-      </div>
+<section class="hero">
+  <div class="orb">A</div>
+  <h1>Your world, <span class="gradient">with Avi.</span></h1>
+  <p class="subtitle">Your ideas, your projects, your world. A personal space to think, explore, and build what's next.</p>
+</section>
 
-      <form class="input-row" id="chatForm">
-        <input id="userInput" placeholder="Type a message to Avi..."
-          aria-label="Message to Avi" autocomplete="off" required>
-        <button type="submit">Send</button>
-      </form>
+<div class="label">WHAT WOULD YOU LIKE TO DO?</div>
+<section class="cards">
+  <button class="card" data-prompt="Help me organize my tasks"><span>✦</span><strong>Organize my day</strong><small>Plan tasks and priorities</small></button>
+  <button class="card" data-prompt="Help me brainstorm a new project"><span>⌘</span><strong>Explore an idea</strong><small>Think through something new</small></button>
+  <button class="card" data-prompt="Help me with my learning"><span>◇</span><strong>Learn something</strong><small>Practice and improve</small></button>
+</section>
 
-      <div class="voice-row">
-        <button id="micButton" type="button">🎙 Press to talk</button>
-        <button class="secondary" id="stopButton" type="button">Stop voice</button>
-      </div>
+<section class="chat">
+  <div class="chathead"><strong>Avi</strong><div class="muted" id="chatStatus">Ready to chat</div></div>
+  <div class="messages" id="messages" aria-live="polite">
+    <div class="message avi">Hi! I'm Avi. 💙 Type a message or try the microphone below.</div>
+  </div>
+  <form id="chatForm">
+    <input id="chatInput" type="text" placeholder="Message Avi..." autocomplete="off" aria-label="Message Avi" required>
+    <button class="send" type="submit">Send ↗</button>
+  </form>
+  <button class="mic" id="micButton" type="button">🎤 Talk to Avi</button>
+  <div class="hint" id="micHint">Allow microphone access if your browser asks.</div>
+</section>
 
-      <p id="status" role="status">Avi is ready for you.</p>
-    </section>
+<div class="tribute">🐾 Forever remembered, Avicii ❤️</div>
+<div class="foot">This is a browser demo. A real AI service and cloud memory are not connected yet.</div>
+</main>
 
-    <section class="shortcuts">
-      <div class="shortcut">✓<br>My Tasks</div>
-      <div class="shortcut">♡<br>My Memory</div>
-      <div class="shortcut">⌘<br>My Projects</div>
-      <div class="shortcut">⚙<br>Settings</div>
-    </section>
+<script>
+const messages = document.getElementById("messages");
+const form = document.getElementById("chatForm");
+const input = document.getElementById("chatInput");
+const mic = document.getElementById("micButton");
+const hint = document.getElementById("micHint");
+const status = document.getElementById("chatStatus");
 
-    <p class="tribute">🐾 Forever remembered, Avicii ❤️</p>
-  </main>
+function addMessage(text, who) {
+  const div = document.createElement("div");
+  div.className = "message " + who;
+  div.textContent = text;
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
 
-  <script>
-    const messages = document.getElementById("messages");
-    const input = document.getElementById("userInput");
-    const status = document.getElementById("status");
-    const micButton = document.getElementById("micButton");
+function respondToText(text) {
+  const t = text.toLowerCase().trim();
 
-    function addMessage(sender, text) {
-      const div = document.createElement("div");
-      div.className = "message";
+  if (/\b(hi|hello|hey|good morning|good evening)\b/.test(t))
+    return "Hello! 💙 I'm Avi. What would you like to talk about?";
 
-      const label = document.createElement("strong");
-      label.textContent = sender + ": ";
-      div.appendChild(label);
-      div.appendChild(document.createTextNode(text));
+  if (t.includes("how are you"))
+    return "I'm here and ready to help! 💙 I'm still a demo, but we're building me one step at a time. How are you?";
 
-      messages.appendChild(div);
-      messages.scrollTop = messages.scrollHeight;
-    }
+  if (t.includes("your name") || t.includes("who are you"))
+    return "I'm Avi, your personal companion, with a little tribute to Avicii. 💙";
 
-    function respondTo(text) {
-      const lower = text.toLowerCase();
-      let reply;
+  if (t.includes("thank"))
+    return "You're very welcome! 💙 What shall we work on next?";
 
-      if (/\b(hi|hello|hey|avi|avichi|avicii)\b/.test(lower)) {
-        reply = "Hey! I'm here. What would you like to do today?";
-      } else if (lower.includes("your name")) {
-        reply = "My name is Avi. You can also call me Avicii.";
-      } else if (lower.includes("task")) {
-        reply = "Let's organize your tasks. Task management will be added soon.";
-      } else if (lower.includes("project")) {
-        reply = "Let's make progress on your projects, one step at a time.";
-      } else if (lower.includes("remember")) {
-        reply = "We will add personal memory in a future version.";
-      } else {
-        reply = "I'm Avi. My real AI connection isn't set up yet, but we're getting started!";
-      }
+  if (t.includes("task") || t.includes("organize") || t.includes("plan my day"))
+    return "Let's make a plan. What are the three most important things you want to get done today?";
 
-      addMessage("Avi", reply);
-      status.textContent = "Avi replied.";
+  if (t.includes("project") || t.includes("brainstorm") || t.includes("idea"))
+    return "Tell me about your idea and what you'd like to build. Let's think it through together.";
 
-      if ("speechSynthesis" in window) {
-        speechSynthesis.cancel();
-        const speech = new SpeechSynthesisUtterance(reply);
-        speech.lang = "en-IN";
-        speechSynthesis.speak(speech);
-      }
-    }
+  if (t.includes("learn") || t.includes("practice"))
+    return "What topic would you like to learn or practise? We'll take it step by step.";
 
-    document.getElementById("chatForm").addEventListener("submit", function(event) {
-      event.preventDefault();
-      const text = input.value.trim();
-      if (!text) return;
+  if (t.includes("avicii"))
+    return "Avicii's music and memory can live on in the things we create. 🐾❤️";
 
-      addMessage("You", text);
-      input.value = "";
-      respondTo(text);
-    });
+  return 'I heard you say: "' + text + '". 💙 I can answer a few common topics, but I do not have a real AI connection yet.';
+}
 
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
+function speak(text) {
+  if (!("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "en-IN";
+  window.speechSynthesis.speak(utterance);
+}
 
-    let recognition = null;
+function sendMessage(text) {
+  text = text.trim();
+  if (!text) return;
+  addMessage(text, "user");
+  input.value = "";
+  const reply = respondToText(text);
+  addMessage(reply, "avi");
+  speak(reply);
+}
 
-    if (SpeechRecognition) {
-      recognition = new SpeechRecognition();
-      recognition.lang = "en-IN";
-      recognition.continuous = false;
-      recognition.interimResults = false;
+form.addEventListener("submit", function(event) {
+  event.preventDefault();
+  sendMessage(input.value);
+});
 
-      recognition.onstart = function() {
-        status.textContent = "Avi is listening...";
-        micButton.textContent = "🎙 Listening...";
-      };
+document.querySelectorAll("[data-prompt]").forEach(function(button) {
+  button.addEventListener("click", function() {
+    sendMessage(button.dataset.prompt);
+  });
+});
 
-      recognition.onresult = function(event) {
-        const text = event.results[0][0].transcript;
-        addMessage("You", text);
-        respondTo(text);
-      };
-
-      recognition.onerror = function() {
-        status.textContent = "Couldn't hear you. Please try again or type.";
-      };
-
-      recognition.onend = function() {
-        micButton.textContent = "🎙 Press to talk";
-      };
-
-      micButton.addEventListener("click", function() {
-        try {
-          recognition.start();
-        } catch (error) {
-          status.textContent = "Please wait, then try the microphone again.";
-        }
-      });
-    } else {
-      micButton.addEventListener("click", function() {
-        status.textContent = "Voice input isn't supported here. Please type instead.";
-      });
-    }
-
-    document.getElementById("stopButton").addEventListener("click", function() {
-      if (recognition) recognition.stop();
-      if ("speechSynthesis" in window) speechSynthesis.cancel();
-
-      micButton.textContent = "🎙 Press to talk";
-      status.textContent = "Voice stopped.";
-    });
- ```javascript
-// Avi voice input - microphone feature
-const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 if (SpeechRecognition) {
   const recognition = new SpeechRecognition();
   recognition.lang = "en-IN";
   recognition.continuous = false;
   recognition.interimResults = false;
+  let listening = false;
 
-  const micButton = document.createElement("button");
-  micButton.type = "button";
-  micButton.textContent = "🎤 Talk to Avi";
-  micButton.style.cssText =
-    "display:block;margin:12px auto;padding:12px 20px;" +
-    "border:0;border-radius:25px;" +
-    "background:linear-gradient(135deg,#4776e6,#8e54e9);" +
-    "color:white;font-size:16px;cursor:pointer;";
+  recognition.onstart = function() {
+    listening = true;
+    mic.classList.add("listening");
+    mic.textContent = "🎙️ Listening...";
+    status.textContent = "Listening to you";
+    hint.textContent = "Go ahead — Avi is listening.";
+  };
 
-  // Find the existing chat input
-  const chatInput = document.querySelector(
-    'input[type="text"], textarea'
-  );
+  recognition.onresult = function(event) {
+    const spokenText = event.results[0][0].transcript;
+    input.value = spokenText;
+    sendMessage(spokenText);
+  };
 
-  const messagesElement = document.getElementById("messages");
+  recognition.onerror = function(event) {
+    const errors = {
+      "not-allowed": "Please allow microphone access in Chrome settings.",
+      "no-speech": "I didn't hear anything. Please try again.",
+      "audio-capture": "No microphone was detected.",
+      "network": "Voice recognition had a network issue. Please try again."
+    };
+    hint.textContent = errors[event.error] || "Microphone error. Please try again.";
+  };
 
-  if (messagesElement) {
-    messagesElement.parentElement.appendChild(micButton);
-  } else {
-    document.body.appendChild(micButton);
-  }
+  recognition.onend = function() {
+    listening = false;
+    mic.classList.remove("listening");
+    mic.textContent = "🎤 Talk to Avi";
+    status.textContent = "Ready to chat";
+  };
 
-  micButton.addEventListener("click", () => {
-    micButton.textContent = "🎙️ Listening...";
+  mic.addEventListener("click", function() {
+    if (listening) return;
     try {
       recognition.start();
     } catch (error) {
-      micButton.textContent = "🎤 Talk to Avi";
+      hint.textContent = "Couldn't start the microphone. Please try again.";
     }
   });
-
-  recognition.onresult = (event) => {
-    const spokenText = event.results[0][0].transcript;
-
-    // Put your actual spoken words in the chat input
-    if (chatInput) {
-      chatInput.value = spokenText;
-      chatInput.dispatchEvent(
-        new Event("input", { bubbles: true })
-      );
-
-      // Submit through the existing chat form, if available
-      const chatForm = chatInput.closest("form");
-
-      if (chatForm) {
-        if (chatForm.requestSubmit) {
-          chatForm.requestSubmit();
-        } else {
-          chatForm.dispatchEvent(
-            new Event("submit", {
-              bubbles: true,
-              cancelable: true
-            })
-          );
-        }
-      } else {
-        chatInput.focus();
-      }
-    } else {
-      alert("I heard: " + spokenText +
-        ". Please type this into Avi's chat box.");
-    }
-
-    micButton.textContent = "🎤 Talk to Avi";
-  };
-
-  recognition.onerror = () => {
-    micButton.textContent = "🎤 Talk to Avi";
-  };
-
-  recognition.onend = () => {
-    micButton.textContent = "🎤 Talk to Avi";
-  };
 } else {
-  alert("Voice input is not supported. Please try Google Chrome.");
+  mic.disabled = true;
+  mic.textContent = "Voice input unavailable";
+  hint.textContent = "Speech recognition is not supported here. Try Google Chrome.";
 }
-  </script>
+</script>
 </body>
 </html>
