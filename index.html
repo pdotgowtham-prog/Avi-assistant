@@ -486,14 +486,17 @@ if (SpeechRecognition) {
 
 // Initial status: this checks configuration only, not actual connectivity.
 if (
-  SUPABASE_FUNCTION_URL !== "https://fbtrcquparflbzuaixuo.supabase.co/functions/v1/avi-chat" &&
-  SUPABASE_PUBLISHABLE_KEY !== "sb_publishable_NOTL9-6RF_nww1wYPhHBzQ_ULiLUXsP"
+  SUPABASE_FUNCTION_URL === "https://fbtrcquparflbzuaixuo.supabase.co/functions/v1/avi-chat" &&
+  SUPABASE_PUBLISHABLE_KEY !== "sb_publishable_NOTL9-6RF_nww1wYPhHBzQ_ULiLUXsP" &&
+  !SUPABASE_PUBLISHABLE_KEY.includes("sb_publishable_NOTL9-6RF_nww1wYPhHBzQ_ULiLUXsP")
 ) {
   connectionStatus.textContent = "● Ready to connect";
+  connectionStatus.style.color = "#a6f2cf";
 } else {
   connectionStatus.textContent = "● Setup required";
   connectionStatus.style.color = "#ffd28a";
 }
+
 </script>
 
 </body>
