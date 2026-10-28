@@ -1,0 +1,283 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Avi - Personal AI Assistant</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: radial-gradient(circle at top, #202b58, #080d1c 70%);
+      color: white;
+      display: flex;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 620px;
+      text-align: center;
+    }
+
+    .logo {
+      width: 100px;
+      height: 100px;
+      margin: 35px auto 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #65d8ff, #8065ff, #c58aff);
+      display: grid;
+      place-items: center;
+      font-size: 48px;
+      font-weight: bold;
+      box-shadow: 0 0 40px #8065ff80;
+    }
+
+    h1 { font-size: 40px; letter-spacing: 3px; }
+
+    .subtitle { color: #bbc5e5; line-height: 1.7; }
+
+    .chat {
+      margin-top: 30px;
+      padding: 20px;
+      border: 1px solid #ffffff25;
+      border-radius: 20px;
+      background: #ffffff0b;
+      text-align: left;
+    }
+
+    #messages {
+      min-height: 65px;
+      max-height: 300px;
+      overflow-y: auto;
+      line-height: 1.5;
+    }
+
+    .message {
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 12px;
+      background: #ffffff10;
+      overflow-wrap: anywhere;
+    }
+
+    .input-row { display: flex; gap: 8px; margin-top: 16px; }
+
+    input {
+      flex: 1;
+      min-width: 0;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid #ffffff30;
+      background: #101a31;
+      color: white;
+      font-size: 15px;
+    }
+
+    button {
+      padding: 13px 17px;
+      border: 0;
+      border-radius: 12px;
+      background: #7565f5;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .voice-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .secondary { background: #ffffff20; }
+
+    #status {
+      min-height: 20px;
+      color: #bbc5e5;
+      text-align: center;
+      font-size: 14px;
+      margin-top: 16px;
+    }
+
+    .shortcuts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .shortcut {
+      padding: 18px 10px;
+      border: 1px solid #ffffff20;
+      border-radius: 15px;
+      background: #ffffff09;
+    }
+
+    .tribute { margin-top: 32px; color: #d0c6f4; }
+
+    @media (max-width: 420px) {
+      .input-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <div class="logo">A</div>
+    <h1>Avi</h1>
+    <p class="subtitle">
+      Your personal AI companion.<br>
+      Your ideas, your projects, your world.
+    </p>
+
+    <section class="chat">
+      <h2>Let's talk</h2>
+      <div id="messages" aria-live="polite">
+        <div class="message">
+          <strong>Avi:</strong> Hey! I'm Avi.
+          What can I help you with today?
+        </div>
+      </div>
+
+      <form class="input-row" id="chatForm">
+        <input id="userInput" placeholder="Type a message to Avi..."
+          aria-label="Message to Avi" autocomplete="off" required>
+        <button type="submit">Send</button>
+      </form>
+
+      <div class="voice-row">
+        <button id="micButton" type="button">🎙 Press to talk</button>
+        <button class="secondary" id="stopButton" type="button">Stop voice</button>
+      </div>
+
+      <p id="status" role="status">Avi is ready for you.</p>
+    </section>
+
+    <section class="shortcuts">
+      <div class="shortcut">✓<br>My Tasks</div>
+      <div class="shortcut">♡<br>My Memory</div>
+      <div class="shortcut">⌘<br>My Projects</div>
+      <div class="shortcut">⚙<br>Settings</div>
+    </section>
+
+    <p class="tribute">🐾 Forever remembered, Avicii ❤️</p>
+  </main>
+
+  <script>
+    const messages = document.getElementById("messages");
+    const input = document.getElementById("userInput");
+    const status = document.getElementById("status");
+    const micButton = document.getElementById("micButton");
+
+    function addMessage(sender, text) {
+      const div = document.createElement("div");
+      div.className = "message";
+
+      const label = document.createElement("strong");
+      label.textContent = sender + ": ";
+      div.appendChild(label);
+      div.appendChild(document.createTextNode(text));
+
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function respondTo(text) {
+      const lower = text.toLowerCase();
+      let reply;
+
+      if (/\b(hi|hello|hey|avi|avichi|avicii)\b/.test(lower)) {
+        reply = "Hey! I'm here. What would you like to do today?";
+      } else if (lower.includes("your name")) {
+        reply = "My name is Avi. You can also call me Avichi.";
+      } else if (lower.includes("task")) {
+        reply = "Let's organize your tasks. Task management will be added soon.";
+      } else if (lower.includes("project")) {
+        reply = "Let's make progress on your projects, one step at a time.";
+      } else if (lower.includes("remember")) {
+        reply = "We will add personal memory in a future version.";
+      } else {
+        reply = "I'm Avi. My real AI connection isn't set up yet, but we're getting started!";
+      }
+
+      addMessage("Avi", reply);
+      status.textContent = "Avi replied.";
+
+      if ("speechSynthesis" in window) {
+        speechSynthesis.cancel();
+        const speech = new SpeechSynthesisUtterance(reply);
+        speech.lang = "en-IN";
+        speechSynthesis.speak(speech);
+      }
+    }
+
+    document.getElementById("chatForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
+
+      addMessage("You", text);
+      input.value = "";
+      respondTo(text);
+    });
+
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    let recognition = null;
+
+    if (SpeechRecognition) {
+      recognition = new SpeechRecognition();
+      recognition.lang = "en-IN";
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recognition.onstart = function() {
+        status.textContent = "Avi is listening...";
+        micButton.textContent = "🎙 Listening...";
+      };
+
+      recognition.onresult = function(event) {
+        const text = event.results[0][0].transcript;
+        addMessage("You", text);
+        respondTo(text);
+      };
+
+      recognition.onerror = function() {
+        status.textContent = "Couldn't hear you. Please try again or type.";
+      };
+
+      recognition.onend = function() {
+        micButton.textContent = "🎙 Press to talk";
+      };
+
+      micButton.addEventListener("click", function() {
+        try {
+          recognition.start();
+        } catch (error) {
+          status.textContent = "Please wait, then try the microphone again.";
+        }
+      });
+    } else {
+      micButton.addEventListener("click", function() {
+        status.textContent = "Voice input isn't supported here. Please type instead.";
+      });
+    }
+
+    document.getElementById("stopButton").addEventListener("click", function() {
+      if (recognition) recognition.stop();
+      if ("speechSynthesis" in window) speechSynthesis.cancel();
+
+      micButton.textContent = "🎙 Press to talk";
+      status.textContent = "Voice stopped.";
+    });
+  </script>
+</body>
+</html>
