@@ -278,6 +278,86 @@
       micButton.textContent = "🎙 Press to talk";
       status.textContent = "Voice stopped.";
     });
+    // Avi voice input - microphone feature
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if (SpeechRecognition) {
+  const recognition = new SpeechRecognition();
+  recognition.lang = "en-IN";
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  const micButton = document.createElement("button");
+  micButton.textContent = "🎤 Talk to Avi";
+  micButton.type = "button";
+  micButton.style.cssText = `
+    display: block;
+    margin: 12px auto;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #4776e6, #8e54e9);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+  `;
+
+  const messagesElement = document.getElementById("messages");
+  if (messagesElement) {
+    messagesElement.parentElement.appendChild(micButton);
+  }
+
+  micButton.addEventListener("click", () => {
+    micButton.textContent = "🎙️ Listening...";
+    try {
+      recognition.start();
+    } catch (error) {
+      micButton.textContent = "🎤 Talk to Avi";
+    }
+  });
+
+  recognition.onresult = (event) => {
+    const spokenText = event.results[0][0].transcript;
+    const input = document.querySelector(
+      'input[type="text"], textarea'
+    );
+
+    if (input) {
+      input.value = spokenText;
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+
+      const sendButton = document.querySelector(
+        'button[type="submit"]'
+      );
+
+      if (sendButton) {
+        sendButton.click();
+      } else {
+        input.dispatchEvent(
+          new KeyboardEvent("keydown", {
+            key: "Enter",
+            bubbles: true
+          })
+        );
+      }
+    }
+
+    micButton.textContent = "🎤 Talk to Avi";
+  };
+
+  recognition.onerror = () => {
+    micButton.textContent = "🎤 Talk to Avi";
+  };
+
+  recognition.onend = () => {
+    micButton.textContent = "🎤 Talk to Avi";
+  };
+} else {
+  alert(
+    "Voice input is not supported in this browser. Try Google Chrome."
+  );
+}
   </script>
 </body>
 </html>
