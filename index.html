@@ -102,36 +102,37 @@ function addMessage(text, who) {
   messages.scrollTop = messages.scrollHeight;
 }
 
-function respondToText(text) {
-  const t = text.toLowerCase().trim();
+async function respondToText(text) {
+  try {
+    const response = await fetch(
+      "YOUR_SUPABASE_FUNCTION_URL",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": "YOUR_SUPABASE_PUBLISHABLE_KEY",
+          "Authorization": "Bearer YOUR_SUPABASE_PUBLISHABLE_KEY"
+        },
+        body: JSON.stringify({
+          message: text
+        })
+      }
+    );
 
-  if (/\b(hi|hello|hey|good morning|good evening)\b/.test(t))
-    return "Hello! 💙 I'm Avi. What would you like to talk about?";
+    const data = await response.json();
 
-  if (t.includes("how are you"))
-    return "I'm here and ready to help! 💙 I'm still a demo, but we're building me one step at a time. How are you?";
+    if (!response.ok) {
+      console.error("Avi AI error:", data);
+      return "I'm having trouble connecting to my AI right now. Please try again.";
+    }
 
-  if (t.includes("your name") || t.includes("who are you"))
-    return "I'm Avi, your personal companion, with a little tribute to Avicii. 💙";
+    return data.reply || "I couldn't generate a response. Please try again.";
 
-  if (t.includes("thank"))
-    return "You're very welcome! 💙 What shall we work on next?";
-
-  if (t.includes("task") || t.includes("organize") || t.includes("plan my day"))
-    return "Let's make a plan. What are the three most important things you want to get done today?";
-
-  if (t.includes("project") || t.includes("brainstorm") || t.includes("idea"))
-    return "Tell me about your idea and what you'd like to build. Let's think it through together.";
-
-  if (t.includes("learn") || t.includes("practice"))
-    return "What topic would you like to learn or practise? We'll take it step by step.";
-
-  if (t.includes("avicii"))
-    return "Avicii's music and memory can live on in the things we create. 🐾❤️";
-
-  return 'I heard you say: "' + text + '". 💙 I can answer a few common topics, but I do not have a real AI connection yet.';
+  } catch (error) {
+    console.error("Avi connection error:", error);
+    return "I couldn't connect to my AI service. Please check your connection.";
+  }
 }
-
 function speak(text) {
   if (!("speechSynthesis" in window)) return;
   window.speechSynthesis.cancel();
