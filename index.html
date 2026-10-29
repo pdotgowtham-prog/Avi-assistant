@@ -420,6 +420,56 @@ h1{font-size:clamp(34px,3.3vw,48px);letter-spacing:-1.5px}
 .sidebar-bottom,.memory-card{background:#060e18;border-color:#14273a;box-shadow:none}
 @media(max-width:1150px){.workspace{grid-template-columns:190px minmax(0,1fr)}.rightbar{display:none}.welcome{grid-template-columns:minmax(0,1fr) 160px}.core{width:135px;height:135px}}
 @media(max-width:760px){.shell{padding:7px}.workspace{display:block;min-height:0}.sidebar{display:none}.welcome{min-height:185px;flex-basis:auto;padding:17px 14px;grid-template-columns:minmax(0,1fr) 70px}.overline{font-size:8px;margin-bottom:12px}h1{font-size:29px}.intro{font-size:11px;margin:8px 0}.chips{gap:4px}.chip{font-size:9px;padding:6px 7px}.core{width:58px;height:58px}.core svg{width:85%;height:85%}.core:before{inset:-5px}.core:after{inset:-9px}.core-caption{font-size:6px;letter-spacing:.7px;bottom:-20px}.chat{margin-top:8px;min-height:55vh}.messages{min-height:100px;padding:10px}.rightbar{display:none}}
+
+/* AVI — fresh, minimalist chat-first interface */
+:root{--bg:#0b0d10;--panel:#111418;--panel2:#171b20;--line:#252b32;--text:#f2f4f7;--muted:#929aa5;--cyan:#b7d9e5;--gold:#d5b47a}
+html,body{background:var(--bg);color:var(--text)}
+body{background:#0b0d10;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.shell{max-width:1600px;margin:0 auto;padding:0 22px;gap:0}
+.topbar{position:relative;top:auto;right:auto;display:flex;min-height:68px;padding:12px 0;background:transparent;border:0;border-bottom:1px solid #20252b;border-radius:0;box-shadow:none}
+.brand{gap:10px}.brandmark{width:34px;height:34px;border-radius:10px;background:#151a20;border:1px solid #2a333d;box-shadow:none}
+.brandmark svg{width:29px;height:29px;filter:none}
+.brandname{font-size:21px;letter-spacing:-.8px;font-weight:650}.brandtag{font-size:11px;letter-spacing:0;color:#8f99a5}
+.top-actions{gap:10px}.connection{padding:7px 10px;background:transparent;border:1px solid #29323b;border-radius:999px;font-size:11px;color:#a7b3be}
+.iconbutton{width:34px;height:34px;border-radius:50%;background:transparent;border:1px solid #2a323b;color:#c8d1da;box-shadow:none}
+.workspace{display:block;min-height:calc(100vh - 69px);max-width:920px;margin:0 auto}
+.sidebar,.rightbar{display:none!important}
+.main{display:flex;flex-direction:column;gap:0;min-height:calc(100vh - 69px)}
+.welcome{flex:0 0 auto;min-height:0;padding:34px 0 22px;display:block;background:transparent;border:0;border-radius:0;box-shadow:none}
+.welcome:before,.welcome:after{display:none}
+.welcome-copy{text-align:center;max-width:660px;margin:0 auto}
+.overline{font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:#a6b1bc;margin:0 0 14px}
+.overline:before{display:none}
+h1{font-size:clamp(28px,4vw,38px);line-height:1.15;letter-spacing:-1.4px;font-weight:600;margin:0}
+h1 span{display:inline;margin-left:8px;background:none;color:#c6dce6;font-weight:600}
+.intro{max-width:490px;margin:12px auto 0;color:#929ba6;font-size:13px;line-height:1.65}
+.chips{justify-content:center;gap:6px;margin-top:14px}.chip{padding:5px 9px;font-size:10px;background:transparent;border:1px solid #242b32;color:#9ba6b2;border-radius:999px}
+.core-wrap{display:none}
+.chat{display:flex;flex-direction:column;flex:1;min-height:300px;background:transparent;border:0;border-radius:0;box-shadow:none}
+.chat-head{padding:11px 0;background:transparent;border:0;border-bottom:1px solid #20252b}
+.chat-identity{gap:9px}.tiny-mark{width:29px;height:29px;border-radius:9px;background:#151b21;border:1px solid #2a333c;color:#b9dce7}
+.tiny-mark svg{width:25px;height:25px;filter:none}
+.chat-identity strong{font-size:12px;font-weight:600}.chat-identity small{font-size:10px;color:#89939f}
+.private-label{font-size:9px;letter-spacing:1px;color:#77828d}
+.clear-chat{width:30px;height:30px;border-radius:50%;background:transparent;border:1px solid #2a323a;color:#aab4be}
+.messages{flex:1;min-height:180px;max-height:none;padding:22px 0;background:transparent;display:flex;flex-direction:column;gap:16px}
+.message{max-width:min(80%,680px);padding:12px 15px;border-radius:16px;font-size:14px;line-height:1.7;box-shadow:none}
+.message.avi{align-self:flex-start;background:#15191e;border:1px solid #252b32;color:#e1e6eb;border-radius:5px 16px 16px 16px}
+.message.user{align-self:flex-end;background:#202a33;border:1px solid #303b46;color:#f0f4f7;border-radius:16px 5px 16px 16px}
+#chatForm{display:flex;align-items:center;gap:9px;padding:9px;background:#14181d;border:1px solid #30363e;border-radius:17px;margin:12px 0 7px;box-shadow:0 8px 30px #0002}
+#chatForm input{flex:1;min-width:0;padding:12px 7px;background:transparent;border:0;border-radius:0;color:#f0f3f6;font-size:14px;outline:none;box-shadow:none}
+#chatForm input:focus{border:0;box-shadow:none}
+#chatForm input::placeholder{color:#818b96}
+#chatForm .mic{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;margin:0;padding:0;border-radius:11px;background:transparent;border:1px solid transparent;color:#a9bac5;font-size:17px}
+#chatForm .mic:hover,#chatForm .mic.listening{background:#25343e;border-color:#435764;color:#d7f5ff;box-shadow:none}
+#chatForm .send{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;padding:0;border-radius:12px;background:#e8edf1;border:0;color:#14191e;font-size:0;position:relative;box-shadow:none}
+#chatForm .send:after{content:"↑";font-size:22px;font-weight:600;position:absolute;inset:0;display:grid;place-items:center}
+.hint{display:none}
+.shortcuts{display:none!important}
+.sidebar-bottom,.memory-card{box-shadow:none}
+button:hover{filter:brightness(1.12)}
+@media(min-height:850px){.welcome{padding-top:50px;padding-bottom:28px}}
+@media(max-width:760px){.shell{padding:0 14px}.topbar{min-height:58px;padding:10px 0}.brandmark{width:30px;height:30px}.brandmark svg{width:25px;height:25px}.brandname{font-size:19px}.brandtag{font-size:10px}.connection{font-size:10px;padding:6px 8px}.workspace,.main{min-height:calc(100vh - 58px)}.welcome{padding:30px 0 17px}h1{font-size:27px}.intro{font-size:12px;padding:0 8px}.messages{padding:17px 0}.message{max-width:90%;font-size:13px;padding:10px 12px}#chatForm{gap:5px;padding:6px 8px;border-radius:14px}#chatForm input{font-size:13px;padding:10px 3px}#chatForm .mic,#chatForm .send{flex-basis:35px;width:35px;height:35px;border-radius:10px}}
 </style>
 </head>
 <body>
