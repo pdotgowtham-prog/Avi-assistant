@@ -787,6 +787,47 @@ body:after{background:radial-gradient(ellipse at 18% 20%,rgba(139,58,26,.2),tran
 }
 @media(prefers-reduced-motion:reduce){.welcome *, .chat *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 
+
+/* Gowtham's review: keep the photo canvas clean and the controls quiet. */
+@media (min-width: 521px) {
+  .welcome-copy { display:none!important; }
+}
+.welcome:after {
+  background:linear-gradient(90deg,rgba(7,8,10,0) 0%,rgba(7,8,10,.08) 45%,rgba(7,8,10,.2) 100%)!important;
+}
+.chat {
+  left:30%!important; right:2%!important; bottom:2%!important; height:52%!important;
+  background:rgba(12,12,14,.43)!important;
+  border-color:rgba(197,139,78,.24)!important;
+  backdrop-filter:blur(12px)!important;
+  box-shadow:0 12px 35px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.035)!important;
+}
+.chat-head {background:rgba(24,22,21,.32)!important}
+.messages {background:transparent!important}
+.message.avi,.message.user {background:rgba(35,31,29,.53)!important;backdrop-filter:blur(8px)!important}
+#chatForm {background:rgba(7,8,10,.48)!important}
+@media (min-width:881px) {
+  .topbar {position:relative!important}
+  .brand,.home-button,.connection,.voice-settings-button,#installAvi,#signOutAvi,.top-actions>.new-chat-button {display:none!important}
+  .top-actions {margin-left:auto!important;justify-content:flex-end!important}
+  #accountChip {display:flex!important;min-width:42px!important;width:42px!important;height:42px!important;padding:4px!important;justify-content:center!important;border-radius:50%!important}
+  #accountChip .profile-email,#accountChip .profile-caret {display:none!important}
+  .sidebar .navbutton:not([data-view="home"]) {display:none!important}
+  .sidebar .nav {gap:4px!important}
+  .chat .messages {max-height:none!important}
+}
+@media(max-width:880px) {
+  .brand,.home-button,.connection,.voice-settings-button,#installAvi,#signOutAvi,.top-actions>.new-chat-button {display:none!important}
+  .top-actions {margin-left:auto!important;justify-content:flex-end!important}
+  #accountChip {display:flex!important;min-width:38px!important;width:38px!important;height:38px!important;padding:3px!important;justify-content:center!important;border-radius:50%!important}
+  #accountChip .profile-email,#accountChip .profile-caret {display:none!important}
+  .sidebar .navbutton:not([data-view="home"]) {display:none!important}
+  .sidebar .nav {display:flex!important;justify-content:flex-start!important}
+  .sidebar .navbutton[data-view="home"] {width:100%!important;flex-direction:row!important;font-size:12px!important}
+  .welcome-copy {display:none!important}
+  .chat {left:3%!important;right:3%!important;bottom:2%!important;height:53%!important;background:rgba(12,12,14,.48)!important}
+}
+
 </style>
 <meta name="avi-ui-version" content="avi-approved-mockup-v1">
 </head>
@@ -1626,8 +1667,8 @@ document.addEventListener("keydown", function(event) {
 });
 
 
-// Restore the last conversation from this browser.
-restoreConversationHistory();
+// Open to a clean chat view. Existing saved history is preserved; it is not deleted.
+// restoreConversationHistory();
 
 
 /* Install Avi on Android/iOS home screen */
