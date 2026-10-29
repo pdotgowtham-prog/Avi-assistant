@@ -609,6 +609,8 @@ const MEMORY_KEY = "avi_conversation_memory_v1";
 const PROFILE_MEMORY_KEY = "avi_personal_memory_v1";
 let conversationHistory = [];
 let personalMemory = [];
+let handsFree = false;
+let restartVoiceRecognition = null;
 try {
   const savedHistory = JSON.parse(localStorage.getItem(MEMORY_KEY) || "[]");
   if (Array.isArray(savedHistory)) {
@@ -739,7 +741,7 @@ async function sendMessage(text) {
       utterance.onstart = function() { mainOrb.classList.add("speaking"); };
       utterance.onend = function() {
         mainOrb.classList.remove("speaking");
-        if (handsFree && !sendButton.disabled) startListeningAgain();
+        if (handsFree && !sendButton.disabled && restartVoiceRecognition) restartVoiceRecognition();
       };
       utterance.onerror = function() {
         mainOrb.classList.remove("speaking");
@@ -801,11 +803,10 @@ if (SpeechRecognition) {
   recognition.interimResults = false;
 
   let listening = false;
-  let handsFree = false;
-  function startListeningAgain() {
+  restartVoiceRecognition = function() {
     if (!handsFree || listening || sendButton.disabled || (window.speechSynthesis && window.speechSynthesis.speaking)) return;
     try { recognition.start(); } catch (error) { /* browser may still be shutting down */ }
-  }
+  };
 
   recognition.onstart = function() {
     listening = true;
@@ -849,7 +850,7 @@ if (SpeechRecognition) {
     if (!sendButton.disabled) {
       status.textContent = handsFree ? "Hands-free voice enabled" : "Ready to chat";
       if (handsFree && !(window.speechSynthesis && window.speechSynthesis.speaking)) {
-        setTimeout(startListeningAgain, 350);
+        setTimeout(function() { if (restartVoiceRecognition) restartVoiceRecognition(); }, 350);
       }
     }
   };
