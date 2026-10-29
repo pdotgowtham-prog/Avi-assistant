@@ -243,6 +243,31 @@ input:focus{border-color:#11c6ff;box-shadow:0 0 0 4px #11c6ff13}
 .memory-card{background:linear-gradient(140deg,#151f2b,#0a1420);border-color:#4e422e}.memory-card strong{color:#ffbf59}
 @media(max-width:1120px){.workspace{grid-template-columns:185px minmax(0,1fr)}}
 @media(max-width:760px){.welcome{grid-template-columns:minmax(0,1fr) 100px;min-height:235px;padding:20px 15px}.core{width:82px;height:82px}.core svg{width:58px;height:58px}.core:before{inset:-7px}.core:after{inset:-12px}.brandmark{width:42px;height:42px}.brandmark svg{width:34px;height:34px}}
+
+/* AVI LOGO + LAYOUT REFINEMENT */
+.brandmark{width:58px;height:58px;border-radius:17px;background:radial-gradient(circle at 30% 20%,#123e62,#061324 72%);border:1px solid #1489c5;box-shadow:0 0 24px #008cff2b,inset 0 0 16px #009dff13}
+.brandmark svg{width:48px;height:48px}
+.tiny-mark{width:39px;height:39px;border-radius:13px}
+.tiny-mark svg{width:32px;height:32px}
+.core svg{width:145px;height:145px}
+.mini-core svg{width:76px;height:76px}
+.workspace{grid-template-columns:218px minmax(0,1fr) 238px;gap:13px}
+.shell{padding:16px;gap:14px}
+.topbar{padding:14px 18px}
+.welcome{min-height:315px;padding:30px 34px;grid-template-columns:minmax(0,1fr) 275px}
+.shortcuts{padding:16px}
+.chat{min-height:340px}
+.messages{min-height:180px;max-height:390px;padding:18px}
+.message{font-size:13px;line-height:1.75}
+.rightbar{padding:17px 15px}
+@media(max-width:1120px){.workspace{grid-template-columns:185px minmax(0,1fr)}}
+@media(max-width:760px){
+ .brandmark{width:43px;height:43px;border-radius:13px}.brandmark svg{width:36px;height:36px}
+ .tiny-mark{width:34px;height:34px}.tiny-mark svg{width:28px;height:28px}
+ .welcome{grid-template-columns:minmax(0,1fr) 100px;min-height:235px;padding:20px 15px}
+ .core{width:82px;height:82px}.core svg{width:58px;height:58px}
+ .messages{min-height:150px;padding:12px}
+}
 </style>
 </head>
 <body>
@@ -250,14 +275,15 @@ input:focus{border-color:#11c6ff;box-shadow:0 0 0 4px #11c6ff13}
 <header class="topbar">
  <div class="brand">
   <div class="brandmark" aria-label="Avi emblem">
-  <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
-  <path d="M15 11 L27 18 L32 16 L37 18 L49 11 L47 29 L42 39 L32 49 L22 39 L17 29 Z" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
-  <path d="M15 11 L8 7 L10 25 L18 33 M49 11 L56 7 L54 25 L46 33" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M21 25 L28 28 M43 25 L36 28" stroke="#a5dce0" stroke-width="2.6" stroke-linecap="round"/>
-  <path d="M25 35 L29 33 M39 33 L35 35" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/>
-  <path d="M28 38 L32 36 L36 38 L34 42 L30 42 Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
-  <path d="M27 44 L32 47 L37 44" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M25 13 L32 10 L39 13" stroke="#a5dce0" stroke-width="1.5" stroke-linecap="round"/>
+  <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
+<path d="M24 20 L10 11 L13 39 L25 51 L32 40 M76 20 L90 11 L87 39 L75 51 L68 40" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M24 20 L39 26 L50 23 L61 26 L76 20 L79 45 Q75 68 50 83 Q25 68 21 45 Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+<path d="M29 42 L41 47 L46 43 M71 42 L59 47 L54 43" stroke="#ffb34b" stroke-width="4" stroke-linecap="round"/>
+<path d="M34 56 Q41 50 47 57 M66 56 Q59 50 53 57" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<path d="M42 62 Q50 57 58 62 L55 70 Q50 74 45 70 Z" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round"/>
+<path d="M38 74 Q50 82 62 74" stroke="#ffb34b" stroke-width="3" stroke-linecap="round"/>
+<path d="M35 15 L50 10 L65 15" stroke="#18c8ff" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M17 25 L27 34 M83 25 L73 34" stroke="#18c8ff" stroke-width="2" stroke-linecap="round"/>
 </svg>
   </div>
   <div><div class="brandname">avi<span style="color:#a5dce0">.</span></div><div class="brandtag">Your personal AI companion</div></div>
@@ -285,14 +311,15 @@ input:focus{border-color:#11c6ff;box-shadow:0 0 0 4px #11c6ff13}
     <div class="chips"><span class="chip">✦ Personal AI</span><span class="chip">◉ Voice enabled</span><span class="chip">Made with meaning</span></div>
    </div>
    <div class="core-wrap"><div><div class="core orb" id="mainOrb" aria-label="Animated Avi AI core">
-    <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
-  <path d="M15 11 L27 18 L32 16 L37 18 L49 11 L47 29 L42 39 L32 49 L22 39 L17 29 Z" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
-  <path d="M15 11 L8 7 L10 25 L18 33 M49 11 L56 7 L54 25 L46 33" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M21 25 L28 28 M43 25 L36 28" stroke="#a5dce0" stroke-width="2.6" stroke-linecap="round"/>
-  <path d="M25 35 L29 33 M39 33 L35 35" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/>
-  <path d="M28 38 L32 36 L36 38 L34 42 L30 42 Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
-  <path d="M27 44 L32 47 L37 44" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M25 13 L32 10 L39 13" stroke="#a5dce0" stroke-width="1.5" stroke-linecap="round"/>
+    <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
+<path d="M24 20 L10 11 L13 39 L25 51 L32 40 M76 20 L90 11 L87 39 L75 51 L68 40" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M24 20 L39 26 L50 23 L61 26 L76 20 L79 45 Q75 68 50 83 Q25 68 21 45 Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+<path d="M29 42 L41 47 L46 43 M71 42 L59 47 L54 43" stroke="#ffb34b" stroke-width="4" stroke-linecap="round"/>
+<path d="M34 56 Q41 50 47 57 M66 56 Q59 50 53 57" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<path d="M42 62 Q50 57 58 62 L55 70 Q50 74 45 70 Z" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round"/>
+<path d="M38 74 Q50 82 62 74" stroke="#ffb34b" stroke-width="3" stroke-linecap="round"/>
+<path d="M35 15 L50 10 L65 15" stroke="#18c8ff" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M17 25 L27 34 M83 25 L73 34" stroke="#18c8ff" stroke-width="2" stroke-linecap="round"/>
 </svg>
    </div><div class="core-caption">AVI CORE · ONLINE</div></div></div>
   </section>
@@ -306,14 +333,15 @@ input:focus{border-color:#11c6ff;box-shadow:0 0 0 4px #11c6ff13}
   </section>
   <section class="panel chat">
    <div class="chat-head">
-    <div class="chat-identity"><div class="tiny-mark"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
-  <path d="M15 11 L27 18 L32 16 L37 18 L49 11 L47 29 L42 39 L32 49 L22 39 L17 29 Z" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
-  <path d="M15 11 L8 7 L10 25 L18 33 M49 11 L56 7 L54 25 L46 33" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M21 25 L28 28 M43 25 L36 28" stroke="#a5dce0" stroke-width="2.6" stroke-linecap="round"/>
-  <path d="M25 35 L29 33 M39 33 L35 35" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/>
-  <path d="M28 38 L32 36 L36 38 L34 42 L30 42 Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
-  <path d="M27 44 L32 47 L37 44" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M25 13 L32 10 L39 13" stroke="#a5dce0" stroke-width="1.5" stroke-linecap="round"/>
+    <div class="chat-identity"><div class="tiny-mark"><svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
+<path d="M24 20 L10 11 L13 39 L25 51 L32 40 M76 20 L90 11 L87 39 L75 51 L68 40" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M24 20 L39 26 L50 23 L61 26 L76 20 L79 45 Q75 68 50 83 Q25 68 21 45 Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+<path d="M29 42 L41 47 L46 43 M71 42 L59 47 L54 43" stroke="#ffb34b" stroke-width="4" stroke-linecap="round"/>
+<path d="M34 56 Q41 50 47 57 M66 56 Q59 50 53 57" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<path d="M42 62 Q50 57 58 62 L55 70 Q50 74 45 70 Z" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round"/>
+<path d="M38 74 Q50 82 62 74" stroke="#ffb34b" stroke-width="3" stroke-linecap="round"/>
+<path d="M35 15 L50 10 L65 15" stroke="#18c8ff" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M17 25 L27 34 M83 25 L73 34" stroke="#18c8ff" stroke-width="2" stroke-linecap="round"/>
 </svg></div><div><strong>Talk to Avi</strong><small id="chatStatus">Ready when you are</small></div></div>
     <div class="chat-tools"><span class="private-label">YOUR PRIVATE SPACE</span><button type="button" class="clear-chat" id="clearChat" title="Start a fresh conversation" aria-label="Clear conversation">↻</button></div>
    </div>
@@ -325,14 +353,15 @@ input:focus{border-color:#11c6ff;box-shadow:0 0 0 4px #11c6ff13}
  </section>
  <aside class="panel rightbar">
   <div class="section-label">COMPANION STATUS</div>
-  <div class="mini-core"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
-  <path d="M15 11 L27 18 L32 16 L37 18 L49 11 L47 29 L42 39 L32 49 L22 39 L17 29 Z" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
-  <path d="M15 11 L8 7 L10 25 L18 33 M49 11 L56 7 L54 25 L46 33" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M21 25 L28 28 M43 25 L36 28" stroke="#a5dce0" stroke-width="2.6" stroke-linecap="round"/>
-  <path d="M25 35 L29 33 M39 33 L35 35" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/>
-  <path d="M28 38 L32 36 L36 38 L34 42 L30 42 Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
-  <path d="M27 44 L32 47 L37 44" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M25 13 L32 10 L39 13" stroke="#a5dce0" stroke-width="1.5" stroke-linecap="round"/>
+  <div class="mini-core"><svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
+<path d="M24 20 L10 11 L13 39 L25 51 L32 40 M76 20 L90 11 L87 39 L75 51 L68 40" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M24 20 L39 26 L50 23 L61 26 L76 20 L79 45 Q75 68 50 83 Q25 68 21 45 Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+<path d="M29 42 L41 47 L46 43 M71 42 L59 47 L54 43" stroke="#ffb34b" stroke-width="4" stroke-linecap="round"/>
+<path d="M34 56 Q41 50 47 57 M66 56 Q59 50 53 57" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<path d="M42 62 Q50 57 58 62 L55 70 Q50 74 45 70 Z" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round"/>
+<path d="M38 74 Q50 82 62 74" stroke="#ffb34b" stroke-width="3" stroke-linecap="round"/>
+<path d="M35 15 L50 10 L65 15" stroke="#18c8ff" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M17 25 L27 34 M83 25 L73 34" stroke="#18c8ff" stroke-width="2" stroke-linecap="round"/>
 </svg></div>
   <div class="right-intro">Here for the big plans<br>and the little things.</div>
   <div class="divider"></div>
