@@ -280,6 +280,14 @@ h1 span{display:block;margin-top:6px;color:#b7c4ff;font-weight:500}
  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
 
+
+/* Final layout safeguards: voice settings occupy their own row when opened. */
+.shell{grid-template-rows:auto auto minmax(0,1fr)}
+.connection-dot{background:currentColor;box-shadow:0 0 12px currentColor}
+.auth-gate:after{content:"";position:fixed;z-index:0;inset:-20%;pointer-events:none;background:radial-gradient(ellipse at 30% 35%,rgba(0,240,255,.05),transparent 34%),radial-gradient(ellipse at 68% 65%,rgba(255,43,214,.055),transparent 33%);animation:authGlowDrift 18s ease-in-out infinite alternate}
+@keyframes authGlowDrift{from{transform:translate3d(-1%,0,0) scale(1)}to{transform:translate3d(1%,1%,0) scale(1.04)}}
+@media(max-width:880px){.shell{grid-template-rows:auto auto minmax(0,1fr)}}
+
 </style>
 <meta name="avi-ui-version" content="minimal-redesign-2">
 </head>
