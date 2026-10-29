@@ -746,6 +746,7 @@ async function sendMessage(text) {
 
     if ("speechSynthesis" in window) {
       window.speechSynthesis.cancel();
+      currentAssistantReply = reply;
       const utterance = new SpeechSynthesisUtterance(reply);
       utterance.lang = "en-US";
       utterance.rate = 1.18;
@@ -826,6 +827,7 @@ if (SpeechRecognition) {
   let bargeInFrame = null;
   let bargeInActiveFrames = 0;
   let bargeInCooldownUntil = 0;
+  let currentAssistantReply = "";
 
   async function startBargeInMonitor() {
     if (bargeInStream || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
@@ -857,10 +859,10 @@ if (SpeechRecognition) {
           window.speechSynthesis &&
           window.speechSynthesis.speaking &&
           Date.now() > bargeInCooldownUntil &&
-          rms > 0.14
+          rms > 0.075
         ) {
           bargeInActiveFrames++;
-          if (bargeInActiveFrames >= 12) {
+          if (bargeInActiveFrames >= 6) {
             window.speechSynthesis.cancel();
             mainOrb.classList.remove("speaking");
             hint.textContent = "Avi stopped — go ahead, I’m listening.";
@@ -917,8 +919,24 @@ if (SpeechRecognition) {
       else interimText += (interimText ? " " : "") + transcript;
     }
 
-    // Barge-in is handled by the microphone voice-activity monitor above.
-    // Do not interrupt on an interim transcript: it can contain Avi's own speaker bleed.
+    // Use interim recognition as a second barge-in signal, but ignore words that
+    // substantially match Avi's current reply to reduce speaker-echo interruptions.
+    if (handsFree && interimText && window.speechSynthesis && window.speechSynthesis.speaking) {
+      const normalize = function(value) {
+        return value.toLowerCase().replace(/[^a-z0-9\s']/g, " ").replace(/\s+/g, " ").trim();
+      };
+      const interimWords = normalize(interimText).split(" ").filter(Boolean);
+      const replyWords = new Set(normalize(currentAssistantReply).split(" ").filter(Boolean));
+      const matchedWords = interimWords.filter(function(word) { return replyWords.has(word); }).length;
+      const replyOverlap = interimWords.length ? matchedWords / interimWords.length : 1;
+      if (interimWords.length >= 2 && replyOverlap < 0.5) {
+        window.speechSynthesis.cancel();
+        mainOrb.classList.remove("speaking");
+        hint.textContent = "Avi stopped — go ahead, I’m listening.";
+        status.textContent = "Listening to you";
+      }
+    }
+
     const spokenText = finalText.trim();
     if (!spokenText) return;
     try { recognition.stop(); } catch (error) {}
