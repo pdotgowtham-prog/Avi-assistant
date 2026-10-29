@@ -818,25 +818,28 @@ async function syncAviMemories() {
  if (!aviSession || !aviMemorySyncReady || !aviAuthClient) return;
  const userId = aviSession.user.id;
  const desired = [...new Set(personalMemory.slice(-50).filter(item => typeof item === "string" && item.trim()))];
+ // Additive sync only: never delete cloud memories just because this device has a stale local list.
  aviMemorySyncChain = aviMemorySyncChain.then(async () => {
   if (!aviSession || aviSession.user.id !== userId) return;
-  const current = await aviAuthClient.from("avi_personal_memories").select("id,memory").eq("user_id", userId);
-  if (current.error) throw current.error;
-  const desiredSet = new Set(desired);
-  const obsoleteIds = (current.data || []).filter(row => !desiredSet.has(row.memory)).map(row => row.id);
-  if (obsoleteIds.length) {
-   const removed = await aviAuthClient.from("avi_personal_memories").delete().eq("user_id", userId).in("id", obsoleteIds);
-   if (removed.error) throw removed.error;
-  }
   if (desired.length) {
-   const saved = await aviAuthClient.from("avi_personal_memories").upsert(desired.map(memory => ({ user_id: userId, memory })), { onConflict: "user_id,memory", ignoreDuplicates: true });
+   const saved = await aviAuthClient.from("avi_personal_memories").upsert(
+    desired.map(memory => ({ user_id: userId, memory })),
+    { onConflict: "user_id,memory", ignoreDuplicates: true }
+   );
    if (saved.error) throw saved.error;
   }
  }).catch(error => {
   console.error("Avi memory sync failed:", error);
   if (typeof status !== "undefined") status.textContent = "Memory is on this device, but account sync failed. Please check your connection.";
+  if (typeof authStatus !== "undefined") authStatus.textContent = "Memory sync failed: " + (error.message || "check connection and permissions.");
  });
  await aviMemorySyncChain;
+}
+async function deleteCloudMemories(memories) {
+ if (!aviSession || !aviMemorySyncReady || !aviAuthClient || !memories.length) return;
+ const result = await aviAuthClient.from("avi_personal_memories")
+  .delete().eq("user_id", aviSession.user.id).in("memory", memories);
+ if (result.error) throw result.error;
 }
 signOutAvi.addEventListener("click", async () => { if (aviAuthClient) await aviAuthClient.auth.signOut(); });
 if (aviAuthClient) {
@@ -961,46 +964,49 @@ function saveConversationHistory() {
       });
   }
 }
-function savePersonalMemory() {
+async function savePersonalMemory() {
   try { localStorage.setItem(PROFILE_MEMORY_KEY, JSON.stringify(personalMemory.slice(-50))); }
-  catch (error) { console.warn("Avi could not save personal memory.", error); }
-  syncAviMemories();
+  catch (error) { console.warn("Avi could not save personal memory locally.", error); }
+  await syncAviMemories();
 }
-function processMemoryCommand(text) {
+async function processMemoryCommand(text) {
   const rememberMatch = text.match(/^\s*(?:avi[, ]+)?remember(?: that)?\s+(.+?)\s*[.!]?\s*$/i);
   if (rememberMatch) {
     const fact = rememberMatch[1].trim();
     if (fact && !personalMemory.some(x => x.toLowerCase() === fact.toLowerCase())) {
       personalMemory.push(fact);
       personalMemory = personalMemory.slice(-50);
-      savePersonalMemory();
+      await savePersonalMemory();
     }
-    return { handled: true, reply: fact ? "I'll remember that for future chats on this browser. 💙" : "Tell me what you'd like me to remember." };
+    return { handled: true, reply: fact ? (aviSession ? "Saved to your Avi account memory. I'll use it in future chats on your signed-in devices. 💙" : "Saved on this browser. Sign in to sync it across devices. 💙") : "Tell me what you'd like me to remember." };
   }
   if (/^\s*(?:avi[, ]+)?forget (?:everything|all(?: my)? memories|all memories)\s*[.!]?\s*$/i.test(text)) {
+    const previous = [...personalMemory];
     personalMemory = [];
-    savePersonalMemory();
-    return { handled: true, reply: "I've cleared the personal memories saved in this browser. 💙" };
+    await savePersonalMemory();
+    try { await deleteCloudMemories(previous); } catch(error) { console.error("Avi could not delete cloud memories:", error); }
+    return { handled: true, reply: "I've cleared the personal memories saved for this account and browser. 💙" };
   }
   const forgetMatch = text.match(/^\s*(?:avi[, ]+)?forget(?: that)?\s+(.+?)\s*[.!]?\s*$/i);
   if (forgetMatch) {
     const target = forgetMatch[1].trim().toLowerCase();
-    const before = personalMemory.length;
+    const removed = personalMemory.filter(x => x.toLowerCase().includes(target));
     personalMemory = personalMemory.filter(x => !x.toLowerCase().includes(target));
-    savePersonalMemory();
-    return { handled: true, reply: before === personalMemory.length ? "I couldn't find a matching saved memory. You can ask me to forget all memories if you'd like." : "I've removed the matching saved memory from this browser. 💙" };
+    await savePersonalMemory();
+    try { await deleteCloudMemories(removed); } catch(error) { console.error("Avi could not delete cloud memories:", error); }
+    return { handled: true, reply: removed.length === 0 ? "I couldn't find a matching saved memory. You can ask me to forget all memories if you'd like." : "I've removed the matching saved memory from your account and browser. 💙" };
   }
   return { handled: false };
 }
-function savePersonalFactFromMessage(text) {
-  // Automatically retain simple first-person preference facts across chats.
+async function savePersonalFactFromMessage(text) {
+  // Automatically retain simple first-person preference facts.
   const match = text.match(/\bmy\s+(favorite\s+[^.!?]+?)\s+is\s+([^.!?]+)[.!]?\s*$/i);
   if (!match) return;
   const fact = "My " + match[1].trim() + " is " + match[2].trim();
   if (!personalMemory.some(item => item.toLowerCase() === fact.toLowerCase())) {
     personalMemory.push(fact);
     personalMemory = personalMemory.slice(-50);
-    savePersonalMemory();
+    await savePersonalMemory();
   }
 }
 function restoreConversationHistory() {
@@ -1064,8 +1070,8 @@ async function sendMessage(text) {
   const loadingMessage = addMessage("Thinking... 💙", "avi");
 
   try {
-    savePersonalFactFromMessage(text);
-    const memoryCommand = processMemoryCommand(text);
+    await savePersonalFactFromMessage(text);
+    const memoryCommand = await processMemoryCommand(text);
     const reply = memoryCommand.handled ? memoryCommand.reply : await respondToText(text);
 
     loadingMessage.textContent = reply;
