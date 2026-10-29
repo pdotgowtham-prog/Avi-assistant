@@ -1311,6 +1311,16 @@ async function startLiveVoice() {
             if (userText) {
               updateLiveTranscript("user", userText);
               conversationHistory.push({ role: "user", text: userText });
+              // Keep live voice on the same persistent-memory path as typed chat.
+              // Do not block the voice turn while cloud sync is running.
+              savePersonalFactFromMessage(userText).catch(function(error) {
+                console.error("Avi could not save a fact from live voice:", error);
+              });
+              if (/^\\s*(?:avi[, ]+)?remember(?: that)?\\s+/i.test(userText)) {
+                processMemoryCommand(userText).catch(function(error) {
+                  console.error("Avi could not save a spoken memory command:", error);
+                });
+              }
             }
             if (assistantText) {
               updateLiveTranscript("avi", assistantText);
