@@ -345,6 +345,23 @@ input{background:#020916;border-color:#163a5e;font-size:14px;padding:14px}
 .footer{display:none}
 @media(max-width:1150px){.workspace{grid-template-columns:220px minmax(0,1fr)}.rightbar{display:none}.welcome{grid-template-columns:minmax(0,1fr) 220px}.core{width:190px;height:190px}}
 @media(max-width:760px){.shell{padding:8px}.topbar{top:10px;right:12px}.workspace{display:block;min-height:0}.sidebar{display:none}.welcome{min-height:300px;flex-basis:auto;padding:22px 17px;grid-template-columns:minmax(0,1fr) 95px}.overline{font-size:8px;letter-spacing:1.5px;margin-bottom:18px}h1{font-size:34px}.intro{font-size:11px;margin:12px 0}.core{width:82px;height:82px}.core svg{width:60px;height:60px}.core:before{inset:-7px}.core:after{inset:-12px}.core-caption{font-size:7px;letter-spacing:1px;bottom:-28px}.shortcut-grid{grid-template-columns:1fr}.shortcut{min-height:68px}.chat{margin-top:10px}.messages{max-height:130px}}
+
+/* final appearance pass: premium neon Rottweiler identity */
+.brand{gap:14px}.brandmark{width:64px;height:64px;border-radius:19px;background:radial-gradient(circle at 32% 20%,#0c3e68,#03101f 73%);border:1px solid #087fc5;box-shadow:0 0 28px #008fff30,inset 0 0 18px #009dff13;display:grid;place-items:center}
+.brandmark svg{width:57px;height:57px;filter:drop-shadow(0 0 7px #008fff8a)}
+.brandname{font-size:30px;letter-spacing:-1.5px;font-weight:750}.brandtag{font-size:10px;letter-spacing:1.8px;color:#a8cbed}
+.sidebar .nav:before{background-image:linear-gradient(90deg,#031225bb,#04172b99),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='39' fill='none' stroke='%230a8bdb' stroke-width='1' opacity='.7'/%3E%3Ccircle cx='50' cy='50' r='32' fill='none' stroke='%2314caff' stroke-width='2' stroke-dasharray='9 5' opacity='.7'/%3E%3C/svg%3E");background-position:center;background-size:cover}
+.welcome{position:relative;overflow:hidden}
+.welcome:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent 42%,#007cff09 68%,#ffae1607)}
+.core{position:relative;isolation:isolate}
+.core svg{width:75%;height:75%;filter:drop-shadow(0 0 9px #00aaffaa)}
+.core-caption{white-space:nowrap}
+.rightbar .mini-core svg{width:90px;height:90px}
+.chat-head .tiny-mark svg{width:33px;height:33px}
+.shortcut{transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.shortcut:hover{transform:translateY(-2px)}
+.navbutton{transition:background .18s ease,border-color .18s ease}
+@media(min-width:1500px){.workspace{grid-template-columns:310px minmax(0,1fr) 285px}.welcome{min-height:385px}.core{width:280px;height:280px}}
 </style>
 </head>
 <body>
@@ -352,15 +369,17 @@ input{background:#020916;border-color:#163a5e;font-size:14px;padding:14px}
 <header class="topbar">
  <div class="brand">
   <div class="brandmark" aria-label="Avi emblem">
-  <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
-<path d="M24 20 L10 11 L13 39 L25 51 L32 40 M76 20 L90 11 L87 39 L75 51 L68 40" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M24 20 L39 26 L50 23 L61 26 L76 20 L79 45 Q75 68 50 83 Q25 68 21 45 Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
-<path d="M29 42 L41 47 L46 43 M71 42 L59 47 L54 43" stroke="#ffb34b" stroke-width="4" stroke-linecap="round"/>
-<path d="M34 56 Q41 50 47 57 M66 56 Q59 50 53 57" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-<path d="M42 62 Q50 57 58 62 L55 70 Q50 74 45 70 Z" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round"/>
-<path d="M38 74 Q50 82 62 74" stroke="#ffb34b" stroke-width="3" stroke-linecap="round"/>
-<path d="M35 15 L50 10 L65 15" stroke="#18c8ff" stroke-width="2.5" stroke-linecap="round"/>
-<path d="M17 25 L27 34 M83 25 L73 34" stroke="#18c8ff" stroke-width="2" stroke-linecap="round"/>
+  <svg viewBox="0 0 120 120" fill="none" aria-hidden="true">
+<defs><linearGradient id="fur" x1="18" y1="12" x2="96" y2="105" gradientUnits="userSpaceOnUse"><stop stop-color="#19d7ff"/><stop offset=".48" stop-color="#087acb"/><stop offset="1" stop-color="#03152c"/></linearGradient><linearGradient id="amber" x1="34" y1="44" x2="88" y2="78" gradientUnits="userSpaceOnUse"><stop stop-color="#ffe6a0"/><stop offset="1" stop-color="#ff8a25"/></linearGradient></defs>
+<path d="M31 29 13 12 16 43 29 59 39 45M89 29 107 12 104 43 91 59 81 45" fill="#07172c" stroke="url(#fur)" stroke-width="4" stroke-linejoin="round"/>
+<path d="M30 28 45 34 60 29 75 34 90 28 94 54Q91 84 60 103Q29 84 26 54Z" fill="#061426" stroke="url(#fur)" stroke-width="4" stroke-linejoin="round"/>
+<path d="M33 45 47 50 53 46M87 45 73 50 67 46" stroke="#18caff" stroke-width="4" stroke-linecap="round"/>
+<path d="M36 46 47 49 42 54 35 52ZM84 46 73 49 78 54 85 52Z" fill="#ffad3f"/>
+<path d="M39 61Q47 54 55 62M81 61Q73 54 65 62" stroke="#0b3555" stroke-width="3" stroke-linecap="round"/>
+<path d="M43 65Q60 57 77 65L72 76Q60 84 48 76Z" fill="#03101f" stroke="url(#amber)" stroke-width="3.5" stroke-linejoin="round"/>
+<path d="M47 89Q60 96 73 89M60 30V42" stroke="#16c8ff" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M29 22 40 34M91 22 80 34M34 37 43 40M86 37 77 40" stroke="#75eaff" stroke-width="2" stroke-linecap="round"/>
+<path d="M20 64Q10 52 16 39M100 64Q110 52 104 39" stroke="#ffb64d" stroke-width="1.8" opacity=".9"/>
 </svg>
   </div>
   <div><div class="brandname">avi<span style="color:#a5dce0">.</span></div><div class="brandtag">Your personal AI companion</div></div>
@@ -388,15 +407,17 @@ input{background:#020916;border-color:#163a5e;font-size:14px;padding:14px}
     <div class="chips"><span class="chip">✦ Personal AI</span><span class="chip">◉ Voice enabled</span><span class="chip">Made with meaning</span></div>
    </div>
    <div class="core-wrap"><div><div class="core orb" id="mainOrb" aria-label="Animated Avi AI core">
-    <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
-<path d="M24 20 L10 11 L13 39 L25 51 L32 40 M76 20 L90 11 L87 39 L75 51 L68 40" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M24 20 L39 26 L50 23 L61 26 L76 20 L79 45 Q75 68 50 83 Q25 68 21 45 Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
-<path d="M29 42 L41 47 L46 43 M71 42 L59 47 L54 43" stroke="#ffb34b" stroke-width="4" stroke-linecap="round"/>
-<path d="M34 56 Q41 50 47 57 M66 56 Q59 50 53 57" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-<path d="M42 62 Q50 57 58 62 L55 70 Q50 74 45 70 Z" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round"/>
-<path d="M38 74 Q50 82 62 74" stroke="#ffb34b" stroke-width="3" stroke-linecap="round"/>
-<path d="M35 15 L50 10 L65 15" stroke="#18c8ff" stroke-width="2.5" stroke-linecap="round"/>
-<path d="M17 25 L27 34 M83 25 L73 34" stroke="#18c8ff" stroke-width="2" stroke-linecap="round"/>
+    <svg viewBox="0 0 120 120" fill="none" aria-hidden="true">
+<defs><linearGradient id="fur" x1="18" y1="12" x2="96" y2="105" gradientUnits="userSpaceOnUse"><stop stop-color="#19d7ff"/><stop offset=".48" stop-color="#087acb"/><stop offset="1" stop-color="#03152c"/></linearGradient><linearGradient id="amber" x1="34" y1="44" x2="88" y2="78" gradientUnits="userSpaceOnUse"><stop stop-color="#ffe6a0"/><stop offset="1" stop-color="#ff8a25"/></linearGradient></defs>
+<path d="M31 29 13 12 16 43 29 59 39 45M89 29 107 12 104 43 91 59 81 45" fill="#07172c" stroke="url(#fur)" stroke-width="4" stroke-linejoin="round"/>
+<path d="M30 28 45 34 60 29 75 34 90 28 94 54Q91 84 60 103Q29 84 26 54Z" fill="#061426" stroke="url(#fur)" stroke-width="4" stroke-linejoin="round"/>
+<path d="M33 45 47 50 53 46M87 45 73 50 67 46" stroke="#18caff" stroke-width="4" stroke-linecap="round"/>
+<path d="M36 46 47 49 42 54 35 52ZM84 46 73 49 78 54 85 52Z" fill="#ffad3f"/>
+<path d="M39 61Q47 54 55 62M81 61Q73 54 65 62" stroke="#0b3555" stroke-width="3" stroke-linecap="round"/>
+<path d="M43 65Q60 57 77 65L72 76Q60 84 48 76Z" fill="#03101f" stroke="url(#amber)" stroke-width="3.5" stroke-linejoin="round"/>
+<path d="M47 89Q60 96 73 89M60 30V42" stroke="#16c8ff" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M29 22 40 34M91 22 80 34M34 37 43 40M86 37 77 40" stroke="#75eaff" stroke-width="2" stroke-linecap="round"/>
+<path d="M20 64Q10 52 16 39M100 64Q110 52 104 39" stroke="#ffb64d" stroke-width="1.8" opacity=".9"/>
 </svg>
    </div><div class="core-caption">AVI CORE · ONLINE</div></div></div>
   </section>
@@ -410,15 +431,17 @@ input{background:#020916;border-color:#163a5e;font-size:14px;padding:14px}
   </section>
   <section class="panel chat">
    <div class="chat-head">
-    <div class="chat-identity"><div class="tiny-mark"><svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
-<path d="M24 20 L10 11 L13 39 L25 51 L32 40 M76 20 L90 11 L87 39 L75 51 L68 40" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M24 20 L39 26 L50 23 L61 26 L76 20 L79 45 Q75 68 50 83 Q25 68 21 45 Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
-<path d="M29 42 L41 47 L46 43 M71 42 L59 47 L54 43" stroke="#ffb34b" stroke-width="4" stroke-linecap="round"/>
-<path d="M34 56 Q41 50 47 57 M66 56 Q59 50 53 57" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-<path d="M42 62 Q50 57 58 62 L55 70 Q50 74 45 70 Z" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round"/>
-<path d="M38 74 Q50 82 62 74" stroke="#ffb34b" stroke-width="3" stroke-linecap="round"/>
-<path d="M35 15 L50 10 L65 15" stroke="#18c8ff" stroke-width="2.5" stroke-linecap="round"/>
-<path d="M17 25 L27 34 M83 25 L73 34" stroke="#18c8ff" stroke-width="2" stroke-linecap="round"/>
+    <div class="chat-identity"><div class="tiny-mark"><svg viewBox="0 0 120 120" fill="none" aria-hidden="true">
+<defs><linearGradient id="fur" x1="18" y1="12" x2="96" y2="105" gradientUnits="userSpaceOnUse"><stop stop-color="#19d7ff"/><stop offset=".48" stop-color="#087acb"/><stop offset="1" stop-color="#03152c"/></linearGradient><linearGradient id="amber" x1="34" y1="44" x2="88" y2="78" gradientUnits="userSpaceOnUse"><stop stop-color="#ffe6a0"/><stop offset="1" stop-color="#ff8a25"/></linearGradient></defs>
+<path d="M31 29 13 12 16 43 29 59 39 45M89 29 107 12 104 43 91 59 81 45" fill="#07172c" stroke="url(#fur)" stroke-width="4" stroke-linejoin="round"/>
+<path d="M30 28 45 34 60 29 75 34 90 28 94 54Q91 84 60 103Q29 84 26 54Z" fill="#061426" stroke="url(#fur)" stroke-width="4" stroke-linejoin="round"/>
+<path d="M33 45 47 50 53 46M87 45 73 50 67 46" stroke="#18caff" stroke-width="4" stroke-linecap="round"/>
+<path d="M36 46 47 49 42 54 35 52ZM84 46 73 49 78 54 85 52Z" fill="#ffad3f"/>
+<path d="M39 61Q47 54 55 62M81 61Q73 54 65 62" stroke="#0b3555" stroke-width="3" stroke-linecap="round"/>
+<path d="M43 65Q60 57 77 65L72 76Q60 84 48 76Z" fill="#03101f" stroke="url(#amber)" stroke-width="3.5" stroke-linejoin="round"/>
+<path d="M47 89Q60 96 73 89M60 30V42" stroke="#16c8ff" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M29 22 40 34M91 22 80 34M34 37 43 40M86 37 77 40" stroke="#75eaff" stroke-width="2" stroke-linecap="round"/>
+<path d="M20 64Q10 52 16 39M100 64Q110 52 104 39" stroke="#ffb64d" stroke-width="1.8" opacity=".9"/>
 </svg></div><div><strong>Talk to Avi</strong><small id="chatStatus">Ready when you are</small></div></div>
     <div class="chat-tools"><span class="private-label">YOUR PRIVATE SPACE</span><button type="button" class="clear-chat" id="clearChat" title="Start a fresh conversation" aria-label="Clear conversation">↻</button></div>
    </div>
@@ -430,15 +453,17 @@ input{background:#020916;border-color:#163a5e;font-size:14px;padding:14px}
  </section>
  <aside class="panel rightbar">
   <div class="section-label">COMPANION STATUS</div>
-  <div class="mini-core"><svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
-<path d="M24 20 L10 11 L13 39 L25 51 L32 40 M76 20 L90 11 L87 39 L75 51 L68 40" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M24 20 L39 26 L50 23 L61 26 L76 20 L79 45 Q75 68 50 83 Q25 68 21 45 Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
-<path d="M29 42 L41 47 L46 43 M71 42 L59 47 L54 43" stroke="#ffb34b" stroke-width="4" stroke-linecap="round"/>
-<path d="M34 56 Q41 50 47 57 M66 56 Q59 50 53 57" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-<path d="M42 62 Q50 57 58 62 L55 70 Q50 74 45 70 Z" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round"/>
-<path d="M38 74 Q50 82 62 74" stroke="#ffb34b" stroke-width="3" stroke-linecap="round"/>
-<path d="M35 15 L50 10 L65 15" stroke="#18c8ff" stroke-width="2.5" stroke-linecap="round"/>
-<path d="M17 25 L27 34 M83 25 L73 34" stroke="#18c8ff" stroke-width="2" stroke-linecap="round"/>
+  <div class="mini-core"><svg viewBox="0 0 120 120" fill="none" aria-hidden="true">
+<defs><linearGradient id="fur" x1="18" y1="12" x2="96" y2="105" gradientUnits="userSpaceOnUse"><stop stop-color="#19d7ff"/><stop offset=".48" stop-color="#087acb"/><stop offset="1" stop-color="#03152c"/></linearGradient><linearGradient id="amber" x1="34" y1="44" x2="88" y2="78" gradientUnits="userSpaceOnUse"><stop stop-color="#ffe6a0"/><stop offset="1" stop-color="#ff8a25"/></linearGradient></defs>
+<path d="M31 29 13 12 16 43 29 59 39 45M89 29 107 12 104 43 91 59 81 45" fill="#07172c" stroke="url(#fur)" stroke-width="4" stroke-linejoin="round"/>
+<path d="M30 28 45 34 60 29 75 34 90 28 94 54Q91 84 60 103Q29 84 26 54Z" fill="#061426" stroke="url(#fur)" stroke-width="4" stroke-linejoin="round"/>
+<path d="M33 45 47 50 53 46M87 45 73 50 67 46" stroke="#18caff" stroke-width="4" stroke-linecap="round"/>
+<path d="M36 46 47 49 42 54 35 52ZM84 46 73 49 78 54 85 52Z" fill="#ffad3f"/>
+<path d="M39 61Q47 54 55 62M81 61Q73 54 65 62" stroke="#0b3555" stroke-width="3" stroke-linecap="round"/>
+<path d="M43 65Q60 57 77 65L72 76Q60 84 48 76Z" fill="#03101f" stroke="url(#amber)" stroke-width="3.5" stroke-linejoin="round"/>
+<path d="M47 89Q60 96 73 89M60 30V42" stroke="#16c8ff" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M29 22 40 34M91 22 80 34M34 37 43 40M86 37 77 40" stroke="#75eaff" stroke-width="2" stroke-linecap="round"/>
+<path d="M20 64Q10 52 16 39M100 64Q110 52 104 39" stroke="#ffb64d" stroke-width="1.8" opacity=".9"/>
 </svg></div>
   <div class="right-intro">Here for the big plans<br>and the little things.</div>
   <div class="divider"></div>
