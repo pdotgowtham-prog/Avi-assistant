@@ -828,6 +828,55 @@ body:after{background:radial-gradient(ellipse at 18% 20%,rgba(139,58,26,.2),tran
   .chat {left:3%!important;right:3%!important;bottom:2%!important;height:53%!important;background:rgba(12,12,14,.48)!important}
 }
 
+
+/* Latest layout correction: chat is a floating layer on Avi's portrait, not a second card. */
+html,body {height:100%!important;min-height:0!important;overflow:hidden!important}
+body {margin:0!important}
+.shell {height:100dvh!important;min-height:0!important;max-height:100dvh!important;margin:0 auto!important;padding:10px 12px!important;gap:10px!important;grid-template-rows:1px minmax(0,1fr)!important;overflow:hidden!important}
+.topbar {min-height:1px!important;height:1px!important;padding:0!important;margin:0!important;border:0!important;overflow:visible!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important}
+.topbar .brand,.topbar .home-button,.topbar .connection,.topbar .voice-settings-button,#installAvi,#signOutAvi,.top-actions>.new-chat-button {display:none!important}
+.top-actions {position:absolute!important;z-index:40!important;top:16px!important;right:18px!important;margin:0!important;padding:0!important;gap:0!important}
+#accountChip {display:flex!important;position:relative!important;width:42px!important;height:42px!important;min-width:42px!important;padding:4px!important;justify-content:center!important;border-radius:50%!important;background:rgba(18,17,18,.68)!important;border:1px solid rgba(197,139,78,.42)!important;backdrop-filter:blur(16px)!important}
+#accountChip .profile-email,#accountChip .profile-caret {display:none!important}
+.workspace {height:100%!important;min-height:0!important;overflow:hidden!important;grid-template-columns:250px minmax(0,1fr)!important;gap:12px!important}
+.main {position:relative!important;display:block!important;height:100%!important;min-height:0!important;overflow:hidden!important}
+.welcome {position:absolute!important;inset:0!important;height:100%!important;min-height:0!important;border-radius:22px!important;overflow:hidden!important}
+.welcome-copy {display:none!important}
+.home-portrait {left:-2%!important;width:69%!important;height:98%!important;bottom:0!important;object-position:left bottom!important}
+.welcome:after {background:linear-gradient(90deg,rgba(7,8,10,0) 0%,rgba(7,8,10,.04) 48%,rgba(7,8,10,.18) 100%),linear-gradient(0deg,rgba(7,8,10,.15),transparent 38%)!important}
+.chat {position:absolute!important;z-index:8!important;left:27%!important;right:2%!important;bottom:2%!important;height:53%!important;min-height:230px!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;border:1px solid rgba(197,139,78,.16)!important;border-radius:18px!important;background:rgba(12,12,14,.28)!important;backdrop-filter:blur(8px)!important;box-shadow:0 10px 28px rgba(0,0,0,.12)!important}
+.chat-head {background:rgba(18,17,18,.28)!important;border-bottom:1px solid rgba(197,139,78,.13)!important}
+.messages {background:transparent!important;padding:12px 15px!important}
+.message.avi,.message.user {background:rgba(28,26,26,.52)!important;backdrop-filter:blur(7px)!important}
+#chatForm {background:rgba(7,8,10,.36)!important;border-color:rgba(197,139,78,.22)!important}
+.hint {background:transparent!important}
+.sidebar {height:100%!important;min-height:0!important}
+.profile-menu {position:absolute;z-index:100;top:calc(100% + 10px);right:0;width:238px;padding:12px;border:1px solid rgba(197,139,78,.32);border-radius:15px;background:rgba(18,17,18,.96);backdrop-filter:blur(22px);box-shadow:0 18px 48px rgba(0,0,0,.48);color:#f5eee5}
+.profile-menu-email {display:block;overflow-wrap:anywhere;padding:5px 7px 12px;color:#d8c6b4;font-size:12px;border-bottom:1px solid rgba(197,139,78,.18);margin-bottom:8px}
+.profile-menu button {display:flex;align-items:center;width:100%;padding:10px 9px;border:0;border-radius:9px;background:transparent;color:#f5eee5;text-align:left;cursor:pointer;font:inherit;font-size:13px}
+.profile-menu button:hover {background:rgba(197,139,78,.13)}
+.profile-menu .profile-signout {color:#efb49c}
+@media(max-width:1100px) and (min-width:881px) {
+ .workspace {grid-template-columns:205px minmax(0,1fr)!important}
+ .home-portrait {width:72%!important;left:-8%!important}
+ .chat {left:24%!important;right:2%!important;height:54%!important}
+}
+@media(max-width:880px) {
+ html,body {overflow:auto!important}
+ .shell {height:auto!important;min-height:100dvh!important;max-height:none!important;padding:8px 8px 82px!important;grid-template-rows:1px minmax(680px,1fr)!important;overflow:visible!important}
+ .workspace {display:block!important;height:auto!important;min-height:680px!important;overflow:visible!important}
+ .sidebar {position:fixed!important;z-index:50!important;left:8px!important;right:8px!important;bottom:max(7px,env(safe-area-inset-bottom))!important;top:auto!important;height:58px!important}
+ .sidebar .section-label,.sidebar-bottom,.side-new-chat,.history-caption {display:none!important}
+ .sidebar .nav {display:flex!important;justify-content:flex-start!important}
+ .sidebar .navbutton:not([data-view="home"]) {display:none!important}
+ .sidebar .navbutton[data-view="home"] {width:100%!important;flex-direction:row!important;font-size:12px!important}
+ .main {height:680px!important;min-height:680px!important}
+ .home-portrait {left:-13%!important;width:100%!important;height:76%!important;opacity:.88!important}
+ .chat {left:3%!important;right:3%!important;bottom:2%!important;height:52%!important;min-height:300px!important;background:rgba(12,12,14,.38)!important}
+ .top-actions {top:12px!important;right:12px!important}
+ #accountChip {width:38px!important;height:38px!important;min-width:38px!important}
+}
+
 </style>
 <meta name="avi-ui-version" content="avi-approved-mockup-v1">
 </head>
@@ -1146,10 +1195,31 @@ document.getElementById("homeAvi").addEventListener("click", () => {
 accountChip.addEventListener("click", () => {
  if (!aviSession) {
   document.getElementById("authGate").hidden = false;
- } else {
-  const menuOpen = accountChip.getAttribute("aria-expanded") === "true";
-  accountChip.setAttribute("aria-expanded", String(!menuOpen));
-  signOutAvi.hidden = menuOpen;
+  return;
+ }
+ let menu = document.getElementById("aviProfileMenu");
+ if (menu) { menu.remove(); accountChip.setAttribute("aria-expanded","false"); return; }
+ menu = document.createElement("div");
+ menu.id = "aviProfileMenu";
+ menu.className = "profile-menu";
+ menu.innerHTML = '<span class="profile-menu-email"></span><button type="button" class="profile-account">Account settings</button><button type="button" class="profile-signout">Sign out</button>';
+ menu.querySelector(".profile-menu-email").textContent = aviSession.user.email || "Signed in";
+ accountChip.parentElement.appendChild(menu);
+ accountChip.setAttribute("aria-expanded","true");
+ menu.querySelector(".profile-account").addEventListener("click", () => {
+   menu.remove(); accountChip.setAttribute("aria-expanded","false");
+   document.getElementById("voiceSettingsToggle").click();
+   document.getElementById("voiceSettings").scrollIntoView({behavior:"smooth",block:"nearest"});
+ });
+ menu.querySelector(".profile-signout").addEventListener("click", async () => {
+   menu.remove(); accountChip.setAttribute("aria-expanded","false");
+   if (aviAuthClient) await aviAuthClient.auth.signOut();
+ });
+});
+document.addEventListener("click", event => {
+ const menu = document.getElementById("aviProfileMenu");
+ if (menu && !menu.contains(event.target) && !accountChip.contains(event.target)) {
+   menu.remove(); accountChip.setAttribute("aria-expanded","false");
  }
 });
 if (aviAuthClient) {
