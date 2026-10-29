@@ -21,12 +21,12 @@
 
 :root{
   color-scheme:dark;
-  --bg:#0B0B0D;--bg-2:#101014;--surface:#141418;--surface-2:#1B1B20;
-  --rust:#8B3A1A;--rust-bright:#A64B23;--tan:#C58B4E;--glow:#3DE0FF;
-  --line:rgba(197,139,78,.20);--line-strong:rgba(61,224,255,.44);
-  --text:#F4F0E9;--muted:#C2B7A9;--subtle:#968A7D;
-  --cyan:var(--glow);--magenta:var(--tan);--violet:var(--rust);--green:#9DCFA7;
-  --orbit-font:"JetBrains Mono",ui-monospace,monospace;--body-font:"Space Grotesk",Inter,system-ui,sans-serif;
+  --bg:#07090f;--bg-2:#0b0e16;--surface:#101521;--surface-2:#151d2b;
+  --rust:#34445d;--rust-bright:#526782;--tan:#a9c1d8;--glow:#72d9ee;
+  --line:rgba(145,174,205,.16);--line-strong:rgba(114,217,238,.36);
+  --text:#edf3fa;--muted:#b6c3d2;--subtle:#8b9aab;
+  --cyan:var(--glow);--magenta:#a9a0e8;--violet:#687fc0;--green:#9de0bd;
+  --orbit-font:"Space Grotesk",Inter,system-ui,sans-serif;--body-font:"Inter","Space Grotesk",system-ui,sans-serif;
   --header-height:72px;--nav-height:66px;--radius:20px;
 }
 *{box-sizing:border-box}
@@ -44,7 +44,7 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;backg
 .brand{display:flex;align-items:center;gap:12px;min-width:0}
 .brandmark{width:43px;height:43px;display:grid;place-items:center;flex:0 0 auto;border:1px solid rgba(0,240,255,.38);border-radius:14px;background:radial-gradient(circle at 32% 18%,rgba(0,240,255,.15),rgba(8,13,29,.9) 67%);box-shadow:inset 0 0 18px rgba(0,240,255,.06),0 0 22px rgba(0,240,255,.06)}
 .brandmark svg{width:31px;height:31px}
-.brandname{font:700 23px/1 var(--orbit-font);letter-spacing:-1px;color:#f4fbff}
+.brandname{font:700 25px/1 var(--body-font);letter-spacing:-1.4px;color:#f4fbff}
 .brandtag{margin-top:6px;color:#95a9c2;font-size:11px;letter-spacing:.09em}
 .top-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;min-width:0}
 .iconbutton,.voice-settings-button,.new-chat-button,.profile-button{min-height:40px;border:1px solid rgba(141,173,208,.22);border-radius:12px;background:rgba(17,25,44,.8);color:#d6e4f4;transition:border-color .18s ease,background .18s ease,box-shadow .18s ease,transform .18s ease}
@@ -68,7 +68,7 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;backg
 .workspace{display:grid;grid-template-columns:208px minmax(0,1fr) 250px;gap:15px;min-height:0;overflow:hidden}
 .glass-panel,.panel{min-width:0;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(135deg,rgba(13,19,35,.84),rgba(7,10,22,.88));box-shadow:inset 0 1px rgba(255,255,255,.035),0 18px 55px rgba(0,0,0,.18);backdrop-filter:blur(18px)}
 .sidebar{display:flex;flex-direction:column;min-height:0;padding:17px 12px;overflow:hidden}
-.section-label,.eyebrow{font:600 9px/1.5 var(--orbit-font);letter-spacing:.19em;color:#91a7c4;text-transform:uppercase}
+.section-label,.eyebrow{font:600 9px/1.5 var(--body-font);letter-spacing:.15em;color:#91a7c4;text-transform:uppercase}
 .section-label{padding:3px 10px 13px}
 .nav{display:grid;gap:5px}
 .navbutton{width:100%;display:flex;align-items:center;gap:11px;min-height:45px;padding:8px 10px;border:1px solid transparent;border-radius:12px;background:transparent;text-align:left;color:#a6b5ca;font-size:12px;transition:color .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease}
@@ -84,9 +84,9 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;backg
 .welcome{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 230px;align-items:center;gap:12px;min-height:210px;padding:22px 27px;overflow:hidden;border-color:rgba(0,240,255,.19);background:radial-gradient(ellipse at 82% 45%,rgba(138,92,255,.12),transparent 38%),linear-gradient(120deg,rgba(14,22,40,.92),rgba(7,12,27,.89) 68%,rgba(18,8,31,.84))}
 .welcome:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,rgba(0,240,255,.025),transparent 42%,rgba(255,43,214,.025));mask-image:linear-gradient(90deg,#000,transparent 94%)}
 .welcome-copy{position:relative;z-index:1;min-width:0}
-.overline{display:flex;align-items:center;gap:9px;margin:0 0 13px;color:#8fdae6;font:600 9px/1.4 var(--orbit-font);letter-spacing:.2em;text-transform:uppercase}
+.overline{display:flex;align-items:center;gap:9px;margin:0 0 13px;color:#8fdae6;font:600 9px/1.4 var(--body-font);letter-spacing:.16em;text-transform:uppercase}
 .overline:before{content:"";width:19px;height:1px;background:var(--cyan);box-shadow:0 0 10px rgba(0,240,255,.5)}
-h1{margin:0;color:#f2f8ff;font:600 clamp(26px,2.25vw,38px)/1.15 var(--orbit-font);letter-spacing:-.055em}
+h1{margin:0;color:#f2f8ff;font:600 clamp(26px,2.25vw,38px)/1.15 var(--body-font);letter-spacing:-.045em}
 h1 span{display:block;margin-top:6px;color:#b7c4ff;font-weight:500}
 .intro{max-width:520px;margin:13px 0 0;color:#a9bad0;font-size:13px;line-height:1.75}
 .hero-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
@@ -117,7 +117,7 @@ h1 span{display:block;margin-top:6px;color:#b7c4ff;font-weight:500}
 .chat-identity{display:flex;align-items:center;gap:10px;min-width:0}
 .tiny-mark{width:35px;height:35px;display:grid;place-items:center;flex:0 0 auto;border:1px solid rgba(0,240,255,.27);border-radius:12px;background:rgba(0,240,255,.06);color:var(--cyan)}
 .tiny-mark svg{width:22px;height:22px}
-.chat-identity strong{display:block;color:#eaf6ff;font:600 10px/1.4 var(--orbit-font);letter-spacing:.08em}
+.chat-identity strong{display:block;color:#eaf6ff;font:650 11px/1.4 var(--body-font);letter-spacing:.03em}
 .chat-identity small{display:block;margin-top:3px;color:#95a7c0;font-size:11px}
 .chat-tools{display:flex;align-items:center;gap:8px}
 .private-label{color:#8198b2;font:500 8px/1.4 var(--orbit-font);letter-spacing:.16em;white-space:nowrap}
@@ -323,17 +323,17 @@ body:after{background:radial-gradient(ellipse at 14% 0%,rgba(139,58,26,.13),tran
 @media(max-width:880px){.sidebar{border-color:rgba(197,139,78,.30);background:rgba(18,17,19,.96)}.navbutton.active{box-shadow:inset 0 2px var(--tan),0 0 18px rgba(139,58,26,.12)}}
 
 </style>
-<meta name="avi-ui-version" content="avi-rottweiler-redesign-1">
+<meta name="avi-ui-version" content="avi-calm-brand-voicefix-1">
 </head>
 <body>
 <section class="auth-gate" id="authGate" aria-label="Sign in to Avi">
  <form class="auth-card" id="authForm">
   <div class="auth-brand">
-   <span class="auth-brand-symbol" aria-hidden="true"><svg class="avi-mark" viewBox="0 0 64 64"><path class="avi-ear" d="M19 28 10 9l19 13Z"/><path class="avi-ear" d="m45 28 9-19-19 13Z"/><path class="avi-head" d="M17 25 32 15l15 10v16c0 9-6.7 15-15 18-8.3-3-15-9-15-18Z"/><circle class="avi-brow" cx="25" cy="31" r="3"/><circle class="avi-brow" cx="39" cy="31" r="3"/><circle class="avi-eye" cx="25" cy="38" r="1.8"/><circle class="avi-eye" cx="39" cy="38" r="1.8"/><path class="avi-muzzle" d="m25 44 7-3 7 3-2 7h-10Z"/><path class="avi-nose" d="m29 45 3-1.5 3 1.5-3 2.5Z"/></svg></span>
-   <span><strong>Avi AI</strong><small>LOYAL. ALERT. YOURS.</small></span>
+   <span class="auth-brand-symbol" aria-hidden="true"><svg class="avi-mark" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15 10 11l2 18c1 13 8 22 20 26 12-4 19-13 20-26l2-18-8 4-14-6-14 6Z"/><path d="M23 30c2-3 5-3 7 0m4 0c2-3 5-3 7 0"/><path d="M26 40c4 3 8 3 12 0"/><path d="M32 17v6"/></svg></span>
+   <span><strong>Avi AI</strong><small>CALM. CLEAR. PERSONAL.</small></span>
   </div>
   <h2 id="authHeading">Welcome back.</h2>
-  <p id="authDescription">Loyal. Alert. Yours. Sign in to return to your private space.</p>
+  <p id="authDescription">A calm, personal AI space. Sign in to continue.</p>
   <label for="authEmail">User ID</label>
   <input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com">
   <label for="authPassword">Password</label>
@@ -346,7 +346,7 @@ body:after{background:radial-gradient(ellipse at 14% 0%,rgba(139,58,26,.13),tran
 <main class="shell">
  <header class="topbar">
   <div class="brand">
-   <div class="brandmark" aria-hidden="true"><svg class="avi-mark" viewBox="0 0 64 64"><path class="avi-ear" d="M19 28 10 9l19 13Z"/><path class="avi-ear" d="m45 28 9-19-19 13Z"/><path class="avi-head" d="M17 25 32 15l15 10v16c0 9-6.7 15-15 18-8.3-3-15-9-15-18Z"/><circle class="avi-brow" cx="25" cy="31" r="3"/><circle class="avi-brow" cx="39" cy="31" r="3"/><circle class="avi-eye" cx="25" cy="38" r="1.8"/><circle class="avi-eye" cx="39" cy="38" r="1.8"/><path class="avi-muzzle" d="m25 44 7-3 7 3-2 7h-10Z"/><path class="avi-nose" d="m29 45 3-1.5 3 1.5-3 2.5Z"/></svg></div>
+   <div class="brandmark" aria-hidden="true"><svg class="avi-mark" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15 10 11l2 18c1 13 8 22 20 26 12-4 19-13 20-26l2-18-8 4-14-6-14 6Z"/><path d="M23 30c2-3 5-3 7 0m4 0c2-3 5-3 7 0"/><path d="M26 40c4 3 8 3 12 0"/><path d="M32 17v6"/></svg></div>
    <div><div class="brandname">AVI<span>.</span></div><div class="brandtag">LOYAL. ALERT. YOURS.</div></div>
   </div>
   <div class="top-actions">
@@ -426,7 +426,7 @@ body:after{background:radial-gradient(ellipse at 14% 0%,rgba(139,58,26,.13),tran
   <aside class="rightbar glass-panel" aria-label="Assistant tools">
    <div class="section-label">SYSTEM OVERVIEW</div>
    <div class="status-hero">
-    <div class="status-orbit" aria-hidden="true"><svg class="avi-mark" viewBox="0 0 64 64"><path class="avi-ear" d="M19 28 10 9l19 13Z"/><path class="avi-ear" d="m45 28 9-19-19 13Z"/><path class="avi-head" d="M17 25 32 15l15 10v16c0 9-6.7 15-15 18-8.3-3-15-9-15-18Z"/><circle class="avi-brow" cx="25" cy="31" r="3"/><circle class="avi-brow" cx="39" cy="31" r="3"/><circle class="avi-eye" cx="25" cy="38" r="1.8"/><circle class="avi-eye" cx="39" cy="38" r="1.8"/><path class="avi-muzzle" d="m25 44 7-3 7 3-2 7h-10Z"/><path class="avi-nose" d="m29 45 3-1.5 3 1.5-3 2.5Z"/></svg></div>
+    <div class="status-orbit" aria-hidden="true"><svg class="avi-mark" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15 10 11l2 18c1 13 8 22 20 26 12-4 19-13 20-26l2-18-8 4-14-6-14 6Z"/><path d="M23 30c2-3 5-3 7 0m4 0c2-3 5-3 7 0"/><path d="M26 40c4 3 8 3 12 0"/><path d="M32 17v6"/></svg></div>
     <strong>STEADY BY DESIGN</strong>
     <p>A private place to think, talk, plan, and keep track of what matters to you.</p>
    </div>
@@ -872,30 +872,9 @@ async function sendMessage(text) {
     saveConversationHistory();
     messages.scrollTop = messages.scrollHeight;
 
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-      currentAssistantReply = reply;
-      const utterance = new SpeechSynthesisUtterance(reply);
-      utterance.lang = "en-US";
-      utterance.rate = 1.18;
-      utterance.pitch = 1;
-      utterance.onstart = function() {
-        mainOrb.classList.add("speaking");
-        // Keep speech recognition running during playback so the user can barge in naturally.
-        if (handsFree) setTimeout(function() {
-          if (handsFree && !listening && !sendButton.disabled && restartVoiceRecognition) restartVoiceRecognition();
-        }, 250);
-      };
-      utterance.onend = function() {
-        mainOrb.classList.remove("speaking");
-        if (handsFree && !sendButton.disabled && restartVoiceRecognition) restartVoiceRecognition();
-      };
-      utterance.onerror = function() {
-        mainOrb.classList.remove("speaking");
-        if (handsFree && !sendButton.disabled) startListeningAgain();
-      };
-      window.speechSynthesis.speak(utterance);
-    }
+    // Typed chat replies stay silent. The selected Avi voice is reserved for live voice,
+    // avoiding the browser's default (often male) voice overlapping live audio.
+    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
     connectionStatus.querySelector(".connection-text").textContent = "AI connected";
     connectionStatus.style.color = "#a6f2cf";
   } catch (error) {
