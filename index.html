@@ -748,6 +748,64 @@ body { background:#0b0d10; color:var(--text); }
   .auth-card { padding:23px !important; }
 }
 
+
+/* Mobile-first app layout: keep the conversation full-width and usable. */
+@media (max-width: 760px) {
+  html, body { width:100%; min-width:0; min-height:100%; overflow-x:hidden; }
+  body { background:var(--bg); }
+  .shell {
+    width:100%; max-width:none; min-height:100dvh; height:100dvh;
+    margin:0; padding: max(8px, env(safe-area-inset-top)) 10px max(8px, env(safe-area-inset-bottom));
+    display:flex; flex-direction:column; gap:10px; overflow:hidden;
+  }
+  .topbar { flex:0 0 auto; padding:9px 10px; gap:8px; border-radius:13px; min-width:0; }
+  .brand { gap:8px; flex:1 1 auto; min-width:0; }
+  .brandname { font-size:18px; }
+  .brandmark { display:none !important; }
+  .top-actions { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:5px; min-width:0; }
+  .top-actions button, .top-actions .button { min-height:36px; padding:7px 9px; font-size:12px; }
+  .workspace { flex:1 1 auto; min-height:0; width:100%; display:flex !important; flex-direction:column; gap:0; overflow:hidden; }
+  .leftbar, .rightbar, .welcome, .shortcuts, .sidebar, .side-panel { display:none !important; }
+  .chat, .chat-panel, .conversation, .chat-container {
+    display:flex; flex:1 1 auto; flex-direction:column; min-height:0; width:100%;
+    max-width:none; margin:0; padding:0; border-radius:15px; overflow:hidden;
+  }
+  .chat-head { flex:0 0 auto; padding:12px 12px 10px; gap:8px; }
+  .chat-head h2, .chat-head h3 { font-size:15px; margin:0; }
+  .chat-head p, .chat-status, #chatStatus { font-size:12px; line-height:1.35; }
+  .messages {
+    flex:1 1 auto; min-height:0; height:auto; max-height:none; overflow-y:auto;
+    overscroll-behavior:contain; -webkit-overflow-scrolling:touch;
+    padding:12px 10px; gap:10px;
+  }
+  .message { max-width:92%; font-size:15px; line-height:1.55; overflow-wrap:anywhere; }
+  #chatForm {
+    flex:0 0 auto; width:100%; display:flex; align-items:flex-end; gap:7px;
+    padding:8px; padding-bottom:max(8px, env(safe-area-inset-bottom));
+    margin:0; border-radius:14px;
+  }
+  #chatInput { flex:1 1 auto; width:0; min-width:0; min-height:44px; max-height:120px; font-size:16px; padding:12px; }
+  #chatForm .mic, #chatForm .send, #micButton, #sendButton {
+    flex:0 0 44px; width:44px; min-width:44px; height:44px; padding:0;
+    display:inline-flex; align-items:center; justify-content:center; border-radius:12px;
+  }
+  .mic-hint, #micHint { display:none !important; }
+  #voiceSettings { max-width:100%; }
+  .auth-gate { flex:1 1 auto; min-height:0; padding:12px !important; overflow:auto; }
+}
+@media (max-width: 390px) {
+  .shell { padding-left:7px; padding-right:7px; }
+  .topbar { padding:8px; }
+  .top-actions button, .top-actions .button { padding:6px 7px; font-size:11px; }
+  .chat-head { padding:10px; }
+  .messages { padding:10px 7px; }
+  #chatForm { gap:5px; padding:6px; }
+  #chatForm .mic, #chatForm .send, #micButton, #sendButton { flex-basis:40px; width:40px; min-width:40px; height:42px; }
+}
+@media (max-height: 520px) and (max-width: 760px) {
+  .topbar { padding:5px 8px; }
+  .chat-head { padding:6px 10px; }
+}
 </style>
 <meta name="avi-ui-version" content="minimal-redesign-2">
 </head>
