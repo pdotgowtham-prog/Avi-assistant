@@ -842,6 +842,7 @@ function saveConversationHistory() {
 function savePersonalMemory() {
   try { localStorage.setItem(PROFILE_MEMORY_KEY, JSON.stringify(personalMemory.slice(-50))); }
   catch (error) { console.warn("Avi could not save personal memory.", error); }
+  syncAviMemories();
 }
 function processMemoryCommand(text) {
   const rememberMatch = text.match(/^\s*(?:avi[, ]+)?remember(?: that)?\s+(.+?)\s*[.!]?\s*$/i);
