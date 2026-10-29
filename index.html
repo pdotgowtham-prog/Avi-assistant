@@ -825,6 +825,7 @@ if (SpeechRecognition) {
   let bargeInAudioContext = null;
   let bargeInFrame = null;
   let bargeInActiveFrames = 0;
+  let bargeInCooldownUntil = 0;
 
   async function startBargeInMonitor() {
     if (bargeInStream || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
@@ -850,14 +851,22 @@ if (SpeechRecognition) {
           sum += value * value;
         }
         const rms = Math.sqrt(sum / samples.length);
-        if (window.speechSynthesis && window.speechSynthesis.speaking && rms > 0.055) {
+        // Avoid cutting Avi off because of speaker bleed or ordinary room noise.
+        // Require a stronger mic signal for several consecutive frames and apply a cooldown.
+        if (
+          window.speechSynthesis &&
+          window.speechSynthesis.speaking &&
+          Date.now() > bargeInCooldownUntil &&
+          rms > 0.14
+        ) {
           bargeInActiveFrames++;
-          if (bargeInActiveFrames >= 5) {
+          if (bargeInActiveFrames >= 12) {
             window.speechSynthesis.cancel();
             mainOrb.classList.remove("speaking");
             hint.textContent = "Avi stopped — go ahead, I’m listening.";
             status.textContent = "Listening to you";
             bargeInActiveFrames = 0;
+            bargeInCooldownUntil = Date.now() + 900;
             if (!listening) {
               try { recognition.start(); } catch (error) {}
             }
@@ -908,15 +917,8 @@ if (SpeechRecognition) {
       else interimText += (interimText ? " " : "") + transcript;
     }
 
-    // The first interim words from the user's voice interrupt Avi immediately.
-    // Wait for a final transcript before sending it, so partial words aren't submitted.
-    if (handsFree && interimText && window.speechSynthesis && window.speechSynthesis.speaking) {
-      window.speechSynthesis.cancel();
-      mainOrb.classList.remove("speaking");
-      hint.textContent = "I’m listening — go ahead.";
-      status.textContent = "Listening to you";
-    }
-
+    // Barge-in is handled by the microphone voice-activity monitor above.
+    // Do not interrupt on an interim transcript: it can contain Avi's own speaker bleed.
     const spokenText = finalText.trim();
     if (!spokenText) return;
     try { recognition.stop(); } catch (error) {}
