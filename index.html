@@ -708,6 +708,21 @@ body{background:radial-gradient(ellipse at 50% -18%,rgba(91,139,154,.16),transpa
 .auth-card .auth-link{background:transparent!important;border-color:#303a43!important;color:#d6dfe1!important;border-radius:12px!important}
 @media(max-width:760px){html,body{width:100%;height:100%;min-height:0;overflow:hidden}body{height:100dvh}.shell{display:flex;flex-direction:column;width:100%;height:100dvh;min-height:0;max-width:none!important;padding:max(10px,env(safe-area-inset-top)) 12px max(8px,env(safe-area-inset-bottom))!important;gap:8px!important;overflow:hidden}.topbar{flex:0 0 auto;min-height:54px;padding:4px 0 10px!important;align-items:center}.brandname{font-size:23px!important}.brandtag{display:none!important}.top-actions{gap:5px!important;justify-content:flex-end}.account-chip{max-width:115px;padding:8px;font-size:11px}.connection{display:none!important}.voice-settings-button{min-height:38px;padding:0 10px!important}.iconbutton{min-width:38px;min-height:38px;padding:0 10px!important}.workspace{display:flex!important;flex:1 1 auto;width:100%;min-height:0;height:auto;margin:0!important;overflow:hidden;flex-direction:column}.welcome{flex:0 0 auto;padding:16px!important;margin:0 0 8px!important;border-radius:15px!important}.welcome h1,.welcome h2{font-size:22px!important}.welcome p{font-size:12px;margin-bottom:0}.main{display:flex;flex:1 1 auto;min-height:0;overflow:hidden}.chat{display:flex;flex:1 1 auto;width:100%;height:100%;min-height:0;max-height:none;border-radius:16px!important}.chat-head{flex:0 0 auto;min-height:48px;padding:11px 12px!important}.messages{flex:1 1 0;height:0;min-height:0;padding:13px 10px;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}.message{max-width:92%;font-size:14px;padding:11px 12px}#chatForm{flex:0 0 auto;width:100%;min-width:0;gap:6px!important;padding:8px!important;padding-bottom:max(8px,env(safe-area-inset-bottom))!important}#chatForm input{width:0;flex:1 1 0;min-width:0;min-height:44px;padding:10px;font-size:16px}#chatForm .mic{width:40px;min-width:40px;height:42px}#chatForm .send{min-width:58px;height:42px;padding:0 11px}.hint{display:none}.voice-settings{margin:0 0 8px;max-width:100%}}
 @media(max-width:390px){.shell{padding-left:8px!important;padding-right:8px!important}.top-actions{gap:4px!important}.account-chip{max-width:85px}.welcome{padding:13px!important}.welcome h1,.welcome h2{font-size:20px!important}#chatForm{gap:5px!important;padding:6px!important}#chatForm .mic{width:36px;min-width:36px}#chatForm .send{min-width:52px;padding:0 8px}}
+
+/* AVI NAV / ACCOUNT POLISH */
+.top-actions{gap:8px!important;align-items:center}
+.home-button{font-size:22px!important;min-width:42px}
+.profile-button{display:inline-flex;align-items:center;gap:8px;max-width:220px;cursor:pointer}
+.profile-icon{display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:50%;background:#293d3b;color:#c6e4df;font-size:10px;flex-shrink:0}
+.profile-email{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.profile-caret{color:#8f9da4;font-size:12px}
+.connection{display:inline-flex!important;align-items:center;gap:7px}
+.connection-dot{width:8px;height:8px;border-radius:50%;background:#d4ae65;box-shadow:0 0 0 3px rgba(212,174,101,.12);flex-shrink:0}
+.connection:has(.connection-text){white-space:nowrap}
+.new-chat-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:40px;padding:0 14px;border-radius:11px;border:1px solid #b8dcd7;background:#c6e4df;color:#14201f;font-weight:650;font-size:12px;cursor:pointer}
+.new-chat-button:hover{background:#d8efeb}
+.private-label{font-size:10px;letter-spacing:1.1px;color:#7f9698!important}
+@media(max-width:760px){.top-actions{gap:5px!important}.profile-button{max-width:130px;padding:7px 9px!important}.profile-email{max-width:68px}.new-chat-button{min-width:38px;width:38px;padding:0;font-size:20px}.new-chat-button span{display:none}.home-button{min-width:36px}.connection{display:none!important}}
 </style>
 <meta name="avi-ui-version" content="minimal-redesign-2">
 </head>
@@ -735,9 +750,9 @@ body{background:radial-gradient(ellipse at 50% -18%,rgba(91,139,154,.16),transpa
 <path d="M27 47 32 49 37 47" stroke="#70dce8" stroke-width="1.8" stroke-linecap="round"/>
 </svg>
   </div>
-  <div><div class="brandname">avi<span style="color:#a5dce0">.</span></div><div class="brandtag">Your personal AI companion</div></div>
+  <div><div class="brandname">avi<span style="color:#a5dce0">.</span></div><div class="brandtag">A calmer, thoughtful AI companion</div></div>
  </div>
- <div class="top-actions"><span id="accountChip" class="account-chip" hidden></span><button class="iconbutton" id="installAvi" type="button" title="Install Avi on this device" aria-label="Install Avi" hidden>⇩</button><button class="iconbutton" id="signOutAvi" type="button" title="Sign out" aria-label="Sign out" hidden>↪</button><div class="connection" id="connectionStatus">Connecting...</div><button class="voice-settings-button" type="button" id="voiceSettingsToggle" aria-expanded="false" aria-controls="voiceSettings">⚙ Voice</button><button class="iconbutton" type="button" id="topClear" title="Start a new chat" aria-label="Start a new chat">↻</button></div>
+ <div class="top-actions"><button class="iconbutton home-button" id="homeAvi" type="button" title="Home" aria-label="Home">⌂</button><button id="accountChip" class="account-chip profile-button" type="button" title="Account profile" aria-label="Account profile" hidden><span class="profile-icon">●</span><span class="profile-email"></span><span class="profile-caret">▾</span></button><button class="iconbutton" id="installAvi" type="button" title="Install Avi on this device" aria-label="Install Avi" hidden>⇩</button><button class="iconbutton" id="signOutAvi" type="button" title="Sign out" aria-label="Sign out" hidden>↪</button><div class="connection" id="connectionStatus"><span class="connection-dot"></span><span class="connection-text">Connecting...</span></div><button class="voice-settings-button" type="button" id="voiceSettingsToggle" aria-expanded="false" aria-controls="voiceSettings">⚙ Settings</button><button class="new-chat-button" type="button" id="topClear" title="Start a new chat">＋ <span>New chat</span></button></div>
 </header>
 <section class="voice-settings panel" id="voiceSettings" hidden aria-label="Voice preferences">
  <div class="voice-settings-copy"><strong>Voice preference</strong><span>Choose how Avi sounds. Your choice is saved on this device.</span></div>
@@ -793,7 +808,7 @@ body{background:radial-gradient(ellipse at 50% -18%,rgba(91,139,154,.16),transpa
 <path d="M24 38 32 35 40 38 36 43 28 43 24 38Z" fill="#8a9eff"/>
 <path d="M27 47 32 49 37 47" stroke="#70dce8" stroke-width="1.8" stroke-linecap="round"/>
 </svg></div><div><strong>Talk to Avi</strong><small id="chatStatus">Ready when you are</small></div></div>
-    <div class="chat-tools"><span class="private-label">YOUR PRIVATE SPACE</span><button type="button" class="clear-chat" id="clearChat" title="Start a fresh conversation" aria-label="Clear conversation">↻</button></div>
+    <div class="chat-tools"><span class="private-label">YOUR CONVERSATION</span><button type="button" class="clear-chat" id="clearChat" title="Start a fresh conversation" aria-label="Clear conversation">↻</button></div>
    </div>
    <div class="messages" id="messages" aria-live="polite"><div class="message avi">Hey, I'm here. 💙 What's on your mind?</div></div>
    <form id="chatForm"><input id="chatInput" type="text" placeholder="Message Avi..." autocomplete="off" aria-label="Message Avi" required><button class="mic" id="micButton" type="button" aria-label="Talk to Avi" title="Talk to Avi">🎙</button><button class="send" id="sendButton" type="submit" aria-label="Send message">Send ↗</button></form>
