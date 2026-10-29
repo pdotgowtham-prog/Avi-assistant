@@ -662,6 +662,17 @@ function processMemoryCommand(text) {
   }
   return { handled: false };
 }
+function savePersonalFactFromMessage(text) {
+  // Automatically retain simple first-person preference facts across chats.
+  const match = text.match(/\bmy\s+(favorite\s+[^.!?]+?)\s+is\s+([^.!?]+)[.!]?\s*$/i);
+  if (!match) return;
+  const fact = "My " + match[1].trim() + " is " + match[2].trim();
+  if (!personalMemory.some(item => item.toLowerCase() === fact.toLowerCase())) {
+    personalMemory.push(fact);
+    personalMemory = personalMemory.slice(-50);
+    savePersonalMemory();
+  }
+}
 function restoreConversationHistory() {
   if (!conversationHistory.length) return;
   messages.innerHTML = "";
@@ -723,6 +734,7 @@ async function sendMessage(text) {
   const loadingMessage = addMessage("Thinking... 💙", "avi");
 
   try {
+    savePersonalFactFromMessage(text);
     const memoryCommand = processMemoryCommand(text);
     const reply = memoryCommand.handled ? memoryCommand.reply : await respondToText(text);
 
