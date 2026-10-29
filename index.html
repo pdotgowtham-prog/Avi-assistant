@@ -813,16 +813,30 @@ async function aviApplySession(session) {
 function savePersonalMemoryLocalOnly() {
  try { localStorage.setItem(PROFILE_MEMORY_KEY,JSON.stringify(personalMemory.slice(-50))); } catch(error) {}
 }
+let aviMemorySyncChain = Promise.resolve();
 async function syncAviMemories() {
- if (!aviSession || !aviMemorySyncReady) return;
- try {
-  const removed = await aviAuthClient.from("avi_personal_memories").delete().eq("user_id",aviSession.user.id);
-  if (removed.error) throw removed.error;
-  if (personalMemory.length) {
-   const inserted = await aviAuthClient.from("avi_personal_memories").insert(personalMemory.slice(-50).map(memory=>({user_id:aviSession.user.id,memory})));
-   if (inserted.error) throw inserted.error;
+ if (!aviSession || !aviMemorySyncReady || !aviAuthClient) return;
+ const userId = aviSession.user.id;
+ const desired = [...new Set(personalMemory.slice(-50).filter(item => typeof item === "string" && item.trim()))];
+ aviMemorySyncChain = aviMemorySyncChain.then(async () => {
+  if (!aviSession || aviSession.user.id !== userId) return;
+  const current = await aviAuthClient.from("avi_personal_memories").select("id,memory").eq("user_id", userId);
+  if (current.error) throw current.error;
+  const desiredSet = new Set(desired);
+  const obsoleteIds = (current.data || []).filter(row => !desiredSet.has(row.memory)).map(row => row.id);
+  if (obsoleteIds.length) {
+   const removed = await aviAuthClient.from("avi_personal_memories").delete().eq("user_id", userId).in("id", obsoleteIds);
+   if (removed.error) throw removed.error;
   }
- } catch(error) { console.error("Avi memory sync failed:",error); status.textContent = "Memory saved on this device; cloud sync needs attention."; }
+  if (desired.length) {
+   const saved = await aviAuthClient.from("avi_personal_memories").upsert(desired.map(memory => ({ user_id: userId, memory })), { onConflict: "user_id,memory", ignoreDuplicates: true });
+   if (saved.error) throw saved.error;
+  }
+ }).catch(error => {
+  console.error("Avi memory sync failed:", error);
+  if (typeof status !== "undefined") status.textContent = "Memory is on this device, but account sync failed. Please check your connection.";
+ });
+ await aviMemorySyncChain;
 }
 signOutAvi.addEventListener("click", async () => { if (aviAuthClient) await aviAuthClient.auth.signOut(); });
 if (aviAuthClient) {
