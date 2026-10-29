@@ -514,6 +514,46 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 /* The floating Avi core competes with the welcome copy and quick-start cards; remove it from the home hero. */
 .welcome .core-wrap{display:none!important}
 
+
+/* Premium home refinement based on the latest visual review. */
+.brand{gap:14px!important}
+.brandmark{width:58px!important;height:58px!important;border-radius:18px!important;border-color:rgba(197,139,78,.52)!important;background:linear-gradient(145deg,#1b1714,#0d0e10)!important;box-shadow:inset 0 1px rgba(255,255,255,.07),0 7px 24px rgba(0,0,0,.28)!important}
+.brandmark svg{width:38px!important;height:38px!important}
+.brandname{font-family:'Manrope',sans-serif!important;font-size:32px!important;font-weight:800!important;letter-spacing:-1.8px!important;color:#fffaf3!important}
+.brandname span{color:#f4ad42!important}
+.brandtag{font-family:'DM Sans',sans-serif!important;font-size:9px!important;letter-spacing:.18em!important;color:#c4a889!important;text-transform:uppercase}
+.topbar{gap:14px!important;border-color:rgba(197,139,78,.23)!important;background:linear-gradient(110deg,rgba(20,20,22,.97),rgba(10,11,13,.97))!important;box-shadow:0 16px 44px rgba(0,0,0,.28),inset 0 1px rgba(255,255,255,.045)!important}
+.top-actions{gap:10px!important}
+.top-actions button{border-radius:16px!important;transition:transform .18s ease,border-color .18s ease,filter .18s ease!important}
+.top-actions button:hover{transform:translateY(-1px);filter:brightness(1.07)}
+.top-actions .new-chat-button{background:linear-gradient(135deg,#f2a83e,#ffc45f)!important;color:#21160a!important;border-color:rgba(255,210,130,.7)!important;box-shadow:0 8px 24px rgba(197,139,78,.14)!important;font-weight:700!important}
+.top-actions .iconbutton{border-color:rgba(197,139,78,.18)!important;background:rgba(255,255,255,.025)!important}
+.top-actions .connection{border-color:rgba(68,194,144,.24)!important;background:rgba(21,76,57,.20)!important}
+.hero-shortcuts{display:none!important}
+.welcome-copy{width:min(56%,570px)!important;right:5%!important;top:16%!important}
+.welcome .intro{max-width:540px!important}
+.home-portrait{left:-1%!important;width:min(51%,600px)!important;filter:drop-shadow(0 28px 35px rgba(0,0,0,.42))!important}
+.chat-identity .tiny-mark{display:none!important}
+.chat-identity{gap:0!important}
+#micButton{display:grid!important;place-items:center!important;position:relative!important;color:#f4ad42!important;border-color:rgba(197,139,78,.55)!important;background:linear-gradient(145deg,rgba(139,58,26,.55),rgba(25,20,18,.95))!important;box-shadow:inset 0 1px rgba(255,255,255,.08),0 4px 15px rgba(0,0,0,.2)!important}
+#micButton:before{content:""!important;display:block!important;width:25px!important;height:25px!important;background-color:currentColor!important;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3.2c-1.5 0-2.7 1.2-2.7 2.7v4.5a2.7 2.7 0 0 0 5.4 0V5.9c0-1.5-1.2-2.7-2.7-2.7Z'/%3E%3Cpath d='M6.5 10.2v.4a5.5 5.5 0 0 0 11 0v-.4M12 16.2v4M9 20.2h6'/%3E%3Cpath d='M18.7 3.8c1.1.8 1.8 2 2 3.4'/%3E%3C/svg%3E") center/contain no-repeat!important}
+#micButton:hover{color:#ffd28a!important;box-shadow:0 0 0 3px rgba(197,139,78,.1),0 0 20px rgba(197,139,78,.15)!important}
+#micButton[aria-pressed="true"],#micButton.listening{color:#3de0ff!important;border-color:rgba(61,224,255,.7)!important}
+#sendButton{border-radius:14px!important;background:linear-gradient(145deg,#a85a28,#7d3b1e)!important;border-color:rgba(197,139,78,.6)!important}
+@media(max-width:880px){
+ .welcome-copy{width:58%!important;right:4%!important;top:10%!important}
+ .home-portrait{left:-7%!important;width:53%!important}
+ .hero-shortcuts{display:none!important}
+}
+@media(max-width:520px){
+ .brandmark{width:44px!important;height:44px!important;border-radius:14px!important}
+ .brandmark svg{width:30px!important;height:30px!important}
+ .brandname{font-size:27px!important}
+ .welcome-copy{width:60%!important;right:3%!important;top:8%!important}
+ .home-portrait{left:-13%!important;width:64%!important}
+}
+@media(prefers-reduced-motion:reduce){.top-actions button{transition:none!important}}
+
 </style>
 <meta name="avi-ui-version" content="avi-calm-brand-voicefix-1">
 </head>
