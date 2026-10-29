@@ -438,6 +438,78 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 @media(max-width:880px){.auth-gate{display:block!important;padding:12px!important}.auth-showcase{display:none!important}.auth-gate .auth-card{min-height:0!important;margin:min(8dvh,60px) auto!important;padding:27px!important}.workspace{display:block!important}.main{grid-template-rows:minmax(270px,46dvh) minmax(0,1fr)!important;gap:8px!important}.welcome{min-height:0!important}.welcome-copy{top:13%!important;right:5%!important;width:48%!important}.home-portrait{left:-12%!important;width:62%!important;height:95%!important}.hero-shortcuts{right:4%!important;bottom:14px!important;width:54%!important}.core-wrap{display:none!important}}
 
 
+
+/* Avi layout repair — scoped visual overrides; no chat/auth/API behavior changes. */
+.brandmark .avi-mark,.auth-brand-symbol .avi-mark{width:31px;height:31px;overflow:visible}
+.brandmark .avi-ear,.auth-brand-symbol .avi-ear{fill:rgba(197,139,78,.24);stroke:var(--tan);stroke-width:2.2;stroke-linejoin:round}
+.brandmark .avi-head,.auth-brand-symbol .avi-head{fill:#15171a;stroke:var(--tan);stroke-width:2.2;stroke-linejoin:round}
+.brandmark .avi-mask,.auth-brand-symbol .avi-mask{fill:rgba(197,139,78,.12);stroke:var(--tan);stroke-width:1.5;stroke-linejoin:round}
+.brandmark .avi-brow,.auth-brand-symbol .avi-brow{fill:var(--tan);stroke:var(--tan);filter:drop-shadow(0 0 2px rgba(197,139,78,.35))}
+.brandmark .avi-muzzle,.auth-brand-symbol .avi-muzzle{fill:#c58b4e;stroke:#c58b4e;stroke-width:1.3}
+.brandmark .avi-nose,.auth-brand-symbol .avi-nose{fill:#090a0c;stroke:#090a0c}
+@media(min-width:881px){
+ .shell{height:auto;min-height:100dvh;grid-template-rows:auto minmax(0,1fr);overflow:visible}
+ .workspace{min-height:0;overflow:visible;grid-template-columns:220px minmax(0,1fr)!important}
+ .main{min-height:0;grid-template-rows:minmax(300px,0.9fr) minmax(280px,0.8fr)!important}
+ .welcome{min-height:300px!important}
+ .welcome-copy{top:12%!important;right:4%!important;width:min(46%,500px)!important}
+ .home-portrait{left:1%!important;width:min(47%,520px)!important;height:92%!important}
+ .hero-shortcuts{right:3%!important;bottom:16px!important;width:min(55%,650px)!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .core-wrap{right:12px!important;top:10px!important;transform:scale(.46)!important;transform-origin:top right!important}
+}
+@media(min-width:881px) and (max-height:820px){
+ .shell{padding-top:12px!important;padding-bottom:12px!important}
+ .main{grid-template-rows:minmax(260px,0.82fr) minmax(260px,0.8fr)!important}
+ .welcome{min-height:260px!important}
+ .hero-shortcut{min-height:58px!important;padding:8px 10px!important}
+ .hero-shortcut>span{width:32px!important;height:32px!important}
+}
+@media(max-width:880px){
+ .shell{height:auto!important;min-height:100dvh!important;padding-bottom:96px!important}
+ .topbar{flex-wrap:nowrap!important;align-items:flex-start!important}
+ .top-actions{width:auto!important;max-width:100%;flex:1 1 auto!important;justify-content:flex-end!important;flex-wrap:wrap!important;overflow:visible!important}
+ .top-actions .connection{max-width:145px!important}
+ .workspace{display:flex!important;flex-direction:column!important;overflow:visible!important}
+ .main{display:grid!important;grid-template-rows:minmax(285px,42dvh) minmax(360px,1fr)!important;min-height:720px!important;overflow:visible!important}
+ .welcome{position:relative!important;min-height:285px!important;overflow:hidden!important}
+ .welcome-copy{top:9%!important;right:4%!important;width:52%!important}
+ .welcome h1,.welcome h2{max-width:100%!important;font-size:clamp(20px,4.8vw,29px)!important}
+ .welcome .intro{display:block!important;max-width:100%!important;font-size:11px!important}
+ .welcome .hero-actions{display:flex!important;flex-wrap:wrap!important;margin-top:10px!important}
+ .home-portrait{left:-5%!important;width:54%!important;height:88%!important}
+ .hero-shortcuts{right:3%!important;bottom:10px!important;width:53%!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:5px!important}
+ .hero-shortcut{min-height:50px!important;grid-template-columns:25px minmax(0,1fr)!important;column-gap:5px!important;padding:6px!important}
+ .hero-shortcut>span{width:25px!important;height:25px!important;font-size:8px!important}
+ .hero-shortcut strong{font-size:9px!important;overflow-wrap:anywhere}
+ .hero-shortcut small{font-size:7px!important}
+ .core-wrap{display:none!important}
+ .chat{min-height:360px!important}
+ .messages{min-height:240px!important}
+ #chatForm{display:flex!important;align-items:center!important;gap:7px!important}
+ #chatForm .mic,#chatForm .send{display:grid!important;flex:0 0 44px!important;width:44px!important;height:44px!important;min-width:44px!important}
+ #chatForm .mic:before{content:""!important;display:block!important;width:20px!important;height:20px!important;background-color:currentColor!important;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='9' y='2' width='6' height='12' rx='3'/%3E%3Cpath d='M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8'/%3E%3C/svg%3E") center/contain no-repeat!important}
+}
+@media(max-width:520px){
+ .topbar{align-items:center!important;flex-wrap:wrap!important}
+ .top-actions{width:100%!important;justify-content:flex-start!important}
+ .main{grid-template-rows:minmax(340px,48dvh) minmax(360px,1fr)!important;min-height:760px!important}
+ .welcome{min-height:340px!important}
+ .welcome-copy{top:8%!important;right:4%!important;width:57%!important}
+ .welcome h1,.welcome h2{font-size:20px!important}
+ .welcome .intro{font-size:10px!important;line-height:1.45!important}
+ .welcome .hero-actions{display:none!important}
+ .home-portrait{left:-15%!important;width:67%!important;height:78%!important}
+ .hero-shortcuts{right:3%!important;bottom:9px!important;width:58%!important;grid-template-columns:1fr!important;gap:4px!important}
+ .hero-shortcut{min-height:34px!important;padding:4px 6px!important;grid-template-columns:22px minmax(0,1fr)!important}
+ .hero-shortcut>span{width:22px!important;height:22px!important;font-size:7px!important}
+ .hero-shortcut strong{font-size:8px!important}
+ .hero-shortcut small{display:none!important}
+ #chatForm{padding:7px!important}
+ #chatForm input{padding:10px 8px!important;font-size:16px!important}
+ #chatForm .mic,#chatForm .send{flex-basis:40px!important;width:40px!important;height:42px!important;min-width:40px!important}
+}
+@media(prefers-reduced-motion:reduce){.orb-rings,.core,.message{animation:none!important;transition:none!important}}
+
 </style>
 <meta name="avi-ui-version" content="avi-calm-brand-voicefix-1">
 </head>
@@ -449,7 +521,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
  </div>
  <form class="auth-card" id="authForm">
   <div class="auth-brand">
-   <span class="auth-brand-symbol" aria-hidden="true"><svg class="avi-mark" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15 10 11l2 18c1 13 8 22 20 26 12-4 19-13 20-26l2-18-8 4-14-6-14 6Z"/><path d="M23 30c2-3 5-3 7 0m4 0c2-3 5-3 7 0"/><path d="M26 40c4 3 8 3 12 0"/><path d="M32 17v6"/></svg></span>
+   <span class="auth-brand-symbol" aria-hidden="true"><svg class="avi-mark" viewBox="0 0 64 64" aria-hidden="true"><path class="avi-ear" d="M17 27 10 9l18 10 4 5-4 5Z"/><path class="avi-ear" d="m47 27 7-18-18 10-4 5 4 5Z"/><path class="avi-head" d="M16 25 32 18l16 7v14c0 10-7 17-16 21-9-4-16-11-16-21Z"/><path class="avi-mask" d="M18 38 25 34l7 3 7-3 7 4-4 10-10 5-10-5Z"/><circle class="avi-brow" cx="25" cy="32" r="2.7"/><circle class="avi-brow" cx="39" cy="32" r="2.7"/><path class="avi-muzzle" d="m27 42 5-2 5 2-2 5h-6Z"/><path class="avi-nose" d="m30 42 2-1 2 1-2 2Z"/></svg></span>
    <span><strong>Avi AI</strong><small>CALM. CLEAR. PERSONAL.</small></span>
   </div>
   <h2 id="authHeading">Welcome back.</h2>
@@ -466,7 +538,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 <main class="shell">
  <header class="topbar">
   <div class="brand">
-   <div class="brandmark" aria-hidden="true"><svg class="avi-mark" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15 10 11l2 18c1 13 8 22 20 26 12-4 19-13 20-26l2-18-8 4-14-6-14 6Z"/><path d="M23 30c2-3 5-3 7 0m4 0c2-3 5-3 7 0"/><path d="M26 40c4 3 8 3 12 0"/><path d="M32 17v6"/></svg></div>
+   <div class="brandmark" aria-hidden="true"><svg class="avi-mark" viewBox="0 0 64 64" aria-hidden="true"><path class="avi-ear" d="M17 27 10 9l18 10 4 5-4 5Z"/><path class="avi-ear" d="m47 27 7-18-18 10-4 5 4 5Z"/><path class="avi-head" d="M16 25 32 18l16 7v14c0 10-7 17-16 21-9-4-16-11-16-21Z"/><path class="avi-mask" d="M18 38 25 34l7 3 7-3 7 4-4 10-10 5-10-5Z"/><circle class="avi-brow" cx="25" cy="32" r="2.7"/><circle class="avi-brow" cx="39" cy="32" r="2.7"/><path class="avi-muzzle" d="m27 42 5-2 5 2-2 5h-6Z"/><path class="avi-nose" d="m30 42 2-1 2 1-2 2Z"/></svg></div>
    <div><div class="brandname">AVI<span>.</span></div><div class="brandtag">LOYAL. ALERT. YOURS.</div></div>
   </div>
   <div class="top-actions">
@@ -555,7 +627,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
   <aside class="rightbar glass-panel" aria-label="Assistant tools">
    <div class="section-label">SYSTEM OVERVIEW</div>
    <div class="status-hero">
-    <div class="status-orbit" aria-hidden="true"><svg class="avi-mark" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15 10 11l2 18c1 13 8 22 20 26 12-4 19-13 20-26l2-18-8 4-14-6-14 6Z"/><path d="M23 30c2-3 5-3 7 0m4 0c2-3 5-3 7 0"/><path d="M26 40c4 3 8 3 12 0"/><path d="M32 17v6"/></svg></div>
+    <div class="status-orbit" aria-hidden="true"><svg class="avi-mark" viewBox="0 0 64 64" aria-hidden="true"><path class="avi-ear" d="M17 27 10 9l18 10 4 5-4 5Z"/><path class="avi-ear" d="m47 27 7-18-18 10-4 5 4 5Z"/><path class="avi-head" d="M16 25 32 18l16 7v14c0 10-7 17-16 21-9-4-16-11-16-21Z"/><path class="avi-mask" d="M18 38 25 34l7 3 7-3 7 4-4 10-10 5-10-5Z"/><circle class="avi-brow" cx="25" cy="32" r="2.7"/><circle class="avi-brow" cx="39" cy="32" r="2.7"/><path class="avi-muzzle" d="m27 42 5-2 5 2-2 5h-6Z"/><path class="avi-nose" d="m30 42 2-1 2 1-2 2Z"/></svg></div>
     <strong>STEADY BY DESIGN</strong>
     <p>A private place to think, talk, plan, and keep track of what matters to you.</p>
    </div>
