@@ -726,18 +726,39 @@ const signOutAvi = document.getElementById("signOutAvi");
 let aviAuthMode = "signin";
 let aviSession = null;
 let aviMemorySyncReady = false;
-authModeToggle.addEventListener("click", () => {
+authModeToggle.addEventListener("click", async () => {
  if (aviAuthMode === "signin") {
-  // Make the visible "Create account" action actually start account creation,
-  // instead of requiring a confusing second click on another button.
+  // This button performs account creation directly with the entered credentials.
   aviAuthMode = "signup";
-  authHeading.textContent = "Create your Avi account.";
-  authDescription.textContent = "Create an account to keep your personal memories private and synced.";
-  authSubmit.textContent = "Create account";
-  authModeToggle.textContent = "Back to sign in";
-  authPassword.autocomplete = "new-password";
-  authStatus.textContent = "";
-  authForm.requestSubmit();
+  authHeading.textContent = "Creating your Avi account…";
+  authDescription.textContent = "Please wait while we securely create your account.";
+  authSubmit.disabled = true;
+  authModeToggle.disabled = true;
+  authStatus.textContent = "Creating account…";
+  try {
+   const email = authEmail.value.trim();
+   const password = authPassword.value;
+   if (!email || !authEmail.checkValidity()) throw new Error("Enter a valid email address first.");
+   if (password.length < 6) throw new Error("Enter a password with at least 6 characters.");
+   const result = await aviAuthClient.auth.signUp({email,password});
+   if (result.error) throw result.error;
+   if (!result.data.session) {
+    authHeading.textContent = "Check your email.";
+    authDescription.textContent = "Your account was created. Confirm your email, then return here and sign in.";
+    authStatus.textContent = "Account created. Check your inbox (and spam folder) for the confirmation email.";
+   } else {
+    await aviApplySession(result.data.session);
+   }
+  } catch(error) {
+   authHeading.textContent = "Create your Avi account.";
+   authDescription.textContent = "Enter your email and a password of at least 6 characters.";
+   authStatus.textContent = error.message || "Account creation failed. Please try again.";
+   aviAuthMode = "signin";
+  } finally {
+   authSubmit.disabled = false;
+   authModeToggle.disabled = false;
+   if (aviAuthMode === "signin") { authSubmit.textContent = "Sign in"; authModeToggle.textContent = "Create account"; }
+  }
  } else {
   aviAuthMode = "signin";
   authHeading.textContent = "Welcome back.";
