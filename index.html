@@ -470,6 +470,19 @@ h1 span{display:inline;margin-left:8px;background:none;color:#c6dce6;font-weight
 button:hover{filter:brightness(1.12)}
 @media(min-height:850px){.welcome{padding-top:50px;padding-bottom:28px}}
 @media(max-width:760px){.shell{padding:0 14px}.topbar{min-height:58px;padding:10px 0}.brandmark{width:30px;height:30px}.brandmark svg{width:25px;height:25px}.brandname{font-size:19px}.brandtag{font-size:10px}.connection{font-size:10px;padding:6px 8px}.workspace,.main{min-height:calc(100vh - 58px)}.welcome{padding:30px 0 17px}h1{font-size:27px}.intro{font-size:12px;padding:0 8px}.messages{padding:17px 0}.message{max-width:90%;font-size:13px;padding:10px 12px}#chatForm{gap:5px;padding:6px 8px;border-radius:14px}#chatForm input{font-size:13px;padding:10px 3px}#chatForm .mic,#chatForm .send{flex-basis:35px;width:35px;height:35px;border-radius:10px}}
+
+/* Voice preference control */
+.voice-settings-button{border:1px solid #3a515d;background:#172630;color:#d9eeee;border-radius:10px;padding:9px 11px;font-size:11px;white-space:nowrap}
+.voice-settings-button:hover{background:#213642}
+.voice-settings{margin-top:-5px;padding:15px 17px;display:grid;grid-template-columns:minmax(170px,1fr) minmax(190px,260px);gap:8px 16px;align-items:center;border-radius:14px}
+.voice-settings[hidden]{display:none}
+.voice-settings-copy{grid-row:span 2;display:flex;flex-direction:column;gap:5px}
+.voice-settings-copy strong{font-size:12px}
+.voice-settings-copy span,.voice-settings-note{font-size:10px;color:var(--muted);line-height:1.5}
+.voice-select-label{font-size:10px;color:#b6c5cf}
+.voice-select{width:100%;background:#0b121a;color:var(--text);border:1px solid #344754;border-radius:9px;padding:10px;font:inherit;font-size:12px}
+.voice-settings-note{grid-column:2;margin:0}
+@media(max-width:760px){.voice-settings-button{font-size:10px;padding:8px}.voice-settings{grid-template-columns:1fr;gap:8px;padding:13px}.voice-settings-copy{grid-row:auto}.voice-settings-note{grid-column:1}}
 </style>
 </head>
 <body>
@@ -492,8 +505,25 @@ button:hover{filter:brightness(1.12)}
   </div>
   <div><div class="brandname">avi<span style="color:#a5dce0">.</span></div><div class="brandtag">Your personal AI companion</div></div>
  </div>
- <div class="top-actions"><div class="connection" id="connectionStatus">Connecting...</div><button class="iconbutton" type="button" id="topClear" title="Start a new chat" aria-label="Start a new chat">↻</button></div>
+ <div class="top-actions"><div class="connection" id="connectionStatus">Connecting...</div><button class="voice-settings-button" type="button" id="voiceSettingsToggle" aria-expanded="false" aria-controls="voiceSettings">⚙ Voice</button><button class="iconbutton" type="button" id="topClear" title="Start a new chat" aria-label="Start a new chat">↻</button></div>
 </header>
+<section class="voice-settings panel" id="voiceSettings" hidden aria-label="Voice preferences">
+ <div class="voice-settings-copy"><strong>Voice preference</strong><span>Choose how Avi sounds. Your choice is saved on this device.</span></div>
+ <label class="voice-select-label" for="voicePreference">Avi’s voice</label>
+ <select id="voicePreference" class="voice-select">
+  <option value="Aoede">Aoede — Breezy</option>
+  <option value="Kore">Kore — Firm</option>
+  <option value="Leda">Leda — Youthful</option>
+  <option value="Achird">Achird — Friendly</option>
+  <option value="Callirrhoe">Callirrhoe — Easy-going</option>
+  <option value="Zephyr">Zephyr — Bright</option>
+  <option value="Sulafat">Sulafat — Warm</option>
+  <option value="Charon">Charon — Informative</option>
+  <option value="Puck">Puck — Upbeat</option>
+  <option value="Enceladus">Enceladus — Breathy</option>
+ </select>
+ <p class="voice-settings-note" id="voiceSettingsNote">Changes apply when you next start live voice.</p>
+</section>
 <div class="workspace">
  <aside class="panel sidebar">
   <div class="section-label">WORKSPACE</div>
@@ -603,6 +633,31 @@ const sendButton = document.getElementById("sendButton");
 const connectionStatus = document.getElementById("connectionStatus");
 const mainOrb = document.getElementById("mainOrb");
 const clearChatButton = document.getElementById("clearChat");
+const voiceSettingsToggle = document.getElementById("voiceSettingsToggle");
+const voiceSettingsPanel = document.getElementById("voiceSettings");
+const voicePreference = document.getElementById("voicePreference");
+const voiceSettingsNote = document.getElementById("voiceSettingsNote");
+const VOICE_PREFERENCE_KEY = "avi_voice_preference_v1";
+const AVAILABLE_AVI_VOICES = ["Aoede", "Kore", "Leda", "Achird", "Callirrhoe", "Zephyr", "Sulafat", "Charon", "Puck", "Enceladus"];
+let selectedAviVoice = "Aoede";
+try {
+  const savedVoice = localStorage.getItem(VOICE_PREFERENCE_KEY);
+  if (savedVoice && AVAILABLE_AVI_VOICES.includes(savedVoice)) selectedAviVoice = savedVoice;
+} catch (error) { console.warn("Avi could not load voice preference.", error); }
+voicePreference.value = selectedAviVoice;
+voiceSettingsToggle.addEventListener("click", function() {
+  const opening = voiceSettingsPanel.hidden;
+  voiceSettingsPanel.hidden = !opening;
+  voiceSettingsToggle.setAttribute("aria-expanded", String(opening));
+});
+voicePreference.addEventListener("change", function() {
+  if (AVAILABLE_AVI_VOICES.includes(voicePreference.value)) selectedAviVoice = voicePreference.value;
+  try { localStorage.setItem(VOICE_PREFERENCE_KEY, selectedAviVoice); }
+  catch (error) { console.warn("Avi could not save voice preference.", error); }
+  voiceSettingsNote.textContent = liveHandsFree
+    ? "Saved. Turn live voice off and on again for the new voice to take effect."
+    : "Saved. Your selected voice will be used next time you start live voice.";
+});
 
 // Browser-local conversation history and long-term facts.
 const MEMORY_KEY = "avi_conversation_memory_v1";
@@ -924,6 +979,7 @@ async function startLiveVoice() {
       model: "gemini-3.8-live",
       config: {
         responseModalities: [sdk.Modality.AUDIO],
+        speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: selectedAviVoice } } },
         inputAudioTranscription: {},
         outputAudioTranscription: {},
         systemInstruction: "You are Avi, a warm and loyal personal AI companion. Speak in natural, clear Indian English. Keep replies concise unless more detail is needed. The user may interrupt at any time; stop the current response and listen to the new thought. Conversation history: " + JSON.stringify(conversationHistory.slice(-12)) + ". Saved personal memories: " + JSON.stringify(personalMemory.slice(-50))
