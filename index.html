@@ -554,6 +554,35 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 }
 @media(prefers-reduced-motion:reduce){.top-actions button{transition:none!important}}
 
+
+/* Integrated single-hero composition: portrait and welcome copy share one canvas. */
+.main{grid-template-rows:minmax(440px,1.15fr) minmax(300px,.85fr)!important;gap:12px!important}
+.welcome{position:relative!important;display:block!important;min-height:440px!important;height:100%!important;padding:0!important;overflow:hidden!important;border-radius:22px!important;background:radial-gradient(ellipse at 25% 45%,rgba(139,58,26,.20),transparent 40%),linear-gradient(115deg,#15110f 0%,#101113 48%,#0a0b0d 100%)!important}
+.welcome:after{content:""!important;position:absolute!important;inset:0!important;z-index:1!important;pointer-events:none!important;background:linear-gradient(90deg,rgba(8,9,10,.05) 0%,rgba(8,9,10,.12) 34%,rgba(8,9,10,.78) 58%,rgba(8,9,10,.88) 100%)!important}
+.home-portrait{position:absolute!important;z-index:0!important;left:-7%!important;bottom:-3%!important;width:75%!important;height:108%!important;max-width:none!important;object-fit:contain!important;object-position:left bottom!important;opacity:.96!important;filter:drop-shadow(0 25px 30px rgba(0,0,0,.48))!important}
+.welcome-copy{position:absolute!important;z-index:2!important;top:50%!important;right:5%!important;left:auto!important;bottom:auto!important;transform:translateY(-50%)!important;width:46%!important;max-width:560px!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important}
+.welcome-copy .overline{margin-bottom:14px!important;color:#e8a642!important}
+.welcome-copy h1{font-size:clamp(29px,3vw,46px)!important;line-height:1.12!important;color:#f5e4ce!important}
+.welcome-copy h1 span{color:#d8b58f!important}
+.welcome-copy .intro{max-width:470px!important;color:#c3c5c8!important;font-size:clamp(13px,1.15vw,16px)!important;line-height:1.7!important}
+.welcome-copy .hero-actions{display:flex!important;flex-wrap:wrap!important;gap:10px!important}
+.hero-shortcuts{display:none!important}
+.sidebar .section-label{font-size:9px!important}
+.history-caption{margin-top:24px!important}
+@media(max-width:900px){
+ .main{grid-template-rows:minmax(400px,1fr) minmax(300px,.9fr)!important}
+ .home-portrait{left:-14%!important;width:80%!important;opacity:.72!important}
+ .welcome-copy{right:4%!important;width:52%!important}
+ .welcome:after{background:linear-gradient(90deg,rgba(8,9,10,.04),rgba(8,9,10,.45) 35%,rgba(8,9,10,.88) 62%)!important}
+}
+@media(max-width:600px){
+ .main{grid-template-rows:minmax(430px,auto) minmax(300px,.8fr)!important}
+ .home-portrait{left:-20%!important;width:100%!important;height:86%!important;opacity:.48!important}
+ .welcome:after{background:linear-gradient(0deg,rgba(8,9,10,.92) 0%,rgba(8,9,10,.64) 48%,rgba(8,9,10,.12) 100%)!important}
+ .welcome-copy{left:7%!important;right:7%!important;top:auto!important;bottom:8%!important;transform:none!important;width:86%!important}
+ .welcome-copy h1{font-size:clamp(28px,8vw,38px)!important}
+}
+
 </style>
 <meta name="avi-ui-version" content="avi-calm-brand-voicefix-1">
 </head>
@@ -608,9 +637,9 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 
  <div class="workspace">
   <aside class="sidebar glass-panel">
-   <div class="section-label">CHAT HISTORY</div>
+   <div class="section-label">YOUR SPACE</div>
    <button class="side-new-chat" type="button" id="sideClear"><span aria-hidden="true">+</span> New chat</button>
-   <div class="history-caption"><span>START HERE</span><small>History list coming soon</small></div>
+   <div class="history-caption"><span>YOUR TOOLS</span><small>Saved chats coming soon</small></div>
    <nav class="nav" aria-label="Avi navigation">
     <button class="navbutton active" type="button" data-view="home"><span class="navicon" aria-hidden="true">⌂</span><span>Home</span></button>
     <button class="navbutton" type="button" data-view="ideas"><span class="navicon" aria-hidden="true">✳</span><span>Ideas</span></button>
