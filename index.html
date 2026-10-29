@@ -3,303 +3,223 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Avi — Your Personal AI Companion</title>
-
+<meta name="theme-color" content="#0a0e14">
+<title>Avi — Personal AI</title>
 <style>
 *{box-sizing:border-box}
-:root{--bg:#080b17;--line:rgba(139,157,255,.18);--text:#f5f6ff;--muted:#9ba8ca}
-body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -10%,#20295b 0%,#0d1228 38%,#070a14 78%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:hidden}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background-image:linear-gradient(rgba(111,143,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(111,143,255,.08) 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(to bottom,black,transparent 80%)}
-.app{position:relative;max-width:1320px;margin:auto;padding:24px clamp(16px,3vw,42px) 32px}
-header{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:15px 20px;border:1px solid var(--line);border-radius:20px;background:rgba(13,18,38,.72);backdrop-filter:blur(18px);box-shadow:0 12px 45px #0003;margin-bottom:26px}
-.brand{display:flex;align-items:center;gap:13px}.logo{width:48px;height:48px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(145deg,#1b6075,#5543a5 68%,#8c69ed);border:1px solid #83eaff6b;box-shadow:0 0 25px #43d9f43b;overflow:hidden}.logo svg{width:34px;height:34px;filter:drop-shadow(0 0 5px #70f1ff77)}.brandname{font-size:21px;letter-spacing:.3px;font-weight:750}.muted{color:var(--muted);font-size:12px;margin-top:3px}.header-right{display:flex;align-items:center;gap:12px}.status{color:#a6f2cf;font-size:12px;padding:9px 12px;border:1px solid #7ee6c52a;border-radius:999px;background:#173c3830;white-space:nowrap}.status:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:currentColor;margin-right:7px;box-shadow:0 0 10px currentColor}
-.layout{display:grid;grid-template-columns:220px minmax(0,1fr) 230px;gap:18px;align-items:start}.sidepanel,.rightpanel,.hero,.chat,.card{border:1px solid var(--line);background:linear-gradient(145deg,rgba(22,29,57,.82),rgba(12,17,35,.88));backdrop-filter:blur(18px);box-shadow:0 18px 55px #0002}.sidepanel,.rightpanel{border-radius:20px;padding:17px;min-width:0}.eyebrow,.label{font-size:10px;color:#6de7f1;letter-spacing:1.8px;font-weight:800}.eyebrow{margin:3px 0 15px}.navitem{display:flex;align-items:center;gap:10px;padding:11px 10px;margin:5px 0;border-radius:12px;color:#aab5d5;font-size:12px}.navitem.active{color:#f7f8ff;background:linear-gradient(100deg,#3d7ce52e,#9066ff20);border:1px solid #758cff38}.navicon{width:25px;height:25px;border-radius:8px;display:grid;place-items:center;background:#a2b3ff13;color:#77e7f5;font-size:14px}.side-note{margin-top:22px;padding:13px;border:1px solid #d5a96e2b;border-radius:14px;background:#c2923810}.side-note strong{font-size:11px;color:#f0c990}.side-note p{font-size:11px;color:var(--muted);line-height:1.6;margin:7px 0 0}
-.center{min-width:0}.hero{text-align:center;border-radius:24px;padding:28px 20px 24px;position:relative;overflow:hidden}.hero:before{content:"";position:absolute;width:340px;height:200px;border-radius:50%;background:#5c62ff1c;filter:blur(65px);left:50%;top:10px;transform:translateX(-50%);pointer-events:none}.hero>*{position:relative}.orb{width:112px;height:112px;border-radius:50%;margin:0 auto 18px;display:grid;place-items:center;position:relative;background:radial-gradient(circle at 30% 20%,#c5f8ff 0%,#5ee5f4 8%,#3e74df 38%,#7452e9 68%,#b17cff 100%);box-shadow:0 0 0 8px #70bfff09,0 0 40px #4e9dff57,inset -9px -12px 25px #1a2469a8;animation:float 5s ease-in-out infinite}.orb:before,.orb:after{content:"";position:absolute;inset:-12px;border-radius:50%;border:1px solid #55e7f55c;animation:orbit 10s linear infinite}.orb:after{inset:-21px;border-color:#a47cff45;animation-duration:15s;animation-direction:reverse}.orb svg{width:67px;height:67px;filter:drop-shadow(0 0 8px #e0fbff5e);transition:transform .35s ease}
-.orb-ring-label{position:absolute;bottom:-31px;left:50%;transform:translateX(-50%);font-size:8px;letter-spacing:2.4px;color:#7cebf5;white-space:nowrap;opacity:.8}
-.orb.thinking{animation:float 1.2s ease-in-out infinite,orbGlow 1.5s ease-in-out infinite}
-.orb.listening{animation:float 1.5s ease-in-out infinite,listenGlow .9s ease-in-out infinite}
-.orb.speaking svg{transform:scale(1.09)}
-@keyframes orbGlow{50%{box-shadow:0 0 0 10px #70bfff12,0 0 58px #8e71ff9c,inset -9px -12px 25px #1a2469a8}}
-@keyframes listenGlow{50%{box-shadow:0 0 0 14px #70f1ff18,0 0 68px #4ce9f6b0,inset -9px -12px 25px #1a2469a8}}
-.live-dot{display:inline-block;width:6px;height:6px;background:#75f0d2;border-radius:50%;margin-right:5px;box-shadow:0 0 8px #75f0d2}
-.clear-chat{margin-left:9px;border:1px solid #8ba5ff35;border-radius:8px;background:#ffffff08;color:#aab9df;width:27px;height:25px;cursor:pointer}
-.clear-chat:hover{color:#fff;border-color:#69e4f2}@keyframes float{50%{transform:translateY(-7px)}}@keyframes orbit{to{transform:rotate(360deg)}}h1{font-size:clamp(28px,4vw,43px);line-height:1.13;letter-spacing:-1.5px;margin:0}.gradient{background:linear-gradient(90deg,#68eaf4,#879bff 48%,#c38cff);-webkit-background-clip:text;background-clip:text;color:transparent}.subtitle{color:#a6b1d0;line-height:1.7;max-width:540px;margin:12px auto 0;font-size:13px}.quickline{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:18px}.pill{border:1px solid #8ba5ff25;background:#111a35;border-radius:999px;padding:7px 10px;color:#b7c6e8;font-size:10px}
-.label{margin:20px 2px 11px}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:16px}.card{color:var(--text);border-radius:16px;padding:14px;text-align:left;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;min-width:0}.card:hover{transform:translateY(-3px);border-color:#66dce7a1;box-shadow:0 10px 28px #1a91ad1a}.card .symbol{width:33px;height:33px;border-radius:11px;display:grid;place-items:center;color:#6ce7f3;background:linear-gradient(135deg,#55e7f51c,#9273ff26);font-size:17px}.card strong,.card small{display:block}.card strong{font-size:12px;margin:10px 0 5px}.card small{color:var(--muted);line-height:1.5;font-size:10px}
-.chat{border-radius:22px;overflow:hidden}.chathead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px;border-bottom:1px solid var(--line);background:#151c36a6}.chat-title{display:flex;align-items:center;gap:10px}.mini-orb{width:30px;height:30px;display:grid;place-items:center;border-radius:10px;background:linear-gradient(140deg,#5ce5f2,#8067f7);color:#071326;font-weight:900;font-size:12px;box-shadow:0 0 18px #5ce5f22e}.chat-title strong{font-size:13px}.chat-head-right{font-size:10px;color:#79e9d1}.messages{min-height:175px;max-height:340px;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}.message{padding:12px 14px;border-radius:15px;max-width:88%;font-size:13px;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}.avi{align-self:flex-start;background:linear-gradient(135deg,#202b4a,#1a223c);border:1px solid #92a8ff18;border-bottom-left-radius:5px}.user{align-self:flex-end;background:linear-gradient(135deg,#356cc7,#7651ce);border:1px solid #a6b3ff2c;border-bottom-right-radius:5px}
-form{display:flex;gap:9px;padding:12px;border-top:1px solid var(--line)}input{min-width:0;flex:1;padding:14px 15px;border:1px solid #8fa7ff35;border-radius:13px;background:#080d1c;color:white;font-size:14px;outline:none}input:focus{border-color:#65e5f2;box-shadow:0 0 0 3px #65e5f214}button{font:inherit}.send,.mic{padding:12px 17px;border:1px solid #7b91ff44;border-radius:12px;color:white;background:linear-gradient(135deg,#477ff0,#8559e7);cursor:pointer;transition:filter .2s,transform .2s}.send:hover,.mic:hover{filter:brightness(1.13)}.mic{display:block;width:calc(100% - 24px);margin:0 12px 10px;background:linear-gradient(110deg,#132a45,#27204d);border-color:#56dfea4d}.mic.listening{background:linear-gradient(110deg,#6a294e,#34204f);animation:pulse 1.2s infinite}@keyframes pulse{50%{box-shadow:0 0 0 5px #bb6af022}}button:disabled{opacity:.5;cursor:not-allowed}.hint{text-align:center;color:var(--muted);font-size:11px;padding:0 12px 15px;line-height:1.6}
-.rightpanel .statbox{padding:12px 0;border-bottom:1px solid #899bff19}.rightpanel .statbox:last-child{border-bottom:0}.statlabel{font-size:10px;color:var(--muted);margin-bottom:6px}.statvalue{font-size:12px;color:#edf1ff}.memory-orb{width:88px;height:88px;border-radius:50%;margin:12px auto 15px;background:radial-gradient(circle at 35% 25%,#a3fbff,#3985d9 36%,#5d43bc 68%,#151b3d);box-shadow:0 0 30px #4bbde94a;position:relative;animation:float 5s ease-in-out infinite}.memory-orb:after{content:"";position:absolute;inset:-7px;border:1px solid #56e4f447;border-radius:50%;transform:rotateX(65deg) rotate(-20deg)}.right-note{font-size:11px;color:#aab6d7;line-height:1.65;text-align:center}.tribute{text-align:center;margin:24px 0 10px;color:#d4ccff;font-size:12px}.foot{text-align:center;color:#7784a7;font-size:10px;line-height:1.6}
-@media(max-width:1050px){.layout{grid-template-columns:190px minmax(0,1fr)}.rightpanel{display:none}}@media(max-width:700px){.app{padding:13px 11px 24px}header{padding:12px 13px;margin-bottom:15px;border-radius:16px}.brandname{font-size:18px}.logo{width:42px;height:42px}.layout{display:block}.sidepanel{display:none}.hero{padding:26px 14px 22px}.orb{width:90px;height:90px}.orb svg{width:55px;height:55px}h1{font-size:31px}.subtitle{font-size:12px}.cards{grid-template-columns:1fr;gap:8px}.card{display:flex;align-items:center;gap:12px;padding:12px}.card strong{margin:0 0 4px}.card .symbol{flex-shrink:0}.card small{font-size:10px}.label{margin-top:16px}.messages{min-height:160px;padding:13px}.message{max-width:94%;font-size:12px}.status{font-size:10px;padding:8px}.muted{font-size:11px}.chathead{padding:13px}form{flex-wrap:wrap}input{flex-basis:100%}.send{flex:1}.quickline{margin-top:14px}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important;transition:none!important}}
-
-/* Minimal, cinematic companion dashboard refresh */
-:root{--bg:#080b14;--line:rgba(151,170,218,.13);--text:#edf2ff;--muted:#8996b4}
-body{background:#090c16;color:var(--text)}
-body:before{opacity:.055;background-size:56px 56px}
-.app{max-width:1450px;padding:20px clamp(14px,2.2vw,32px) 28px}
-header{border-radius:15px;padding:13px 17px;background:#111729;border-color:#202941;box-shadow:none;margin-bottom:17px}
-.logo{width:42px;height:42px;border-radius:13px;background:#171f34;border:1px solid #39465f;box-shadow:none}
-.logo svg{width:30px;height:30px;filter:none}
-.brandname{font-size:19px;letter-spacing:-.35px;font-weight:700}
-.muted{color:#8996b4;font-size:11px}
-.status{background:#10221f;border-color:#27443e;color:#88dfc5;padding:8px 11px}
-.layout{grid-template-columns:190px minmax(0,1fr) 205px;gap:13px}
-.sidepanel,.rightpanel,.hero,.chat,.card{backdrop-filter:none;background:#101625;border:1px solid #202940;box-shadow:none}
-.sidepanel,.rightpanel{border-radius:14px;padding:14px}
-.eyebrow,.label{color:#8c9fbe;letter-spacing:1.35px;font-size:9px}
-.navitem{border-radius:9px;color:#a1acc3;padding:10px 9px}
-.navitem.active{background:#1a2438;border:1px solid #2b3952;color:#f0f5ff}
-.navicon{background:#1a2437;color:#a7c5df;border-radius:7px}
-.side-note{background:#171a24;border-color:#383344}
-.side-note strong{color:#d2b28c}
-.hero{border-radius:16px;padding:26px 18px 22px;background:radial-gradient(ellipse at 50% 0%,#19243a 0%,#101625 58%)}
-.hero:before{width:240px;height:130px;background:#5b87b51a;filter:blur(55px)}
-.orb{width:92px;height:92px;margin-bottom:17px;background:radial-gradient(circle at 31% 23%,#e5f8ff 0%,#8adce8 8%,#3d7eaa 40%,#34446f 74%,#202c4d 100%);box-shadow:0 0 0 6px #80d8ee08,0 0 28px #5b9ec52b,inset -7px -8px 18px #111a34}
-.orb:before,.orb:after{border-color:#86bfd52a;inset:-9px}
-.orb:after{inset:-16px;border-color:#9baed31a}
-.orb svg{width:54px;height:54px;filter:none}
-.orb-ring-label{color:#9cbfd0;letter-spacing:2px}
-h1{font-size:clamp(27px,3.2vw,38px);letter-spacing:-1.2px;font-weight:680}
-.gradient{background:linear-gradient(90deg,#9adbe5,#a8b9ef);-webkit-background-clip:text;background-clip:text;color:transparent}
-.subtitle{color:#a0abc1;font-size:12px}
-.pill{background:#151d2d;border-color:#28334a;color:#aebbd1}
-.cards{gap:9px}
-.card{border-radius:12px;padding:12px;transition:background .18s,border-color .18s}
-.card:hover{transform:translateY(-2px);background:#151f31;border-color:#465d78;box-shadow:none}
-.card .symbol{width:30px;height:30px;border-radius:9px;background:#1b2938;color:#a2dbe2}
-.card strong{font-size:11px;font-weight:650}
-.card small{color:#8d9ab5}
-.chat{border-radius:15px}
-.chathead{background:#121a2a;border-color:#202940;padding:13px 15px}
-.mini-orb{border-radius:9px;background:#263c4e;color:#b8eaf0;box-shadow:none}
-.chat-title strong{font-size:12px}
-.chat-head-right{color:#8bbba9}
-.clear-chat{border-color:#2c3850;background:#151e30;color:#9cabc6}
-.messages{padding:16px;gap:10px}
-.message{font-size:12px;border-radius:12px}
-.avi{background:#172033;border-color:#29364d}
-.user{background:#293b5a;border-color:#3b5275}
-form{border-color:#202940;padding:11px}
-input{background:#0b101c;border-color:#2b3850;border-radius:10px;font-size:13px}
-input:focus{border-color:#78b9c8;box-shadow:0 0 0 3px #78b9c80c}
-.send,.mic{background:#263b4c;border-color:#3c596b;color:#e6f5fb;border-radius:10px}
-.send:hover,.mic:hover{filter:brightness(1.12)}
-.mic{background:#151e30;border-color:#2c3d54}
-.mic.listening{background:#233e49;animation:pulse 1.2s infinite}
-.rightpanel .statbox{border-color:#202940}
-@media(max-width:1050px){.layout{grid-template-columns:175px minmax(0,1fr)}.rightpanel{display:none}}
-@media(max-width:700px){.app{padding:10px 9px 20px}header{padding:10px 12px;margin-bottom:12px}.logo{width:38px;height:38px}.layout{display:block}.hero{padding:23px 13px 20px}.orb{width:82px;height:82px}.orb svg{width:49px;height:49px}h1{font-size:29px}.cards{grid-template-columns:1fr}.card{display:flex;align-items:center;gap:11px}.card strong{margin:0 0 4px}.messages{min-height:150px;padding:12px}.message{max-width:94%;font-size:12px}.status{font-size:10px;padding:7px 8px}.chathead{padding:12px}form{flex-wrap:nowrap}input{flex-basis:auto}.send{flex:0 0 auto}.quickline{margin-top:12px}}
-@media(prefers-reduced-motion:reduce){.orb,.orb:before,.orb:after{animation:none!important}}
-
-
-/* AVI UI refinement — quiet, premium, compact */
-:root{
- --bg:#080b12;--line:rgba(154,174,211,.13);--text:#edf3ff;--muted:#8794ad;
- --cyan:#7edbe7;--violet:#9b8cff;--amber:#d6a16c;
-}
-body{background:radial-gradient(ellipse at 50% 0%,#172237 0%,#0b101b 42%,#080b12 78%);color:var(--text)}
-body:before{opacity:.035;background-size:64px 64px}
-.app{max-width:1540px;padding:18px clamp(12px,2vw,28px) 24px}
-header{margin-bottom:14px;padding:11px 15px;border-radius:14px;background:rgba(15,22,36,.88);border-color:#222d42;box-shadow:0 8px 30px #0002}
-.logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,#26374a,#1b2439);border-color:#42536a;box-shadow:0 0 0 3px #7edbe70a}
-.logo svg{width:29px;height:29px}
-.brandname{font-size:18px;letter-spacing:-.5px}
-.muted{font-size:11px;color:#8b9ab5}
-.status{font-size:11px;padding:7px 10px;background:#12251f;border-color:#24473c;color:#8be1bd}
-.layout{grid-template-columns:174px minmax(0,1fr) 196px;gap:12px}
-.sidepanel,.rightpanel,.hero,.chat,.card{backdrop-filter:none;background:rgba(15,22,35,.94);border:1px solid #202b40;box-shadow:0 10px 30px #00000012}
-.sidepanel,.rightpanel{padding:13px;border-radius:14px}
-.eyebrow,.label{font-size:9px;letter-spacing:1.5px;color:#8da4c0}
-.eyebrow{margin:3px 0 13px}
-.navitem{font-size:11px;gap:8px;padding:9px 8px;margin:4px 0;border-radius:9px;color:#a2aec5}
-.navitem.active{background:#1b293b;border:1px solid #33465e;color:#f4f7ff}
-.navicon{width:25px;height:25px;background:#202d40;color:#9edce6;font-size:13px}
-.side-note{margin-top:17px;padding:11px;border-radius:11px;background:#1a1b22;border-color:#3b332c}
-.side-note strong{font-size:10px;color:#e0b987}
-.side-note p{font-size:10px;line-height:1.55}
-.hero{border-radius:16px;padding:22px 16px 19px;background:radial-gradient(ellipse at 50% 0%,#1a2a40 0%,#101623 66%)}
-.hero:before{width:200px;height:120px;background:#7edbe710;filter:blur(45px)}
-.orb{width:86px;height:86px;margin-bottom:16px;background:radial-gradient(circle at 30% 22%,#f0fdff 0%,#9fe7ed 8%,#4f9bb5 35%,#425a80 66%,#27334e 100%);box-shadow:0 0 0 5px #9eeaf007,0 0 27px #72cfe32a,inset -8px -10px 18px #18223a88;animation:float 5s ease-in-out infinite}
-.orb:before{inset:-8px;border-color:#8bdce53d}
-.orb:after{inset:-15px;border-color:#a9a1f32b}
-.orb svg{width:54px;height:54px}
-.orb-ring-label{font-size:7px;letter-spacing:2px;bottom:-25px;color:#94dce7}
-h1{font-size:clamp(25px,3vw,36px);letter-spacing:-1.2px}
-.gradient{background:linear-gradient(90deg,#9bdde8,#a9b4ef 60%,#c4a4ef);-webkit-background-clip:text;background-clip:text}
-.subtitle{font-size:12px;max-width:450px;color:#a2aec4;margin-top:9px}
-.quickline{margin-top:14px;gap:6px}
-.pill{font-size:9px;padding:6px 9px;border-color:#2b394e;background:#151e2e;color:#aebed3}
-.label{margin:15px 2px 9px}
-.cards{gap:8px;margin-bottom:12px}
-.card{padding:11px;border-radius:12px}
-.card:hover{transform:translateY(-2px);border-color:#567c8c;box-shadow:0 7px 20px #0002}
-.card .symbol{width:29px;height:29px;border-radius:9px;background:#1b2a3b;color:#9bdce5;font-size:14px}
-.card strong{font-size:11px;margin:8px 0 4px}
-.card small{font-size:9px;color:#8f9db6}
-.chat{border-radius:15px;overflow:hidden}
-.chathead{padding:12px 14px;background:#131c2b;border-color:#202b40}
-.mini-orb{width:29px;height:29px;border-radius:9px;background:linear-gradient(145deg,#a1e6e9,#6f87b9);color:#102033;box-shadow:none}
-.chat-title strong{font-size:12px}
-.chat-head-right{font-size:9px;color:#91c8b9}
-.clear-chat{border-color:#33445a;color:#9caec4;background:#192334}
-.messages{min-height:145px;max-height:310px;padding:14px;background:#0d1420}
-.message{font-size:12px;line-height:1.65;border-radius:13px;padding:11px 13px}
-.avi{background:#192436;border-color:#29364a}
-.user{background:linear-gradient(135deg,#355a83,#5e568f);border-color:#65749d}
-form{padding:10px;background:#101827;border-color:#202b40;gap:8px}
-input{padding:12px 13px;border-radius:10px;background:#090f19;border-color:#2a394f;font-size:13px}
-input:focus{border-color:#80cdd8;box-shadow:0 0 0 3px #80cdd80c}
-.send,.mic{border-radius:10px;padding:11px 15px;background:#273c52;border-color:#3c566d;color:#e8f5ff}
-.send:hover,.mic:hover{filter:brightness(1.15)}
-.mic{width:calc(100% - 20px);margin:0 10px 8px;background:#172438;border-color:#2b4258;font-size:12px}
-.mic.listening{background:#392b45;border-color:#806092}
-.hint{font-size:10px;padding:0 10px 12px;color:#8190aa}
-.rightpanel .eyebrow{margin-bottom:10px}
-.memory-orb{width:66px;height:66px;margin:8px auto 12px;background:radial-gradient(circle at 34% 25%,#e2fbff,#7dbdce 35%,#4b648b 68%,#27334a);box-shadow:0 0 23px #75c9db20}
-.memory-orb:after{inset:-6px;border-color:#8ddce52e}
-.right-note{font-size:10px;line-height:1.6;color:#9ba9bf}
-.rightpanel .statbox{padding:10px 0;border-color:#222e41}
-.statlabel{font-size:9px;color:#8190aa;letter-spacing:.5px}
-.statvalue{font-size:11px;color:#dce5f5;line-height:1.45}
-.tribute{margin:18px 0 8px;color:#a8b6ca;font-size:11px}
-.foot{color:#687891;font-size:10px}
-@media(max-width:1100px){.layout{grid-template-columns:155px minmax(0,1fr)}.rightpanel{display:none}}
-@media(max-width:720px){
- .app{padding:10px 9px 20px}
- header{padding:10px 11px;margin-bottom:10px}
- .layout{display:block}
- .sidepanel{display:none}
- .hero{padding:23px 12px 18px}
- .orb{width:78px;height:78px}
- .orb svg{width:49px;height:49px}
- h1{font-size:29px}
- .cards{grid-template-columns:1fr;gap:7px}
- .card{display:flex;align-items:center;gap:11px;padding:10px}
- .card .symbol{flex-shrink:0}
- .card strong{margin:0 0 3px}
- .messages{min-height:140px;max-height:42vh;padding:11px}
+:root{--bg:#0a0e14;--panel:#101721;--panel2:#131d29;--line:#263343;--text:#edf3f7;--muted:#8495a7;--cyan:#a5dce0;--gold:#c9a879;--green:#9cddc4}
+html{min-height:100%;background:var(--bg)}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -20%,#1c2b39 0%,#0d131c 46%,#090c12 85%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input{font:inherit}button{cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+.shell{max-width:1600px;margin:auto;padding:18px;min-height:100vh;display:grid;grid-template-rows:auto 1fr auto;gap:16px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 16px;border:1px solid var(--line);background:#101721d9;border-radius:15px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.brandmark{width:42px;height:42px;display:grid;place-items:center;background:#182431;border:1px solid #3c5360;border-radius:13px;flex-shrink:0}
+.brandmark svg{width:30px;height:30px}
+.brandname{font-size:19px;font-weight:750;letter-spacing:-.6px}
+.brandtag{font-size:11px;color:var(--muted);margin-top:2px}
+.top-actions{display:flex;align-items:center;gap:10px}
+.connection{display:flex;align-items:center;gap:7px;border:1px solid #2b463f;background:#12231f;color:var(--green);padding:8px 11px;border-radius:999px;font-size:11px;white-space:nowrap}
+.connection:before{content:"";width:6px;height:6px;background:currentColor;border-radius:50%;box-shadow:0 0 8px currentColor}
+.iconbutton{width:35px;height:35px;display:grid;place-items:center;background:#17212d;color:#c1d0dc;border:1px solid var(--line);border-radius:10px}
+.iconbutton:hover{background:#22313f}
+.workspace{display:grid;grid-template-columns:205px minmax(0,1fr) 235px;gap:15px;align-items:stretch;min-height:0}
+.panel{background:#101721eF;border:1px solid var(--line);border-radius:15px;min-width:0}
+.sidebar{padding:15px 12px;display:flex;flex-direction:column}
+.section-label{font-size:9px;font-weight:750;letter-spacing:1.7px;color:#8a9baa;margin:4px 9px 12px}
+.nav{display:grid;gap:5px}
+.navbutton{display:flex;align-items:center;gap:11px;width:100%;padding:10px;border-radius:10px;background:transparent;border:1px solid transparent;color:#aab8c6;text-align:left;font-size:12px}
+.navbutton .navicon{width:29px;height:29px;display:grid;place-items:center;border-radius:8px;background:#1a2531;color:#b8d8dd;font-size:15px}
+.navbutton.active{background:#1a2832;border-color:#31434e;color:#f2f7f9}
+.navbutton.active .navicon{background:#263e48;color:#c5f1ee}
+.navbutton:hover{background:#17232e}
+.sidebar-bottom{margin-top:auto;padding:12px 10px 3px}
+.loyalty-mark{width:31px;height:31px;border-radius:10px;background:#28241f;border:1px solid #514535;display:grid;place-items:center;color:var(--gold);margin-bottom:10px}
+.sidebar-bottom strong{font-size:11px;font-weight:650}
+.sidebar-bottom p{font-size:10px;line-height:1.65;color:var(--muted);margin:6px 0 0}
+.main{display:flex;flex-direction:column;gap:13px;min-width:0}
+.welcome{position:relative;overflow:hidden;min-height:268px;display:grid;grid-template-columns:minmax(0,1fr) 220px;align-items:center;gap:16px;padding:27px 29px;background:linear-gradient(115deg,#131e2a,#101721 66%,#14202b)}
+.welcome:after{content:"";position:absolute;right:5%;top:-100px;width:320px;height:320px;border-radius:50%;background:#8cced00a;filter:blur(28px);pointer-events:none}
+.welcome-copy{position:relative;z-index:1}
+.overline{display:flex;align-items:center;gap:8px;color:#a5c9ce;font-size:10px;font-weight:750;letter-spacing:1.8px;text-transform:uppercase;margin-bottom:17px}
+.overline:before{content:"";width:19px;height:1px;background:var(--gold)}
+h1{font-size:clamp(30px,3.5vw,47px);line-height:1.05;letter-spacing:-1.8px;margin:0;font-weight:650}
+h1 span{display:block;color:#a7d5d9;font-weight:500;margin-top:7px}
+.intro{max-width:420px;font-size:12px;line-height:1.8;color:#9eacba;margin:15px 0 19px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{font-size:10px;color:#b5c4d0;border:1px solid #2b3b49;background:#17212c;border-radius:7px;padding:7px 9px}
+.core-wrap{display:grid;place-items:center;position:relative;z-index:1;padding:8px}
+.core{width:132px;height:132px;display:grid;place-items:center;position:relative;border-radius:50%;background:radial-gradient(circle at 32% 25%,#d9f1ee 0%,#8fcbd0 9%,#426e7b 31%,#263d50 63%,#172535 100%);box-shadow:0 0 0 7px #a2dce009,0 0 34px #79c0c51c,inset -10px -12px 24px #07121e80;animation:breathe 5s ease-in-out infinite}
+.core:before,.core:after{content:"";position:absolute;inset:-11px;border:1px solid #9acdd12e;border-radius:50%;transform:rotateX(65deg) rotate(-20deg);animation:rotate 18s linear infinite}
+.core:after{inset:-19px;border-color:#c9a87924;transform:rotateX(65deg) rotate(20deg);animation-duration:28s;animation-direction:reverse}
+.core svg{width:76px;height:76px;position:relative;z-index:1}
+.core-caption{font-size:8px;letter-spacing:2.5px;color:#a9cdd1;text-align:center;margin-top:27px}
+@keyframes breathe{50%{transform:translateY(-4px);box-shadow:0 0 0 9px #a2dce00c,0 0 42px #79c0c52c,inset -10px -12px 24px #07121e80}}
+@keyframes rotate{to{transform:rotateX(65deg) rotate(340deg)}}
+.orb.thinking{animation:breathe 1.2s ease-in-out infinite}
+.orb.listening{animation:breathe .8s ease-in-out infinite}
+.orb.speaking{filter:brightness(1.12)}
+.shortcuts{padding:15px}
+.panel-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 12px}
+.panel-heading strong{font-size:12px;font-weight:650}
+.panel-heading span{font-size:9px;color:#8497a7}
+.shortcut-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.shortcut{display:flex;align-items:center;gap:11px;min-width:0;text-align:left;border:1px solid #273544;background:#141e29;border-radius:11px;padding:12px;color:var(--text);transition:background .18s,border-color .18s,transform .18s}
+.shortcut:hover{background:#1a2934;border-color:#47626c;transform:translateY(-1px)}
+.shortcut-icon{width:34px;height:34px;display:grid;place-items:center;flex-shrink:0;border-radius:10px;background:#20313b;color:#b5e0e0;font-size:16px}
+.shortcut strong{display:block;font-size:11px;font-weight:650}
+.shortcut small{display:block;font-size:10px;color:var(--muted);margin-top:4px;line-height:1.45}
+.chat{overflow:hidden;display:flex;flex-direction:column;min-height:300px;flex:1}
+.chat-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 15px;border-bottom:1px solid var(--line);background:#131c27}
+.chat-identity{display:flex;align-items:center;gap:10px}
+.tiny-mark{width:31px;height:31px;display:grid;place-items:center;background:#20343d;border:1px solid #3b5961;border-radius:10px}
+.tiny-mark svg{width:23px;height:23px}
+.chat-identity strong{font-size:12px}
+.chat-identity small{display:block;color:var(--muted);font-size:10px;margin-top:3px}
+.chat-tools{display:flex;align-items:center;gap:10px}
+.private-label{font-size:9px;letter-spacing:1px;color:#94b8b5}
+.clear-chat{width:31px;height:30px;background:#1a2530;color:#a9bac8;border:1px solid #2c3b48;border-radius:8px}
+.messages{min-height:145px;max-height:330px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}
+.message{max-width:86%;padding:11px 13px;border-radius:12px;font-size:12px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
+.avi{align-self:flex-start;background:#192532;border:1px solid #293a48;border-bottom-left-radius:4px}
+.user{align-self:flex-end;background:#304955;border:1px solid #466671;border-bottom-right-radius:4px}
+form{display:flex;gap:8px;padding:11px;border-top:1px solid var(--line);background:#111a24}
+input{min-width:0;flex:1;background:#0a1119;color:var(--text);border:1px solid #2c3c4b;border-radius:10px;padding:12px 13px;font-size:12px}
+input::placeholder{color:#728495}
+input:focus{border-color:#7ebdc3;outline:none;box-shadow:0 0 0 3px #7ebdc30d}
+.send,.mic{border-radius:10px;border:1px solid #47636c;background:#263f49;color:#e6f5f4;padding:11px 15px;font-size:12px;transition:background .18s}
+.send:hover,.mic:hover{background:#345762}
+.send:disabled,.mic:disabled{opacity:.5;cursor:not-allowed}
+.mic{display:block;margin:0 11px 8px;width:calc(100% - 22px);background:#172630;border-color:#2e4853}
+.mic.listening{background:#342b30;border-color:#8c6c5a}
+.hint{text-align:center;color:#7f91a0;font-size:10px;padding:0 10px 12px}
+.rightbar{padding:15px;display:flex;flex-direction:column;gap:15px}
+.mini-core{width:72px;height:72px;display:grid;place-items:center;border-radius:50%;margin:4px auto 0;background:radial-gradient(circle at 30% 25%,#d6efed,#7eb7bf 35%,#344f62 70%,#192737);box-shadow:0 0 0 6px #8fcbd008,0 0 27px #8fcbd01a;position:relative}
+.mini-core:after{content:"";position:absolute;inset:-7px;border:1px solid #a6d7d51c;border-radius:50%;transform:rotateX(65deg)}
+.mini-core svg{width:42px;height:42px}
+.right-intro{text-align:center;font-size:10px;color:#94a5b2;line-height:1.65;margin-top:-6px}
+.divider{height:1px;background:#263442}
+.info-row{display:flex;gap:10px;align-items:flex-start}
+.info-icon{width:28px;height:28px;display:grid;place-items:center;flex-shrink:0;background:#1b2934;border-radius:8px;color:#a8d5d8;font-size:13px}
+.info-row small{display:block;color:#7f91a0;font-size:9px;letter-spacing:1px;margin:1px 0 5px}
+.info-row strong{display:block;color:#cbd6df;font-size:10px;font-weight:550;line-height:1.55}
+.memory-card{margin-top:auto;padding:12px;background:#171d23;border:1px solid #39362f;border-radius:11px}
+.memory-card strong{font-size:10px;color:#d3b98e}
+.memory-card p{font-size:10px;line-height:1.65;color:#9da7ae;margin:6px 0 0}
+.footer{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#657788;font-size:10px;padding:0 4px}
+.footer strong{font-weight:550;color:#8d9eaa}
+@media(max-width:1120px){.workspace{grid-template-columns:175px minmax(0,1fr)}.rightbar{display:none}}
+@media(max-width:760px){
+ .shell{padding:10px;gap:10px}
+ .topbar{padding:10px 11px;border-radius:12px}
+ .brandmark{width:37px;height:37px}.brandmark svg{width:27px;height:27px}
+ .brandname{font-size:17px}.brandtag{font-size:10px}
+ .connection{font-size:9px;padding:7px 8px}
+ .iconbutton{display:none}
+ .workspace{display:block}
+ .sidebar{display:none}
+ .welcome{grid-template-columns:minmax(0,1fr) 94px;padding:20px 15px;gap:7px;min-height:230px}
+ .overline{font-size:8px;margin-bottom:13px}
+ h1{font-size:32px;letter-spacing:-1.3px}
+ .intro{font-size:11px;margin:12px 0 14px;line-height:1.65}
+ .chip{font-size:9px;padding:6px 7px}
+ .core{width:78px;height:78px}.core svg{width:48px;height:48px}.core:before{inset:-7px}.core:after{inset:-12px}.core-caption{font-size:7px;letter-spacing:1.5px;margin-top:20px}
+ .main{gap:10px}
+ .shortcuts{padding:12px}
+ .shortcut-grid{grid-template-columns:1fr;gap:7px}
+ .shortcut{padding:10px}
+ .shortcut-icon{width:31px;height:31px}
+ .shortcut small{font-size:9px}
+ .chat{min-height:320px}
+ .messages{min-height:150px;max-height:42vh;padding:12px}
  .message{max-width:94%;font-size:12px}
- form{flex-wrap:nowrap}
- input{flex-basis:0;font-size:12px;padding:12px 10px}
- .send{padding:11px 12px;flex:0 0 auto}
- .status{font-size:10px;padding:7px 8px}
+ .private-label{display:none}
+ form{padding:9px}
+ input{font-size:12px;padding:12px 10px}
+ .send{padding:10px 12px}
+ .footer{font-size:9px;line-height:1.5}
 }
-
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important;transition:none!important}}
 </style>
 </head>
-
 <body>
-<main class="app">
-
-<header>
-  <div class="brand">
-    <div class="logo" aria-label="Avi Rottweiler-inspired emblem"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M13 12 25 19 32 16 39 19 51 12 48 34 42 45 32 52 22 45 16 34 13 12Z" stroke="#d7e8ff" stroke-width="2.5" stroke-linejoin="round"/><path d="M22 29 27 32M42 29 37 32" stroke="#78e8f0" stroke-width="3.5" stroke-linecap="round"/><path d="M27 39 32 42 37 39" stroke="#d7e8ff" stroke-width="2.5" stroke-linecap="round"/></svg></div>
-    <div>
-      <strong class="brandname">Avi</strong>
-      <div class="muted">Your personal companion</div>
-    </div>
+<main class="shell">
+<header class="topbar">
+ <div class="brand">
+  <div class="brandmark" aria-label="Avi emblem">
+   <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+    <path d="M13 13 24 19 32 16 40 19 51 13 48 34 42 45 32 52 22 45 16 34 13 13Z" stroke="#d9eeee" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M21 29 27 32M43 29 37 32" stroke="#a5dce0" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M27 39 32 42 37 39" stroke="#c9a879" stroke-width="2.5" stroke-linecap="round"/>
+   </svg>
   </div>
-  <div class="header-right"><div class="status" id="connectionStatus">Connecting...</div></div>
+  <div><div class="brandname">avi<span style="color:#a5dce0">.</span></div><div class="brandtag">Your personal AI companion</div></div>
+ </div>
+ <div class="top-actions"><div class="connection" id="connectionStatus">Connecting...</div><button class="iconbutton" type="button" id="topClear" title="Start a new chat" aria-label="Start a new chat">↻</button></div>
 </header>
-
-<div class="layout">
-<aside class="sidepanel">
-  <div class="eyebrow">YOUR SPACE</div>
-  <div class="navitem active"><span class="navicon">⌂</span> Home base</div>
-  <div class="navitem"><span class="navicon">✧</span> Ideas & thinking</div>
-  <div class="navitem"><span class="navicon">◷</span> Daily focus</div>
-  <div class="navitem"><span class="navicon">⌘</span> Learning lab</div>
-  <div class="navitem"><span class="navicon">♡</span> Memories</div>
-  <div class="side-note"><strong>✦ Built with loyalty</strong><p>A little Rottweiler spirit. A lot of curiosity. Always your companion.</p></div>
-</aside>
-<div class="center">
-<section class="hero">
-  <div class="orb" id="mainOrb" aria-label="Animated Avi companion"><span class="orb-ring-label">AVI CORE</span><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M12 14 25 21 32 17 39 21 52 14 50 35 44 47 32 54 20 47 14 35 12 14Z" fill="#101a38" stroke="#d9fbff" stroke-width="2.1" stroke-linejoin="round"/><path d="M17 20 25 26 28 34 22 38 17 32ZM47 20 39 26 36 34 42 38 47 32Z" fill="#d6a16c"/><path d="M25 37 32 33 39 37 37 45 32 48 27 45Z" fill="#f4f7ff"/><path d="M28 40 32 42 36 40" stroke="#101a38" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="32" r="2" fill="#76f0f7"/><circle cx="40" cy="32" r="2" fill="#76f0f7"/></svg></div>
-  <h1>Your world, <span class="gradient">with Avi.</span></h1>
-  <p class="subtitle">
-    Your ideas, your projects, your world. A personal space to think,
-    explore, and build what's next.
-  </p>
-  <div class="quickline"><span class="pill">✦ Personal AI</span><span class="pill">◉ Voice ready</span><span class="pill">🐾 Loyal by design</span></div>
-</section>
-
-<div class="label">PICK A STARTING POINT</div>
-
-<section class="cards">
-  <button class="card" data-prompt="Help me organize my tasks">
-    <span class="symbol">✦</span>
-    <div>
-      <strong>Organize my day</strong>
-      <small>Plan tasks and priorities</small>
-    </div>
-  </button>
-
-  <button class="card" data-prompt="Help me brainstorm a new project">
-    <span class="symbol">⌘</span>
-    <div>
-      <strong>Explore an idea</strong>
-      <small>Think through something new</small>
-    </div>
-  </button>
-
-  <button class="card" data-prompt="Help me with my learning">
-    <span class="symbol">◇</span>
-    <div>
-      <strong>Learn something</strong>
-      <small>Practice and improve</small>
-    </div>
-  </button>
-</section>
-
-<section class="chat">
-  <div class="chathead">
-    <div class="chat-title"><span class="mini-orb">A</span><div><strong>Avi chat</strong><div class="muted" id="chatStatus">Ready to chat</div></div></div>
-    <div class="chat-head-right"><span class="live-dot"></span> PRIVATE SPACE <button type="button" class="clear-chat" id="clearChat" title="Start a fresh conversation" aria-label="Clear conversation">↻</button></div>
-  </div>
-
-  <div class="messages" id="messages" aria-live="polite">
-    <div class="message avi">
-      Hi! I'm Avi. 💙 Type a message or try the microphone below.
-    </div>
-  </div>
-
-  <form id="chatForm">
-    <input
-      id="chatInput"
-      type="text"
-      placeholder="Message Avi..."
-      autocomplete="off"
-      aria-label="Message Avi"
-      required
-    >
-    <button class="send" id="sendButton" type="submit">Send ↗</button>
-  </form>
-
-  <button class="mic" id="micButton" type="button">🎤 Talk to Avi</button>
-
-  <div class="hint" id="micHint">
-    Allow microphone access if your browser asks.
-  </div>
-</section>
+<div class="workspace">
+ <aside class="panel sidebar">
+  <div class="section-label">WORKSPACE</div>
+  <nav class="nav" aria-label="Workspace navigation">
+   <button class="navbutton active" type="button" data-view="home"><span class="navicon">⌂</span>Overview</button>
+   <button class="navbutton" type="button" data-view="ideas"><span class="navicon">✳</span>Ideas & planning</button>
+   <button class="navbutton" type="button" data-view="focus"><span class="navicon">◷</span>Daily focus</button>
+   <button class="navbutton" type="button" data-view="learn"><span class="navicon">⌘</span>Learning space</button>
+   <button class="navbutton" type="button" data-view="memories"><span class="navicon">♡</span>Memories</button>
+  </nav>
+  <div class="sidebar-bottom"><div class="loyalty-mark">✦</div><strong>Inspired by loyalty.</strong><p>A quiet nod to Avicii: loyal, brave, and always close. No photos needed.</p></div>
+ </aside>
+ <section class="main">
+  <section class="panel welcome">
+   <div class="welcome-copy">
+    <div class="overline">A calmer kind of intelligence</div>
+    <h1>Good to see you.<span>I'm Avi.</span></h1>
+    <p class="intro">A personal space to think out loud, untangle ideas, plan your next move, or simply talk. Let's make something good.</p>
+    <div class="chips"><span class="chip">✦ Personal AI</span><span class="chip">◉ Voice enabled</span><span class="chip">Made with meaning</span></div>
+   </div>
+   <div class="core-wrap"><div><div class="core orb" id="mainOrb" aria-label="Animated Avi AI core">
+    <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+     <path d="M12 14 25 21 32 17 39 21 52 14 50 35 44 47 32 54 20 47 14 35 12 14Z" fill="#142331" stroke="#d8eeee" stroke-width="2" stroke-linejoin="round"/>
+     <path d="M17 21 25 26 28 34 22 38 17 32ZM47 21 39 26 36 34 42 38 47 32Z" fill="#c9a879"/>
+     <path d="M25 38 32 34 39 38 37 45 32 48 27 45Z" fill="#edf3f7"/>
+     <path d="M28 40 32 42 36 40" stroke="#142331" stroke-width="2" stroke-linecap="round"/>
+     <circle cx="24" cy="32" r="1.8" fill="#a5dce0"/><circle cx="40" cy="32" r="1.8" fill="#a5dce0"/>
+    </svg>
+   </div><div class="core-caption">AVI CORE · ONLINE</div></div></div>
+  </section>
+  <section class="panel shortcuts">
+   <div class="panel-heading"><strong>Where should we start?</strong><span>QUICK PROMPTS</span></div>
+   <div class="shortcut-grid">
+    <button class="shortcut" data-prompt="Help me organize my tasks and priorities for today"><span class="shortcut-icon">◷</span><span><strong>Plan my day</strong><small>Make priorities feel manageable</small></span></button>
+    <button class="shortcut" data-prompt="Help me brainstorm a new idea or project"><span class="shortcut-icon">✳</span><span><strong>Explore an idea</strong><small>Think it through together</small></span></button>
+    <button class="shortcut" data-prompt="Help me learn something step by step"><span class="shortcut-icon">⌘</span><span><strong>Learn something</strong><small>Take it one step at a time</small></span></button>
+   </div>
+  </section>
+  <section class="panel chat">
+   <div class="chat-head">
+    <div class="chat-identity"><div class="tiny-mark"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M13 13 24 19 32 16 40 19 51 13 48 34 42 45 32 52 22 45 16 34 13 13Z" stroke="#d9eeee" stroke-width="3" stroke-linejoin="round"/><path d="M21 29 27 32M43 29 37 32" stroke="#a5dce0" stroke-width="4" stroke-linecap="round"/></svg></div><div><strong>Talk to Avi</strong><small id="chatStatus">Ready when you are</small></div></div>
+    <div class="chat-tools"><span class="private-label">YOUR PRIVATE SPACE</span><button type="button" class="clear-chat" id="clearChat" title="Start a fresh conversation" aria-label="Clear conversation">↻</button></div>
+   </div>
+   <div class="messages" id="messages" aria-live="polite"><div class="message avi">Hey, I'm here. 💙 What's on your mind?</div></div>
+   <form id="chatForm"><input id="chatInput" type="text" placeholder="Write a message…" autocomplete="off" aria-label="Message Avi" required><button class="send" id="sendButton" type="submit">Send ↗</button></form>
+   <button class="mic" id="micButton" type="button">♩ &nbsp; Talk to Avi</button>
+   <div class="hint" id="micHint">You can type or use your microphone.</div>
+  </section>
+ </section>
+ <aside class="panel rightbar">
+  <div class="section-label">COMPANION STATUS</div>
+  <div class="mini-core"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M13 13 24 19 32 16 40 19 51 13 48 34 42 45 32 52 22 45 16 34 13 13Z" stroke="#e0f4f0" stroke-width="2.5" stroke-linejoin="round"/><path d="M21 29 27 32M43 29 37 32" stroke="#c9a879" stroke-width="3.5" stroke-linecap="round"/></svg></div>
+  <div class="right-intro">Here for the big plans<br>and the little things.</div>
+  <div class="divider"></div>
+  <div class="info-row"><span class="info-icon">✧</span><div><small>PERSONALITY</small><strong>Curious, calm, helpful</strong></div></div>
+  <div class="info-row"><span class="info-icon">◉</span><div><small>VOICE</small><strong>Browser voice and speech input</strong></div></div>
+  <div class="info-row"><span class="info-icon">⌁</span><div><small>AI ENGINE</small><strong>Connected through your secure function</strong></div></div>
+  <div class="memory-card"><strong>✦ A little meaning</strong><p>The emblem takes subtle inspiration from Avicii's Rottweiler spirit: strength, warmth, and loyalty. His photos stay out of the interface.</p></div>
+ </aside>
 </div>
-<aside class="rightpanel">
-  <div class="eyebrow">AVI CORE</div>
-  <div class="memory-orb"></div>
-  <div class="right-note">Your companion is ready when you are.</div>
-  <div class="statbox"><div class="statlabel">CONVERSATION</div><div class="statvalue">Thoughtful, focused, yours</div></div>
-  <div class="statbox"><div class="statlabel">VOICE INPUT</div><div class="statvalue">Browser microphone</div></div>
-  <div class="statbox"><div class="statlabel">DESIGN DNA</div><div class="statvalue">Neon • Calm • Loyal</div></div>
-  <div class="statbox"><div class="statlabel">INSPIRATION</div><div class="statvalue">A subtle Rottweiler emblem 🐾</div></div>
-</aside>
-</div>
-
-<div class="tribute">🐾 Forever remembered, Avicii ❤️</div>
-
-<div class="foot">
-  Avi — Your personal AI companion.
-</div>
-
+<footer class="footer"><span><strong>avi.</strong> — your personal AI companion</span><span>Designed with loyalty · Built for everyday life</span></footer>
 </main>
-
 <script>
 /*
   IMPORTANT:
@@ -520,6 +440,28 @@ if (
 }
 
 </script>
-
+<script>
+/* Small UI behaviors; these do not change the AI request logic. */
+const clearTop = document.getElementById("topClear");
+if (clearTop) clearTop.addEventListener("click", () => document.getElementById("clearChat").click());
+document.querySelectorAll(".navbutton").forEach(button => {
+ button.addEventListener("click", () => {
+  document.querySelectorAll(".navbutton").forEach(item => item.classList.remove("active"));
+  button.classList.add("active");
+  const prompts = {
+   home: null,
+   ideas: "Help me brainstorm ideas and plan a project.",
+   focus: "Help me plan my day and choose my top priorities.",
+   learn: "Help me learn a topic step by step.",
+   memories: "Let's talk about meaningful memories and things I want to preserve."
+  };
+  const prompt = prompts[button.dataset.view];
+  if (prompt) {
+   document.getElementById("chatInput").value = prompt;
+   document.getElementById("chatInput").focus();
+  }
+ });
+});
+</script>
 </body>
 </html>
