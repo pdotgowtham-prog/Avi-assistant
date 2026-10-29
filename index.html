@@ -14,970 +14,390 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box}
-:root{--bg:#0a0e14;--panel:#101721;--panel2:#131d29;--line:#263343;--text:#edf3f7;--muted:#8495a7;--cyan:#a5dce0;--gold:#c9a879;--green:#9cddc4}
-html{min-height:100%;background:var(--bg)}
-body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -20%,#1c2b39 0%,#0d131c 46%,#090c12 85%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
-button,input{font:inherit}button{cursor:pointer}
-button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
-.shell{max-width:1600px;margin:auto;padding:18px;min-height:100vh;display:grid;grid-template-rows:auto 1fr auto;gap:16px}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 16px;border:1px solid var(--line);background:#101721d9;border-radius:15px}
-.brand{display:flex;align-items:center;gap:12px;min-width:0}
-.brandmark{width:42px;height:42px;display:grid;place-items:center;background:#182431;border:1px solid #3c5360;border-radius:13px;flex-shrink:0}
-.brandmark svg{width:30px;height:30px}
-.brandname{font-size:19px;font-weight:750;letter-spacing:-.6px}
-.brandtag{font-size:11px;color:var(--muted);margin-top:2px}
-.top-actions{display:flex;align-items:center;gap:10px}
-.connection{display:flex;align-items:center;gap:7px;border:1px solid #2b463f;background:#12231f;color:var(--green);padding:8px 11px;border-radius:999px;font-size:11px;white-space:nowrap}
-.connection:before{content:"";width:6px;height:6px;background:currentColor;border-radius:50%;box-shadow:0 0 8px currentColor}
-.iconbutton{width:35px;height:35px;display:grid;place-items:center;background:#17212d;color:#c1d0dc;border:1px solid var(--line);border-radius:10px}
-.iconbutton:hover{background:#22313f}
-.workspace{display:grid;grid-template-columns:205px minmax(0,1fr) 235px;gap:15px;align-items:stretch;min-height:0}
-.panel{background:#101721eF;border:1px solid var(--line);border-radius:15px;min-width:0}
-.sidebar{padding:15px 12px;display:flex;flex-direction:column}
-.section-label{font-size:9px;font-weight:750;letter-spacing:1.7px;color:#8a9baa;margin:4px 9px 12px}
-.nav{display:grid;gap:5px}
-.navbutton{display:flex;align-items:center;gap:11px;width:100%;padding:10px;border-radius:10px;background:transparent;border:1px solid transparent;color:#aab8c6;text-align:left;font-size:12px}
-.navbutton .navicon{width:29px;height:29px;display:grid;place-items:center;border-radius:8px;background:#1a2531;color:#b8d8dd;font-size:15px}
-.navbutton.active{background:#1a2832;border-color:#31434e;color:#f2f7f9}
-.navbutton.active .navicon{background:#263e48;color:#c5f1ee}
-.navbutton:hover{background:#17232e}
-.sidebar-bottom{margin-top:auto;padding:12px 10px 3px}
-.loyalty-mark{width:31px;height:31px;border-radius:10px;background:#28241f;border:1px solid #514535;display:grid;place-items:center;color:var(--gold);margin-bottom:10px}
-.sidebar-bottom strong{font-size:11px;font-weight:650}
-.sidebar-bottom p{font-size:10px;line-height:1.65;color:var(--muted);margin:6px 0 0}
-.main{display:flex;flex-direction:column;gap:13px;min-width:0}
-.welcome{position:relative;overflow:hidden;min-height:268px;display:grid;grid-template-columns:minmax(0,1fr) 220px;align-items:center;gap:16px;padding:27px 29px;background:linear-gradient(115deg,#131e2a,#101721 66%,#14202b)}
-.welcome:after{content:"";position:absolute;right:5%;top:-100px;width:320px;height:320px;border-radius:50%;background:#8cced00a;filter:blur(28px);pointer-events:none}
-.welcome-copy{position:relative;z-index:1}
-.overline{display:flex;align-items:center;gap:8px;color:#a5c9ce;font-size:10px;font-weight:750;letter-spacing:1.8px;text-transform:uppercase;margin-bottom:17px}
-.overline:before{content:"";width:19px;height:1px;background:var(--gold)}
-h1{font-size:clamp(30px,3.5vw,47px);line-height:1.05;letter-spacing:-1.8px;margin:0;font-weight:650}
-h1 span{display:block;color:#a7d5d9;font-weight:500;margin-top:7px}
-.intro{max-width:420px;font-size:12px;line-height:1.8;color:#9eacba;margin:15px 0 19px}
-.chips{display:flex;flex-wrap:wrap;gap:7px}
-.chip{font-size:10px;color:#b5c4d0;border:1px solid #2b3b49;background:#17212c;border-radius:7px;padding:7px 9px}
-.core-wrap{display:grid;place-items:center;position:relative;z-index:1;padding:8px}
-.core{width:132px;height:132px;display:grid;place-items:center;position:relative;border-radius:50%;background:radial-gradient(circle at 32% 25%,#d9f1ee 0%,#8fcbd0 9%,#426e7b 31%,#263d50 63%,#172535 100%);box-shadow:0 0 0 7px #a2dce009,0 0 34px #79c0c51c,inset -10px -12px 24px #07121e80;animation:breathe 5s ease-in-out infinite}
-.core:before,.core:after{content:"";position:absolute;inset:-11px;border:1px solid #9acdd12e;border-radius:50%;transform:rotateX(65deg) rotate(-20deg);animation:rotate 18s linear infinite}
-.core:after{inset:-19px;border-color:#c9a87924;transform:rotateX(65deg) rotate(20deg);animation-duration:28s;animation-direction:reverse}
-.core svg{width:76px;height:76px;position:relative;z-index:1}
-.core-caption{font-size:8px;letter-spacing:2.5px;color:#a9cdd1;text-align:center;margin-top:27px}
-@keyframes breathe{50%{transform:translateY(-4px);box-shadow:0 0 0 9px #a2dce00c,0 0 42px #79c0c52c,inset -10px -12px 24px #07121e80}}
-@keyframes rotate{to{transform:rotateX(65deg) rotate(340deg)}}
-.orb.thinking{animation:breathe 1.2s ease-in-out infinite}
-.orb.listening{animation:breathe .8s ease-in-out infinite}
-.orb.speaking{filter:brightness(1.12)}
-.shortcuts{padding:15px}
-.panel-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 12px}
-.panel-heading strong{font-size:12px;font-weight:650}
-.panel-heading span{font-size:9px;color:#8497a7}
-.shortcut-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
-.shortcut{display:flex;align-items:center;gap:11px;min-width:0;text-align:left;border:1px solid #273544;background:#141e29;border-radius:11px;padding:12px;color:var(--text);transition:background .18s,border-color .18s,transform .18s}
-.shortcut:hover{background:#1a2934;border-color:#47626c;transform:translateY(-1px)}
-.shortcut-icon{width:34px;height:34px;display:grid;place-items:center;flex-shrink:0;border-radius:10px;background:#20313b;color:#b5e0e0;font-size:16px}
-.shortcut strong{display:block;font-size:11px;font-weight:650}
-.shortcut small{display:block;font-size:10px;color:var(--muted);margin-top:4px;line-height:1.45}
-.chat{overflow:hidden;display:flex;flex-direction:column;min-height:300px;flex:1}
-.chat-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 15px;border-bottom:1px solid var(--line);background:#131c27}
-.chat-identity{display:flex;align-items:center;gap:10px}
-.tiny-mark{width:31px;height:31px;display:grid;place-items:center;background:#20343d;border:1px solid #3b5961;border-radius:10px}
-.tiny-mark svg{width:23px;height:23px}
-.chat-identity strong{font-size:12px}
-.chat-identity small{display:block;color:var(--muted);font-size:10px;margin-top:3px}
-.chat-tools{display:flex;align-items:center;gap:10px}
-.private-label{font-size:9px;letter-spacing:1px;color:#94b8b5}
-.clear-chat{width:31px;height:30px;background:#1a2530;color:#a9bac8;border:1px solid #2c3b48;border-radius:8px}
-.messages{min-height:145px;max-height:330px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}
-.message{max-width:86%;padding:11px 13px;border-radius:12px;font-size:12px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
-.avi{align-self:flex-start;background:#192532;border:1px solid #293a48;border-bottom-left-radius:4px}
-.user{align-self:flex-end;background:#304955;border:1px solid #466671;border-bottom-right-radius:4px}
-form{display:flex;gap:8px;padding:11px;border-top:1px solid var(--line);background:#111a24}
-input{min-width:0;flex:1;background:#0a1119;color:var(--text);border:1px solid #2c3c4b;border-radius:10px;padding:12px 13px;font-size:12px}
-input::placeholder{color:#728495}
-input:focus{border-color:#7ebdc3;outline:none;box-shadow:0 0 0 3px #7ebdc30d}
-.send,.mic{border-radius:10px;border:1px solid #47636c;background:#263f49;color:#e6f5f4;padding:11px 15px;font-size:12px;transition:background .18s}
-.send:hover,.mic:hover{background:#345762}
-.send:disabled,.mic:disabled{opacity:.5;cursor:not-allowed}
-.mic{display:block;margin:0 11px 8px;width:calc(100% - 22px);background:#172630;border-color:#2e4853}
-.mic.listening{background:#342b30;border-color:#8c6c5a}
-.hint{text-align:center;color:#7f91a0;font-size:10px;padding:0 10px 12px}
-.rightbar{padding:15px;display:flex;flex-direction:column;gap:15px}
-.mini-core{width:72px;height:72px;display:grid;place-items:center;border-radius:50%;margin:4px auto 0;background:radial-gradient(circle at 30% 25%,#d6efed,#7eb7bf 35%,#344f62 70%,#192737);box-shadow:0 0 0 6px #8fcbd008,0 0 27px #8fcbd01a;position:relative}
-.mini-core:after{content:"";position:absolute;inset:-7px;border:1px solid #a6d7d51c;border-radius:50%;transform:rotateX(65deg)}
-.mini-core svg{width:42px;height:42px}
-.right-intro{text-align:center;font-size:10px;color:#94a5b2;line-height:1.65;margin-top:-6px}
-.divider{height:1px;background:#263442}
-.info-row{display:flex;gap:10px;align-items:flex-start}
-.info-icon{width:28px;height:28px;display:grid;place-items:center;flex-shrink:0;background:#1b2934;border-radius:8px;color:#a8d5d8;font-size:13px}
-.info-row small{display:block;color:#7f91a0;font-size:9px;letter-spacing:1px;margin:1px 0 5px}
-.info-row strong{display:block;color:#cbd6df;font-size:10px;font-weight:550;line-height:1.55}
-.memory-card{margin-top:auto;padding:12px;background:#171d23;border:1px solid #39362f;border-radius:11px}
-.memory-card strong{font-size:10px;color:#d3b98e}
-.memory-card p{font-size:10px;line-height:1.65;color:#9da7ae;margin:6px 0 0}
-.footer{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#657788;font-size:10px;padding:0 4px}
-.footer strong{font-weight:550;color:#8d9eaa}
-@media(max-width:1120px){.workspace{grid-template-columns:175px minmax(0,1fr)}.rightbar{display:none}}
-@media(max-width:760px){
- .shell{padding:10px;gap:10px}
- .topbar{padding:10px 11px;border-radius:12px}
- .brandmark{width:37px;height:37px}.brandmark svg{width:27px;height:27px}
- .brandname{font-size:17px}.brandtag{font-size:10px}
- .connection{font-size:9px;padding:7px 8px}
- .iconbutton{display:none}
- .workspace{display:block}
- .sidebar{display:none}
- .welcome{grid-template-columns:minmax(0,1fr) 94px;padding:20px 15px;gap:7px;min-height:230px}
- .overline{font-size:8px;margin-bottom:13px}
- h1{font-size:32px;letter-spacing:-1.3px}
- .intro{font-size:11px;margin:12px 0 14px;line-height:1.65}
- .chip{font-size:9px;padding:6px 7px}
- .core{width:78px;height:78px}.core svg{width:48px;height:48px}.core:before{inset:-7px}.core:after{inset:-12px}.core-caption{font-size:7px;letter-spacing:1.5px;margin-top:20px}
- .main{gap:10px}
- .shortcuts{padding:12px}
- .shortcut-grid{grid-template-columns:1fr;gap:7px}
- .shortcut{padding:10px}
- .shortcut-icon{width:31px;height:31px}
- .shortcut small{font-size:9px}
- .chat{min-height:320px}
- .messages{min-height:150px;max-height:42vh;padding:12px}
- .message{max-width:94%;font-size:12px}
- .private-label{display:none}
- form{padding:9px}
- input{font-size:12px;padding:12px 10px}
- .send{padding:10px 12px}
- .footer{font-size:9px;line-height:1.5}
-}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important;transition:none!important}}
 
-/* AVI FUTURE UI — refined identity, clearer hierarchy, softer motion */
-:root{--bg:#080c12;--panel:#0e151f;--panel2:#121d29;--line:#273645;--text:#eef5f6;--muted:#91a0ad;--cyan:#a5dce0;--gold:#e0c28b;--green:#9cddc4}
-body{background:radial-gradient(ellipse at 48% -18%,#20313e 0%,#0b111a 48%,#080b11 85%);letter-spacing:.005em}
-.shell{max-width:1680px;padding:20px;gap:17px}
-.topbar{background:rgba(13,20,29,.94);border-color:#2b3947;border-radius:17px;padding:13px 17px;box-shadow:0 12px 38px #0002}
-.brandmark{color:var(--gold);background:linear-gradient(145deg,#1a2832,#101923);border-color:#4a5147;border-radius:14px;box-shadow:inset 0 1px #ffffff09,0 0 22px #d9bd7b0b}
-.brandmark svg{width:31px;height:31px}
-.brandname{font-size:20px;letter-spacing:-.8px}
-.brandtag{letter-spacing:.2px}
-.workspace{grid-template-columns:196px minmax(0,1fr) 224px;gap:14px}
-.panel{background:rgba(14,21,31,.96);border-color:#263442;box-shadow:0 14px 38px #00000014}
-.sidebar,.rightbar{border-radius:16px;padding:15px 12px}
-.navbutton{padding:10px 9px;border-radius:10px;transition:background .2s,border-color .2s}
-.navbutton.active{background:linear-gradient(100deg,#1c2c37,#17232e);border-color:#3a5059;box-shadow:inset 2px 0 #a5dce0}
-.navbutton .navicon{background:#1b2934;color:#b4d9da}
-.welcome{min-height:278px;padding:31px;background:linear-gradient(120deg,#121e29 0%,#101721 62%,#17232d 100%);border-color:#2b3a48}
-.overline{color:#c4d8d8;letter-spacing:2px}
-.overline:before{background:var(--gold);width:23px}
-h1{font-size:clamp(34px,3.7vw,50px);letter-spacing:-2px}
-h1 span{background:linear-gradient(100deg,#b9e4e3,#d6c49d);-webkit-background-clip:text;background-clip:text;color:transparent}
-.intro{font-size:12.5px;line-height:1.85;color:#aab8c3;max-width:460px}
-.chip{border-radius:999px;background:#17232d;border-color:#31424e;padding:7px 10px}
-.core{background:radial-gradient(circle at 32% 24%,#f0ffff 0%,#9ddde0 8%,#5b9eaa 25%,#314c61 55%,#172637 78%);box-shadow:0 0 0 7px #a5dce008,0 0 40px #8bd6dc26,inset -12px -13px 26px #07121e80}
-.core:before{border-color:#a5dce04d;box-shadow:0 0 20px #8bd6dc0b}
-.core:after{border-color:#e0c28b40}
-.core svg{color:#e7d2a7;filter:drop-shadow(0 0 4px #e0c28b26)}
-.core-caption{color:#a8dadd;font-weight:700}
-.shortcuts{padding:16px}
-.shortcut-grid{gap:10px}
-.shortcut{background:linear-gradient(145deg,#141f2a,#111a24);border-color:#2b3b49;border-radius:13px;padding:13px}
-.shortcut:hover{background:#1b2b36;border-color:#58747a;box-shadow:0 8px 22px #0002}
-.shortcut-icon{background:#1c3038;color:#b9e5e2;border:1px solid #2e4850}
-.chat{border-radius:16px;border-color:#2b3a48}
-.chat-head{background:#121c27;padding:13px 15px}
-.tiny-mark{color:var(--gold);background:#1a2932;border-color:#41545a}
-.tiny-mark svg{color:var(--gold)}
-.messages{background:linear-gradient(180deg,#0d141d,#0b1119);gap:12px}
-.message{font-size:12.5px;border-radius:14px;padding:12px 14px}
-.avi{background:#172430;border-color:#2a3d4a}
-.user{background:linear-gradient(135deg,#304e5a,#39475c);border-color:#506b76}
-form{background:#111a24;border-top-color:#293744;padding:12px}
-input{background:#0b121a;border-color:#30414f;border-radius:12px;padding:13px 14px}
-input:focus{border-color:#91cfd2;box-shadow:0 0 0 4px #91cfd20c}
-.send{background:linear-gradient(135deg,#31535d,#263e4b);border-color:#557780;border-radius:11px;font-weight:650}
-.mic{background:#172630;border-color:#344c56;border-radius:11px}
-.rightbar{gap:17px}
-.mini-core{background:radial-gradient(circle at 32% 24%,#f0ffff,#8ccbd0 32%,#405d71 69%,#172637);box-shadow:0 0 0 6px #a5dce008,0 0 30px #8bd6dc20}
-.mini-core svg{color:#ead5a8}
-.memory-card{background:linear-gradient(145deg,#1b1c1c,#151a20);border-color:#484235}
-.memory-card strong{color:#e0c28b}
-.footer{padding:2px 5px}
-@media(max-width:1120px){.workspace{grid-template-columns:175px minmax(0,1fr)}}
-@media(max-width:760px){
- .shell{padding:10px;gap:11px}
- .topbar{border-radius:13px;padding:10px 12px}
- .welcome{padding:20px 15px;min-height:225px}
- .core{width:82px;height:82px}
- .core svg{width:50px;height:50px}
- .shortcut{border-radius:11px}
-}
-
-/* AVI NEON BLUE / OPTION 2-3 */
-:root{--bg:#030914;--panel:#071321;--panel2:#0b1b2e;--line:#173958;--text:#eff8ff;--muted:#9ab4cc;--cyan:#16c8ff;--gold:#ffb34b;--green:#68f0bd}
-body{background:radial-gradient(ellipse at 52% 0%,#062448 0%,#030914 52%,#02050b 100%)}
-.shell{max-width:1900px;padding:14px;gap:12px}
-.topbar{background:#061323ed;border-color:#174064;box-shadow:0 0 28px #008cff0a}
-.brandmark{width:50px;height:50px;border-radius:50%;color:#1dcaff;background:radial-gradient(circle at 35% 25%,#12385c,#061324 72%);border:1px solid #087fc7;box-shadow:0 0 20px #008cff25}
-.brandmark svg{width:40px;height:40px;filter:drop-shadow(0 0 5px #00aaff80)}
-.brandname{font-size:24px}.brandtag{letter-spacing:1px;text-transform:uppercase;font-size:9px;color:#a9d8f5}
-.workspace{grid-template-columns:220px minmax(0,1fr) 245px;gap:12px}
-.panel{background:linear-gradient(145deg,#071525f5,#050e1bf5);border-color:#123a5e;box-shadow:0 10px 40px #0005}
-.section-label{color:#77bde9;letter-spacing:2px}
-.navbutton{color:#b8cce0}.navbutton .navicon{background:#0a2036;color:#7acfff;border:1px solid #143b5d}
-.navbutton.active{background:linear-gradient(100deg,#062b53,#0a1b32);border-color:#087ec7;color:#fff;box-shadow:inset 3px 0 #08c8ff,0 0 18px #007fff20}
-.navbutton.active .navicon{background:#073b68;color:#28d4ff}
-.welcome{min-height:330px;padding:30px 32px;grid-template-columns:minmax(0,1fr) 300px;background:radial-gradient(ellipse at 75% 45%,#06315a88 0%,transparent 47%),linear-gradient(120deg,#07192b,#06101f 65%,#0b1b2c);border-color:#145083}
-.overline{color:#8fcfff;letter-spacing:2.3px}.overline:before{background:#ffb64e;box-shadow:0 0 10px #ffad38}
-h1{font-size:clamp(36px,4vw,58px);letter-spacing:-2.4px}
-h1 span{background:linear-gradient(100deg,#16c8ff,#8edcff 60%,#ffbf68);-webkit-background-clip:text;background-clip:text;color:transparent}
-.intro{color:#b3c9de;font-size:13px;max-width:470px}
-.chip{background:#071b30;border-color:#1c4b71;color:#d4eaff;border-radius:999px}
-.core{width:205px;height:205px;background:radial-gradient(circle at 34% 25%,#e3fcff 0%,#1dcfff 5%,#0877cc 23%,#082f5b 53%,#061427 76%);border:1px solid #1aaeff;box-shadow:0 0 0 8px #00aaff0d,0 0 42px #008fff60,inset -14px -18px 32px #020916b0}
-.core:before,.core:after{border-color:#13bfff88;box-shadow:0 0 18px #008cff28}.core:after{border-color:#ffb84d77}
-.core svg{width:138px;height:138px;color:#20caff;filter:drop-shadow(0 0 7px #008dffcc)}
-.core-caption{color:#62d7ff;font-size:9px;font-weight:800}
-.shortcut{background:linear-gradient(135deg,#0a1e33,#071324);border-color:#17456c;border-radius:13px;padding:14px}
-.shortcut:hover{border-color:#09bfff;background:#0a2540;box-shadow:0 0 24px #008fff15}
-.shortcut-icon{background:#062b4c;color:#20caff;border:1px solid #14578a}
-.chat{border-color:#16456d}.chat-head{background:#08182a;border-color:#143858}
-.tiny-mark{border-radius:50%;color:#20caff;background:#061b30;border-color:#0875b9}.tiny-mark svg{filter:drop-shadow(0 0 4px #00aaff70)}
-.messages{background:linear-gradient(180deg,#040e1b,#030a13)}.avi{background:linear-gradient(135deg,#0a2239,#081727);border-color:#17466a}
-.user{background:linear-gradient(135deg,#07385b,#10334b);border-color:#087bb2}
-form{background:#071526;border-color:#133a5b}input{background:#030d19;border-color:#174263}
-input:focus{border-color:#11c6ff;box-shadow:0 0 0 4px #11c6ff13}
-.send{background:linear-gradient(135deg,#087fcb,#07528f);border-color:#17bfff;color:white;box-shadow:0 0 15px #008cff24}
-.mic{background:#0a1d31;border-color:#1b4c70;color:#9ddfff}
-.mini-core{width:105px;height:105px;background:radial-gradient(circle at 32% 24%,#e3fcff,#13c7ff 7%,#0875c8 31%,#082849 70%,#04101f);border:1px solid #128ed4;box-shadow:0 0 0 7px #00aaff0d,0 0 30px #008fff3b}
-.mini-core:after{border-color:#20caff77;inset:-10px}.mini-core svg{color:#20caff;filter:drop-shadow(0 0 5px #008dff)}
-.memory-card{background:linear-gradient(140deg,#151f2b,#0a1420);border-color:#4e422e}.memory-card strong{color:#ffbf59}
-@media(max-width:1120px){.workspace{grid-template-columns:185px minmax(0,1fr)}}
-@media(max-width:760px){.welcome{grid-template-columns:minmax(0,1fr) 100px;min-height:235px;padding:20px 15px}.core{width:82px;height:82px}.core svg{width:58px;height:58px}.core:before{inset:-7px}.core:after{inset:-12px}.brandmark{width:42px;height:42px}.brandmark svg{width:34px;height:34px}}
-
-/* AVI LOGO + LAYOUT REFINEMENT */
-.brandmark{width:58px;height:58px;border-radius:17px;background:radial-gradient(circle at 30% 20%,#123e62,#061324 72%);border:1px solid #1489c5;box-shadow:0 0 24px #008cff2b,inset 0 0 16px #009dff13}
-.brandmark svg{width:48px;height:48px}
-.tiny-mark{width:39px;height:39px;border-radius:13px}
-.tiny-mark svg{width:32px;height:32px}
-.core svg{width:145px;height:145px}
-.mini-core svg{width:76px;height:76px}
-.workspace{grid-template-columns:218px minmax(0,1fr) 238px;gap:13px}
-.shell{padding:16px;gap:14px}
-.topbar{padding:14px 18px}
-.welcome{min-height:315px;padding:30px 34px;grid-template-columns:minmax(0,1fr) 275px}
-.shortcuts{padding:16px}
-.chat{min-height:340px}
-.messages{min-height:180px;max-height:390px;padding:18px}
-.message{font-size:13px;line-height:1.75}
-.rightbar{padding:17px 15px}
-@media(max-width:1120px){.workspace{grid-template-columns:185px minmax(0,1fr)}}
-@media(max-width:760px){
- .brandmark{width:43px;height:43px;border-radius:13px}.brandmark svg{width:36px;height:36px}
- .tiny-mark{width:34px;height:34px}.tiny-mark svg{width:28px;height:28px}
- .welcome{grid-template-columns:minmax(0,1fr) 100px;min-height:235px;padding:20px 15px}
- .core{width:82px;height:82px}.core svg{width:58px;height:58px}
- .messages{min-height:150px;padding:12px}
-}
-
-/* FULL DASHBOARD REDESIGN — reference layout */
-:root{--bg:#020814;--panel:#061326;--panel2:#091a30;--line:#12375d;--text:#f0f7ff;--muted:#8faac8;--cyan:#16c8ff;--gold:#ffb64d;--green:#54e8ac}
-html,body{min-height:100%;background:#020713}
-body{background:radial-gradient(ellipse at 55% 10%,#08264b 0%,#020916 45%,#01040a 100%);color:var(--text)}
-.shell{width:100%;max-width:none;min-height:100vh;padding:12px;gap:10px;grid-template-rows:1fr}
-.topbar{position:absolute;top:12px;right:20px;z-index:4;background:transparent;border:0;padding:0;box-shadow:none}
-.topbar .brand{display:none}.top-actions{gap:12px}
-.connection{background:#041d22;border-color:#14533f;color:#62efb4;font-size:12px;padding:10px 14px}
-.iconbutton{width:44px;height:44px;border-radius:50%;background:#07172b;border-color:#143b61}
-.workspace{grid-template-columns:310px minmax(0,1fr) 285px;gap:12px;min-height:calc(100vh - 24px);align-items:stretch}
-.panel{background:linear-gradient(150deg,#061326f5,#030b18f7);border-color:#102f50;border-radius:18px;box-shadow:0 15px 45px #0005}
-.sidebar{padding:24px 15px 15px;position:relative;overflow:hidden}
-.sidebar:before{content:"";position:absolute;bottom:-55px;left:-50px;width:260px;height:220px;background:radial-gradient(ellipse,#073c66aa,transparent 70%);pointer-events:none}
-.sidebar:after{content:"";position:absolute;bottom:0;left:0;right:0;height:155px;background:linear-gradient(0deg,#04101fe0,transparent);pointer-events:none}
-.sidebar .section-label{display:none}
-.sidebar:before{z-index:0}
-.sidebar .nav{position:relative;z-index:1;gap:7px;margin-top:24px}
-.sidebar .nav:before{content:"";display:block;height:118px;background:radial-gradient(circle at 25% 40%,#0a3960,#04101f 68%);border:1px solid #12385d;border-radius:16px;margin-bottom:5px}
-.sidebar .navbutton{font-size:14px;padding:12px 11px;gap:14px;color:#a9c0dc;border-radius:12px}
-.navbutton .navicon{width:34px;height:34px;background:transparent;border:1px solid transparent;color:#b7d5f1;font-size:21px}
-.navbutton.active{background:linear-gradient(100deg,#063b75,#071c39);border-color:#087ecb;box-shadow:inset 4px 0 #16c8ff,0 0 25px #007bff22}
-.navbutton.active .navicon{background:#064d86;color:#29d5ff}
-.sidebar-bottom{position:relative;z-index:2;margin-top:auto;padding:18px 15px;background:linear-gradient(140deg,#0b1d31,#111b2b);border:1px solid #3b3528;border-radius:17px}
-.loyalty-mark{background:#242b32;border-color:#65502d;color:#ffc263}
-.sidebar-bottom strong{font-size:12px}.sidebar-bottom p{font-size:12px;line-height:1.7}
-.main{gap:10px;min-height:0}
-.welcome{min-height:385px;flex:0 0 385px;padding:34px 32px;grid-template-columns:minmax(0,.92fr) minmax(300px,1.08fr);background:radial-gradient(ellipse at 72% 45%,#06366a88,transparent 48%),linear-gradient(120deg,#06152b,#020a17 68%,#0b1b31);border-color:#123d69;border-radius:20px}
-.welcome:after{right:0;top:0;width:55%;height:100%;border-radius:0;background:radial-gradient(ellipse,#0068d51b,transparent 65%);filter:none}
-.overline{font-size:11px;letter-spacing:3px;color:#a9d8ff;margin-bottom:27px}
-.overline:before{width:26px;height:2px;background:var(--gold);box-shadow:0 0 9px #ffb64d70}
-h1{font-size:clamp(42px,4.2vw,66px);line-height:1.02;letter-spacing:-2.5px;font-weight:750}
-h1 span{margin-top:5px;background:linear-gradient(100deg,#18caff,#75dcff 70%,#ffbd5c);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:750}
-.intro{font-size:15px;line-height:1.75;color:#c3d5eb;margin:19px 0 25px;max-width:440px}
-.chips{gap:8px}.chip{font-size:11px;border-radius:999px;padding:10px 12px;background:#07162a;border-color:#1d3a5d;color:#e2efff}
-.core-wrap{width:100%;padding:0}
-.core-wrap>div{width:100%;display:flex;align-items:center;justify-content:center;gap:12px;position:relative}
-.core{width:min(26vw,280px);height:min(26vw,280px);background:radial-gradient(circle at 34% 22%,#b6f7ff 0%,#13bfff 6%,#086ec4 26%,#06244a 58%,#020916 82%);border:1px solid #0dafff;box-shadow:0 0 0 9px #008cff0c,0 0 55px #008cff55,inset -18px -20px 38px #01050bbf}
-.core:before{inset:-15px;border-color:#12baffbb;box-shadow:0 0 25px #008cff35;transform:rotateX(65deg) rotate(-20deg)}
-.core:after{inset:-27px;border-color:#ffb64d88;transform:rotateX(65deg) rotate(20deg)}
-.core svg{width:70%;height:70%;color:#17caff;filter:drop-shadow(0 0 8px #00aaff)}
-.core-caption{position:absolute;bottom:-42px;margin:0;color:#65d9ff;font-size:10px;letter-spacing:3px}
-.shortcuts{padding:16px 18px;border-radius:17px;background:#040d1af2}
-.panel-heading strong{font-size:17px}.panel-heading span{font-size:11px;letter-spacing:1.4px;color:#7eaff1}
-.shortcut-grid{gap:12px}
-.shortcut{padding:15px;min-height:88px;border-radius:15px;background:linear-gradient(135deg,#0a1b32,#061122);border-color:#12375e;gap:13px}
-.shortcut:nth-child(2){border-color:#4c3c25}.shortcut:nth-child(3){border-color:#234b5c}
-.shortcut-icon{width:46px;height:46px;border-radius:13px;background:#073363;color:#18caff;font-size:22px}
-.shortcut:nth-child(2) .shortcut-icon,.shortcut:nth-child(3) .shortcut-icon{background:#292315;color:#ffbd59}
-.shortcut strong{font-size:13px}.shortcut small{font-size:11px;color:#8eaed0}
-.chat{min-height:0;flex:1;background:#030b17;border-color:#12375d}
-.chat-head{background:#071529;border-color:#102c4c;padding:14px 17px}
-.tiny-mark{width:38px;height:38px;background:#061a31;border-color:#087bc0;border-radius:50%;color:#1ccaff}
-.tiny-mark svg{width:31px;height:31px}
-.messages{min-height:90px;max-height:180px;background:#030b17;padding:12px 17px}
-.message{font-size:13px}.avi{background:#0a1c31;border-color:#173e61}.user{background:#073c66;border-color:#0d79b2}
-form{background:#030d1c;border-top-color:#123454;padding:12px}
-input{background:#020916;border-color:#163a5e;font-size:14px;padding:14px}
-.send{background:linear-gradient(135deg,#0c8fe9,#0755a5);border-color:#18bfff;border-radius:50%;width:50px;height:50px;font-size:0;position:relative}
-.send:after{content:"➤";font-size:22px;position:absolute;inset:0;display:grid;place-items:center}
-.mic{display:none}.hint{display:none}
-.rightbar{padding:22px 17px;gap:18px;border-radius:18px}
-.rightbar .section-label{font-size:11px;color:#7eb9f4;letter-spacing:2.3px;margin:2px 7px 6px}
-.mini-core{width:145px;height:145px;background:radial-gradient(circle at 33% 22%,#b8f7ff,#13bfff 8%,#086ec4 33%,#06244a 72%,#020916);border:1px solid #0b9fe8;box-shadow:0 0 0 8px #008cff0d,0 0 38px #008cff40}
-.mini-core:after{inset:-12px;border-color:#16bfff88}
-.mini-core svg{width:95px;height:95px;color:#1ccaff;filter:drop-shadow(0 0 6px #008cff)}
-.right-intro{font-size:13px;color:#a9c7e7;line-height:1.7;margin-top:0}
-.divider{background:#143456}
-.info-row{gap:12px;align-items:center}
-.info-icon{width:42px;height:42px;border-radius:13px;background:#071d36;border:1px solid #123a61;color:#42cfff;font-size:18px}
-.info-row small{font-size:10px;color:#75a7d9;letter-spacing:1.4px}
-.info-row strong{font-size:12px;color:#e0edfc}
-.memory-card{background:linear-gradient(145deg,#0b1d33,#071222);border-color:#203c5c}
-.memory-card strong{font-size:12px;color:#ffc15c}.memory-card p{font-size:11px;line-height:1.65;color:#9ab5d5}
-.footer{display:none}
-@media(max-width:1150px){.workspace{grid-template-columns:220px minmax(0,1fr)}.rightbar{display:none}.welcome{grid-template-columns:minmax(0,1fr) 220px}.core{width:190px;height:190px}}
-@media(max-width:760px){.shell{padding:8px}.topbar{top:10px;right:12px}.workspace{display:block;min-height:0}.sidebar{display:none}.welcome{min-height:300px;flex-basis:auto;padding:22px 17px;grid-template-columns:minmax(0,1fr) 95px}.overline{font-size:8px;letter-spacing:1.5px;margin-bottom:18px}h1{font-size:34px}.intro{font-size:11px;margin:12px 0}.core{width:82px;height:82px}.core svg{width:60px;height:60px}.core:before{inset:-7px}.core:after{inset:-12px}.core-caption{font-size:7px;letter-spacing:1px;bottom:-28px}.shortcut-grid{grid-template-columns:1fr}.shortcut{min-height:68px}.chat{margin-top:10px}.messages{max-height:130px}}
-
-/* final appearance pass: premium neon Rottweiler identity */
-.brand{gap:14px}.brandmark{width:64px;height:64px;border-radius:19px;background:radial-gradient(circle at 32% 20%,#0c3e68,#03101f 73%);border:1px solid #087fc5;box-shadow:0 0 28px #008fff30,inset 0 0 18px #009dff13;display:grid;place-items:center}
-.brandmark svg{width:57px;height:57px;filter:drop-shadow(0 0 7px #008fff8a)}
-.brandname{font-size:30px;letter-spacing:-1.5px;font-weight:750}.brandtag{font-size:10px;letter-spacing:1.8px;color:#a8cbed}
-.sidebar .nav:before{background-image:linear-gradient(90deg,#031225bb,#04172b99),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='39' fill='none' stroke='%230a8bdb' stroke-width='1' opacity='.7'/%3E%3Ccircle cx='50' cy='50' r='32' fill='none' stroke='%2314caff' stroke-width='2' stroke-dasharray='9 5' opacity='.7'/%3E%3C/svg%3E");background-position:center;background-size:cover}
-.welcome{position:relative;overflow:hidden}
-.welcome:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent 42%,#007cff09 68%,#ffae1607)}
-.core{position:relative;isolation:isolate}
-.core svg{width:75%;height:75%;filter:drop-shadow(0 0 9px #00aaffaa)}
-.core-caption{white-space:nowrap}
-.rightbar .mini-core svg{width:90px;height:90px}
-.chat-head .tiny-mark svg{width:33px;height:33px}
-.shortcut{transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
-.shortcut:hover{transform:translateY(-2px)}
-.navbutton{transition:background .18s ease,border-color .18s ease}
-@media(min-width:1500px){.workspace{grid-template-columns:310px minmax(0,1fr) 285px}.welcome{min-height:385px}.core{width:280px;height:280px}}
-
-/* Restore visible voice control and unify the chat composer */
-#chatForm{display:flex;align-items:center;gap:9px;padding:12px;background:linear-gradient(110deg,#030d1c,#07172a);border-top:1px solid #123454}
-#chatForm input{flex:1;min-width:0;padding:15px 16px;background:#020916;border:1px solid #163a5e;border-radius:14px;color:#eef8ff;font-size:14px}
-#chatForm .mic{display:grid;place-items:center;flex:0 0 48px;width:48px;height:48px;margin:0;padding:0;border-radius:50%;background:#0a1c32;border:1px solid #1c5279;color:#28ceff;font-size:20px}
-#chatForm .mic:hover,#chatForm .mic.listening{background:#07385b;border-color:#19caff;box-shadow:0 0 18px #008cff30}
-#chatForm .send{display:grid;place-items:center;flex:0 0 50px;width:50px;height:50px;padding:0;border-radius:50%;font-size:0;position:relative}
-#chatForm .send:after{content:"➤";font-size:21px;position:absolute;inset:0;display:grid;place-items:center}
-.mic.listening{background:#07385b!important;border-color:#19caff!important}
-@media(max-width:760px){#chatForm{padding:9px;gap:7px}#chatForm input{font-size:12px;padding:12px 10px}#chatForm .mic{flex-basis:42px;width:42px;height:42px}#chatForm .send{flex-basis:44px;width:44px;height:44px}}
-
-/* Minimalist Avi mode: remove dashboard clutter and focus on conversation */
-body{background:#03070d;color:#eaf4ff}
-.shell{padding:10px;gap:8px}
-.topbar{background:transparent;border:0;box-shadow:none}
-.workspace{grid-template-columns:220px minmax(0,1fr) 220px;gap:10px;min-height:calc(100vh - 20px)}
-.panel{background:#050d18;border-color:#10243a;box-shadow:none;border-radius:14px}
-.sidebar{padding:18px 12px;background:#040a13}
-.sidebar .nav:before{display:none}
-.sidebar .nav{margin-top:14px;gap:4px}
-.sidebar .navbutton{padding:9px 10px;border-color:transparent;background:transparent;box-shadow:none}
-.sidebar .navbutton.active{background:#0a1b2c;border-color:#123b5c;box-shadow:inset 2px 0 #19bfff}
-.navbutton .navicon{background:transparent;border:0;width:28px;height:28px}
-.main{gap:8px;min-height:0}
-.welcome{min-height:250px;flex:0 0 250px;padding:24px 25px;grid-template-columns:minmax(0,1fr) 210px;background:#050d18;border-color:#102a43;box-shadow:none}
-.welcome:after,.welcome:before{display:none}
-.overline{margin-bottom:18px;letter-spacing:2px;font-size:10px;color:#83b7db}
-h1{font-size:clamp(34px,3.3vw,48px);letter-spacing:-1.5px}
-.intro{font-size:13px;line-height:1.65;color:#9eb3c9;margin:13px 0 17px}
-.chip{background:transparent;border-color:#19334a;color:#b6cde2}
-.core{width:175px;height:175px;box-shadow:0 0 24px #008cff18,inset -14px -15px 30px #01050b}
-.core:before{inset:-9px;box-shadow:none}
-.core:after{inset:-17px}
-.core-caption{font-size:9px;letter-spacing:2px;bottom:-30px;color:#69ccef}
-.shortcuts{display:none!important}
-.chat{flex:1;min-height:300px;background:#030912;border-color:#10243a;box-shadow:none}
-.chat-head{padding:11px 14px;background:#050d18;border-color:#10243a}
-.chat-head .tiny-mark{width:32px;height:32px}
-.messages{max-height:none;min-height:140px;padding:16px;background:#030912}
-.message{max-width:82%;font-size:13px;line-height:1.6;box-shadow:none}
-.avi{background:#091522;border-color:#152d42}
-.user{background:#0a2840;border-color:#164563}
-#chatForm{background:#030912;border-top:1px solid #10243a;padding:10px}
-#chatForm input{background:#050d18;border-color:#172c40;border-radius:12px}
-#chatForm .mic{background:transparent;border-color:#1a3449;color:#78cfee}
-#chatForm .send{background:#0b80ba;border-color:#149dd8;box-shadow:none}
-.rightbar{padding:17px 12px;gap:14px;background:#040a13}
-.rightbar .section-label{letter-spacing:1.6px;font-size:10px}
-.mini-core{width:105px;height:105px;box-shadow:0 0 18px #008cff12}
-.mini-core:after{inset:-7px}
-.right-intro{font-size:12px;color:#92a9c0}
-.info-icon{background:transparent;border-color:#183148;color:#68c9ef}
-.info-row{gap:9px}
-.info-row strong{font-size:11px;font-weight:500;color:#c5d7e8}
-.info-row small{font-size:9px}
-.sidebar-bottom,.memory-card{background:#060e18;border-color:#14273a;box-shadow:none}
-@media(max-width:1150px){.workspace{grid-template-columns:190px minmax(0,1fr)}.rightbar{display:none}.welcome{grid-template-columns:minmax(0,1fr) 160px}.core{width:135px;height:135px}}
-@media(max-width:760px){.shell{padding:7px}.workspace{display:block;min-height:0}.sidebar{display:none}.welcome{min-height:185px;flex-basis:auto;padding:17px 14px;grid-template-columns:minmax(0,1fr) 70px}.overline{font-size:8px;margin-bottom:12px}h1{font-size:29px}.intro{font-size:11px;margin:8px 0}.chips{gap:4px}.chip{font-size:9px;padding:6px 7px}.core{width:58px;height:58px}.core svg{width:85%;height:85%}.core:before{inset:-5px}.core:after{inset:-9px}.core-caption{font-size:6px;letter-spacing:.7px;bottom:-20px}.chat{margin-top:8px;min-height:55vh}.messages{min-height:100px;padding:10px}.rightbar{display:none}}
-
-/* AVI — fresh, minimalist chat-first interface */
-:root{--bg:#0b0d10;--panel:#111418;--panel2:#171b20;--line:#252b32;--text:#f2f4f7;--muted:#929aa5;--cyan:#b7d9e5;--gold:#d5b47a}
-html,body{background:var(--bg);color:var(--text)}
-body{background:#0b0d10;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-.shell{max-width:1600px;margin:0 auto;padding:0 22px;gap:0}
-.topbar{position:relative;top:auto;right:auto;display:flex;min-height:68px;padding:12px 0;background:transparent;border:0;border-bottom:1px solid #20252b;border-radius:0;box-shadow:none}
-.brand{gap:10px}.brandmark{width:34px;height:34px;border-radius:10px;background:#151a20;border:1px solid #2a333d;box-shadow:none}
-.brandmark svg{width:29px;height:29px;filter:none}
-.brandname{font-size:21px;letter-spacing:-.8px;font-weight:650}.brandtag{font-size:11px;letter-spacing:0;color:#8f99a5}
-.top-actions{gap:10px}.connection{padding:7px 10px;background:transparent;border:1px solid #29323b;border-radius:999px;font-size:11px;color:#a7b3be}
-.iconbutton{width:34px;height:34px;border-radius:50%;background:transparent;border:1px solid #2a323b;color:#c8d1da;box-shadow:none}
-.workspace{display:block;min-height:calc(100vh - 69px);max-width:920px;margin:0 auto}
-.sidebar,.rightbar{display:none!important}
-.main{display:flex;flex-direction:column;gap:0;min-height:calc(100vh - 69px)}
-.welcome{flex:0 0 auto;min-height:0;padding:34px 0 22px;display:block;background:transparent;border:0;border-radius:0;box-shadow:none}
-.welcome:before,.welcome:after{display:none}
-.welcome-copy{text-align:center;max-width:660px;margin:0 auto}
-.overline{font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:#a6b1bc;margin:0 0 14px}
-.overline:before{display:none}
-h1{font-size:clamp(28px,4vw,38px);line-height:1.15;letter-spacing:-1.4px;font-weight:600;margin:0}
-h1 span{display:inline;margin-left:8px;background:none;color:#c6dce6;font-weight:600}
-.intro{max-width:490px;margin:12px auto 0;color:#929ba6;font-size:13px;line-height:1.65}
-.chips{justify-content:center;gap:6px;margin-top:14px}.chip{padding:5px 9px;font-size:10px;background:transparent;border:1px solid #242b32;color:#9ba6b2;border-radius:999px}
-.core-wrap{display:none}
-.chat{display:flex;flex-direction:column;flex:1;min-height:300px;background:transparent;border:0;border-radius:0;box-shadow:none}
-.chat-head{padding:11px 0;background:transparent;border:0;border-bottom:1px solid #20252b}
-.chat-identity{gap:9px}.tiny-mark{width:29px;height:29px;border-radius:9px;background:#151b21;border:1px solid #2a333c;color:#b9dce7}
-.tiny-mark svg{width:25px;height:25px;filter:none}
-.chat-identity strong{font-size:12px;font-weight:600}.chat-identity small{font-size:10px;color:#89939f}
-.private-label{font-size:9px;letter-spacing:1px;color:#77828d}
-.clear-chat{width:30px;height:30px;border-radius:50%;background:transparent;border:1px solid #2a323a;color:#aab4be}
-.messages{flex:1;min-height:180px;max-height:none;padding:22px 0;background:transparent;display:flex;flex-direction:column;gap:16px}
-.message{max-width:min(80%,680px);padding:12px 15px;border-radius:16px;font-size:14px;line-height:1.7;box-shadow:none}
-.message.avi{align-self:flex-start;background:#15191e;border:1px solid #252b32;color:#e1e6eb;border-radius:5px 16px 16px 16px}
-.message.user{align-self:flex-end;background:#202a33;border:1px solid #303b46;color:#f0f4f7;border-radius:16px 5px 16px 16px}
-#chatForm{display:flex;align-items:center;gap:9px;padding:9px;background:#14181d;border:1px solid #30363e;border-radius:17px;margin:12px 0 7px;box-shadow:0 8px 30px #0002}
-#chatForm input{flex:1;min-width:0;padding:12px 7px;background:transparent;border:0;border-radius:0;color:#f0f3f6;font-size:14px;outline:none;box-shadow:none}
-#chatForm input:focus{border:0;box-shadow:none}
-#chatForm input::placeholder{color:#818b96}
-#chatForm .mic{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;margin:0;padding:0;border-radius:11px;background:transparent;border:1px solid transparent;color:#a9bac5;font-size:17px}
-#chatForm .mic:hover,#chatForm .mic.listening{background:#25343e;border-color:#435764;color:#d7f5ff;box-shadow:none}
-#chatForm .send{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;padding:0;border-radius:12px;background:#e8edf1;border:0;color:#14191e;font-size:0;position:relative;box-shadow:none}
-#chatForm .send:after{content:"↑";font-size:22px;font-weight:600;position:absolute;inset:0;display:grid;place-items:center}
-.hint{display:none}
-.shortcuts{display:none!important}
-.sidebar-bottom,.memory-card{box-shadow:none}
-button:hover{filter:brightness(1.12)}
-@media(min-height:850px){.welcome{padding-top:50px;padding-bottom:28px}}
-@media(max-width:760px){.shell{padding:0 14px}.topbar{min-height:58px;padding:10px 0}.brandmark{width:30px;height:30px}.brandmark svg{width:25px;height:25px}.brandname{font-size:19px}.brandtag{font-size:10px}.connection{font-size:10px;padding:6px 8px}.workspace,.main{min-height:calc(100vh - 58px)}.welcome{padding:30px 0 17px}h1{font-size:27px}.intro{font-size:12px;padding:0 8px}.messages{padding:17px 0}.message{max-width:90%;font-size:13px;padding:10px 12px}#chatForm{gap:5px;padding:6px 8px;border-radius:14px}#chatForm input{font-size:13px;padding:10px 3px}#chatForm .mic,#chatForm .send{flex-basis:35px;width:35px;height:35px;border-radius:10px}}
-
-/* Voice preference control */
-.voice-settings-button{border:1px solid #3a515d;background:#172630;color:#d9eeee;border-radius:10px;padding:9px 11px;font-size:11px;white-space:nowrap}
-.voice-settings-button:hover{background:#213642}
-.voice-settings{margin-top:-5px;padding:15px 17px;display:grid;grid-template-columns:minmax(170px,1fr) minmax(190px,260px);gap:8px 16px;align-items:center;border-radius:14px}
-.voice-settings[hidden]{display:none}
-.voice-settings-copy{grid-row:span 2;display:flex;flex-direction:column;gap:5px}
-.voice-settings-copy strong{font-size:12px}
-.voice-settings-copy span,.voice-settings-note{font-size:10px;color:var(--muted);line-height:1.5}
-.voice-select-label{font-size:10px;color:#b6c5cf}
-.voice-select{width:100%;background:#0b121a;color:var(--text);border:1px solid #344754;border-radius:9px;padding:10px;font:inherit;font-size:12px}
-.voice-settings-note{grid-column:2;margin:0}
-@media(max-width:760px){.voice-settings-button{font-size:10px;padding:8px}.voice-settings{grid-template-columns:1fr;gap:8px;padding:13px}.voice-settings-copy{grid-row:auto}.voice-settings-note{grid-column:1}}
-
-/* Minimal futuristic redesign: restrained Rottweiler-inspired mark, clean panels, soft motion. */
-:root{--bg:#090d14;--panel:#101722;--panel2:#121c29;--line:#202d3a;--text:#edf4f8;--muted:#8797a7;--cyan:#78dce8;--gold:#d2aa75;--green:#8ee1c0}
-html,body{background:var(--bg)}
-body{background:radial-gradient(ellipse at 52% 0%,#16283a 0%,#0a1018 48%,#090d14 82%);letter-spacing:.005em}
-.shell{max-width:1500px;padding:18px 22px;gap:14px}
-.topbar,.panel{background:rgba(15,22,32,.9);border-color:#24313f;box-shadow:0 12px 36px #00000014}
-.topbar{border-radius:14px;padding:11px 15px}
-.brandmark{width:38px;height:38px;border-radius:11px;background:#111d2a;border:1px solid #304653;box-shadow:none}
-.brandmark svg{width:31px;height:31px}
-.brandname{font-size:18px;letter-spacing:-.7px}
-.brandtag{font-size:10px;letter-spacing:.03em}
-.connection{background:#10231f;border-color:#23443c;color:#9ce7c9}
-.iconbutton,.voice-settings-button{background:#151f2b;border-color:#2a3947}
-.workspace{grid-template-columns:190px minmax(0,1fr) 220px;gap:13px}
-.panel{border-radius:13px}
-.sidebar,.rightbar{padding:14px 11px}
-.section-label{font-size:9px;letter-spacing:1.6px;color:#7f94a7}
-.navbutton{border:1px solid transparent;color:#aab8c7;padding:9px 10px;border-radius:9px;font-size:12px}
-.navbutton.active{background:#182b38;border-color:#294957;color:#e6fbff;box-shadow:inset 2px 0 #78dce8}
-.navicon{color:#8fb3c1;font-size:16px}
-.sidebar-bottom{background:#111b27;border:1px solid #233341;border-radius:11px;padding:12px}
-.sidebar-bottom p{line-height:1.55}
-.welcome{min-height:275px;padding:28px 28px 22px;position:relative;overflow:hidden;background:linear-gradient(120deg,#111c29 0%,#101722 60%,#121a2a 100%)}
-.welcome:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #78dce810;border-radius:50%;right:4%;top:-155px;pointer-events:none}
-.overline{color:#83dce8;letter-spacing:1.8px;font-size:9px}
-h1{font-size:clamp(28px,3vw,42px);letter-spacing:-1.7px;font-weight:650;line-height:1.12}
-h1 span{color:#9aaeff}
-.intro{max-width:500px;color:#a2b0bf;line-height:1.7;font-size:13px}
-.chips{gap:7px}
-.chip{border:1px solid #2a3a48;background:#121e2a;color:#a9c0cc;border-radius:7px;padding:6px 9px;font-size:9px}
-.core{width:126px;height:126px;background:radial-gradient(circle at 33% 24%,#273f58,#111a2b 56%,#0b121d 100%);border:1px solid #4b9eaf;box-shadow:0 0 0 7px #69d8e80a,0 0 30px #43c4e51d,inset 0 0 24px #56cfe51b;animation:coreDrift 6s ease-in-out infinite}
-.core svg{width:65px;height:65px;filter:none}
-.core-caption{font-size:8px;letter-spacing:2px;color:#83dce8;margin-top:15px}
-@keyframes coreDrift{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-.core.thinking,.orb.thinking{animation:corePulse 1.25s ease-in-out infinite}
-@keyframes corePulse{50%{box-shadow:0 0 0 11px #69d8e80c,0 0 40px #43c4e54a,inset 0 0 28px #56cfe52b}}
-.chat{padding:0 17px 14px;background:rgba(13,19,28,.94)}
-.chat-head{padding:14px 0;border-bottom:1px solid #24313e}
-.tiny-mark{width:30px;height:30px;border-radius:9px;background:#142330;border:1px solid #2b4855}
-.tiny-mark svg{width:24px;height:24px}
-.chat-identity strong{font-size:12px}
-.chat-identity small{font-size:10px;color:#8b9cac}
-.private-label{font-size:8px;letter-spacing:1.4px;color:#8496a7}
-.clear-chat{background:#151f2b;border-color:#2b3b49;color:#b9c9d4;border-radius:8px}
-.messages{min-height:180px;max-height:330px;padding:19px 2px;gap:12px}
-.message{font-size:13px;line-height:1.65;border-radius:13px;padding:11px 14px;box-shadow:none}
-.message.avi{background:#172330;border:1px solid #243541;color:#e3edf3}
-.message.user{background:#27314b;border:1px solid #3c4c70;color:#f1f4ff}
-#chatForm{background:#0b1119;border:1px solid #2c3d4c;border-radius:12px;padding:6px 7px;gap:7px}
-#chatForm:focus-within{border-color:#4c8997;box-shadow:0 0 0 3px #78dce80c}
-#chatForm .mic{color:#9eb9c4}
-#chatForm .send{background:#b7eaf0;color:#0b1820;border-radius:9px}
-.mini-core{background:#111c28;border-color:#273744}
-.mini-core svg{width:40px;height:40px}
-.status-card,.memory-card,.quick-card{background:#111b27;border-color:#263744;border-radius:10px}
-.rightbar .section-label{margin-bottom:11px}
-.voice-settings{background:#101722;border-color:#263744}
-button:hover{filter:brightness(1.08)}
-@media(max-width:1050px){.workspace{grid-template-columns:165px minmax(0,1fr)}.rightbar{display:none}}
-@media(max-width:760px){.shell{padding:8px;gap:9px}.topbar{padding:9px 10px}.workspace,.main{min-height:calc(100vh - 70px)}.workspace{grid-template-columns:minmax(0,1fr)}.sidebar{display:none}.welcome{min-height:205px;padding:22px 16px 18px}.core{width:82px;height:82px}.core svg{width:47px;height:47px}.core-caption{font-size:7px;margin-top:10px}.intro{font-size:12px}.chips{display:none}.messages{min-height:170px;max-height:38vh}.private-label{display:none}.voice-settings-button{font-size:10px;padding:8px}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
-
-
-.auth-gate[hidden]{display:none!important}.auth-gate{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:20px;background:radial-gradient(ellipse at 50% -20%,#1c2b39 0%,#0d131c 46%,#090c12 85%)}
-.auth-card{width:min(100%,420px);padding:26px;border:1px solid #263343;border-radius:18px;background:#101721;color:#edf3f7;box-shadow:0 24px 80px #0008}
-.auth-card h2{margin:0 0 8px;font-size:26px}.auth-card p{color:#9eacba;font-size:13px;line-height:1.6}
-.auth-card label{display:block;margin:14px 0 6px;color:#b5c4d0;font-size:12px}
-.auth-card input{width:100%;display:block;margin:0;padding:12px;border:1px solid #2c3c4b;border-radius:10px;background:#0a1119;color:#edf3f7}
-.auth-actions{display:flex;gap:9px;margin-top:18px}.auth-actions button,.auth-link{border:1px solid #47636c;border-radius:10px;padding:11px 13px;background:#263f49;color:#e6f5f4}
-.auth-actions button{flex:1}.auth-link{background:transparent;border-color:#2c3c4b}
-.auth-status{min-height:20px;color:#a5dce0!important;font-size:12px!important}.account-chip{font-size:11px;color:#a5dce0;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-@media(max-width:520px){.auth-card{padding:20px}.top-actions{gap:5px}.account-chip{display:none}}
-
-/* FIX: the global chat form is flex-row; the sign-in form must be a vertical card. */
-.auth-gate{display:grid!important;place-items:center!important;padding:24px!important}
-.auth-card{display:block!important;flex:none!important;width:min(100%,440px)!important;max-width:440px!important;margin:0 auto!important;padding:30px!important;overflow:hidden}
-.auth-card .brandmark{display:grid;place-items:center;width:54px;height:54px;margin:0 0 22px!important}
-.auth-card h2{font-size:clamp(27px,4vw,34px);line-height:1.15;letter-spacing:-.8px;margin:0 0 10px}
-.auth-card p:not(.auth-status){margin:0 0 22px;max-width:34ch}
-.auth-card label{display:block!important;margin:16px 0 7px!important}
-.auth-card input{display:block!important;width:100%!important;max-width:none!important;margin:0!important;min-height:48px;padding:13px 14px!important}
-.auth-card .auth-actions{display:grid!important;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
-.auth-card .auth-actions button{display:block;width:100%;min-width:0;min-height:46px;padding:12px 10px;white-space:normal;line-height:1.3}
-.auth-card .auth-status{min-height:0;margin:14px 0 0!important;overflow-wrap:anywhere}
-@media(max-width:520px){
- .auth-gate{padding:18px!important}
- .auth-card{padding:23px!important;border-radius:16px}
- .auth-card .auth-actions{grid-template-columns:1fr}
- .auth-card .auth-actions button{min-height:48px}
-}
-
-
-/* Mobile-first chat layout: one viewport, one message scroller, bottom composer. */
-@media (max-width: 760px) {
-  html, body { width:100%; min-height:100%; margin:0; }
-  body { min-height:100vh; min-height:100dvh; overflow-x:hidden; }
-  .shell { box-sizing:border-box; width:100%; max-width:none; min-height:100vh; min-height:100dvh; padding:0 12px max(8px, env(safe-area-inset-bottom)); gap:0; }
-  .topbar { position:sticky; top:0; z-index:20; min-height:56px; box-sizing:border-box; padding:8px 0; background:rgba(9,13,20,.96); border:0; border-bottom:1px solid #202d3a; border-radius:0; backdrop-filter:blur(14px); }
-  .brand { min-width:0; gap:8px; }
-  .brandname { font-size:18px; }
-  .brandtag { display:none; }
-  .top-actions { gap:6px; }
-  .connection { max-width:105px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:9px; padding:6px 7px; }
-  .workspace { display:block; width:100%; max-width:none; min-height:0; margin:0; }
-  .main { display:flex; flex-direction:column; gap:0; width:100%; min-width:0; min-height:0; }
-  .welcome { display:none !important; }
-  .chat { display:flex; flex-direction:column; width:100%; height:calc(100vh - 56px); height:calc(100dvh - 56px); min-height:260px; box-sizing:border-box; margin:0; padding:0; overflow:hidden; border:0; border-radius:0; background:transparent; box-shadow:none; }
-  .chat-head { flex:0 0 auto; min-height:55px; box-sizing:border-box; padding:10px 0; background:rgba(9,13,20,.96); border-bottom:1px solid #202d3a; }
-  .chat-identity { gap:9px; min-width:0; }
-  .chat-identity strong { font-size:13px; }
-  .chat-identity small { display:block; max-width:54vw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:10px; }
-  .chat-tools { gap:7px; }
-  .private-label { display:none !important; }
-  .clear-chat { width:34px; height:34px; flex:0 0 34px; border-radius:11px; }
-  .messages { display:flex; flex:1 1 auto; min-height:0; max-height:none; height:auto; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:16px 0 12px; gap:13px; scroll-padding-bottom:12px; }
-  .message { box-sizing:border-box; max-width:92%; overflow-wrap:anywhere; font-size:14px; line-height:1.55; padding:11px 13px; }
-  #chatForm { position:relative; z-index:5; flex:0 0 auto; display:flex; align-items:center; box-sizing:border-box; width:100%; margin:0; padding:7px; gap:5px; border:1px solid #2c3d4c; border-radius:15px; background:#111923; box-shadow:0 -5px 20px #0002; }
-  #chatForm input { flex:1 1 auto; width:0; min-width:0; min-height:42px; box-sizing:border-box; padding:10px 7px; font-size:16px; line-height:1.35; }
-  #chatForm .mic, #chatForm .send { flex:0 0 40px; width:40px; height:40px; min-width:40px; border-radius:12px; }
-  #chatForm .mic { display:grid !important; place-items:center; font-size:17px; }
-  #chatForm .send { display:grid; place-items:center; }
-  .hint { display:none !important; }
-  .voice-settings { margin:8px 0; }
-}
-@media (max-width: 390px) {
-  .shell { padding-left:9px; padding-right:9px; }
-  .connection { max-width:82px; }
-  .message { max-width:95%; font-size:13px; }
-  #chatForm .mic, #chatForm .send { flex-basis:37px; width:37px; min-width:37px; height:37px; }
-}
-
-
-/* MOBILE CHAT LAYOUT FIX — layout only; leave chat, memory and voice logic intact */
-@media (max-width:760px) {
-  html, body { width:100%; height:100%; min-height:0; overflow:hidden; }
-  body { height:100dvh; min-height:0; }
-  .shell {
-    width:100%; max-width:none; height:100dvh; min-height:0;
-    padding: max(8px, env(safe-area-inset-top)) 9px max(8px, env(safe-area-inset-bottom));
-    gap:8px; display:grid; grid-template-rows:auto minmax(0,1fr); overflow:hidden;
-  }
-  .topbar { flex:0 0 auto; min-height:54px; padding:8px 10px; }
-  .workspace { display:block; min-height:0; height:100%; overflow:hidden; }
-  .main { display:flex; flex-direction:column; gap:0; height:100%; min-height:0; overflow:hidden; }
-  .welcome, .shortcuts, .footer { display:none !important; }
-  .chat {
-    display:flex; flex-direction:column; flex:1 1 auto; height:100%; min-height:0;
-    max-height:none; overflow:hidden; border-radius:14px;
-  }
-  .chat-head { flex:0 0 auto; min-height:56px; padding:9px 10px; }
-  .chat-identity { min-width:0; }
-  .chat-identity small { max-width:60vw; }
-  .messages {
-    flex:1 1 0; min-height:0; height:0; max-height:none; width:100%;
-    overflow-x:hidden; overflow-y:auto; overscroll-behavior-y:contain;
-    -webkit-overflow-scrolling:touch; padding:14px 10px;
-  }
-  #chatForm {
-    position:relative; flex:0 0 auto; width:100%; min-width:0;
-    display:flex; align-items:center; gap:6px;
-    padding:8px; margin:0; padding-bottom:max(8px, env(safe-area-inset-bottom));
-    border-top:1px solid var(--line); border-radius:0 0 14px 14px;
-  }
-  #chatForm input { flex:1 1 0; width:0; min-width:0; height:44px; font-size:16px; }
-  #chatForm .mic, #chatForm .send {
-    flex:0 0 42px; width:42px; min-width:42px; height:42px;
-    margin:0; padding:0; display:grid; place-items:center;
-    white-space:nowrap; overflow:hidden; text-overflow:clip;
-  }
-  #chatForm .mic { font-size:17px; }
-  #chatForm .mic.listening { font-size:0; }
-  #chatForm .mic.listening::after { content:"⏹"; font-size:17px; }
-  .hint { display:none !important; }
-}
-@media (max-width:390px) {
-  .shell { padding-left:7px; padding-right:7px; }
-  .chat-head { padding-left:8px; padding-right:8px; }
-  .messages { padding-left:7px; padding-right:7px; }
-  #chatForm { gap:5px; padding:6px; }
-  #chatForm .mic, #chatForm .send { flex-basis:38px; width:38px; min-width:38px; height:40px; }
-}
-
-
-/* AVI MINIMAL REDESIGN v2 */
-body{background:radial-gradient(ellipse at 50% -18%,rgba(91,139,154,.16),transparent 48%),#0b0e12!important;color:#eef1f3}
-.shell{max-width:1180px!important;padding:22px 26px!important;gap:18px!important}
-.topbar{display:flex!important;align-items:center;justify-content:space-between;gap:12px;min-height:64px;padding:0 0 14px!important;border-bottom:1px solid #242a31}
-.brand{gap:0!important}.brandmark,.tiny-mark,.core-wrap,.mini-core,.core-caption,.loyalty-mark{display:none!important}
-.brandname{font-size:25px!important;font-weight:700;letter-spacing:-1px;color:#f3f6f6!important}
-.brandtag{display:block!important;font-size:11px;color:#89959d!important;margin-top:2px}
-.top-actions{display:flex!important;align-items:center;gap:8px!important;flex-wrap:wrap}
-.account-chip{max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#c3cbd0!important;background:#151a20;border:1px solid #2a323b;border-radius:10px;padding:9px 12px;font-size:12px}
-.connection{display:inline-flex!important;color:#9ba8af!important;font-size:12px;padding:8px 10px;border:1px solid #2b333b;border-radius:10px;background:#11161b}
-.voice-settings-button,.iconbutton{min-height:40px;border-radius:11px!important;border:1px solid #303943!important;background:#151b21!important;color:#e6ecee!important;padding:0 13px!important;font-size:12px}
-.iconbutton{min-width:40px;font-size:17px!important}
-.workspace{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:16px!important;max-width:900px;width:100%;margin:10px auto 0!important}
-.sidebar,.rightbar{display:none!important}
-.welcome{display:block!important;max-width:900px;margin:0 auto 14px!important;padding:26px 28px!important;border:1px solid #29333a!important;border-radius:20px!important;background:linear-gradient(135deg,#141b20,#101419)!important;text-align:left!important}
-.welcome h1,.welcome h2{font-size:clamp(24px,4vw,34px)!important;letter-spacing:-1px;line-height:1.15;margin:0 0 8px!important;color:#f1f5f5!important}
-.welcome p{max-width:540px;color:#a5b0b6!important;font-size:14px;line-height:1.6}
-.welcome .core-wrap,.welcome .mini-core,.welcome .core-caption{display:none!important}
-.chat{border:1px solid #29333b!important;border-radius:20px!important;background:#101419!important;box-shadow:0 18px 60px rgba(0,0,0,.18);overflow:hidden}
-.chat-head{background:#12181d!important;border-bottom:1px solid #252d34!important;padding:15px 18px!important}
-.messages{background:#0f1317!important}
-.message.user{background:#20342f!important;border:1px solid #34574e!important}
-.message.assistant{background:#171d23!important;border:1px solid #28313a!important}
-#chatForm{background:#12171c!important;border-top:1px solid #252d34!important;gap:8px!important;padding:12px!important}
-#chatForm input{background:#0c1014!important;border:1px solid #303a43!important;border-radius:13px!important;color:#f3f6f7!important;min-height:46px}
-#chatForm .mic,#chatForm .send{border-radius:12px!important;min-height:44px}
-#chatForm .send{background:#c6e4df!important;color:#14201f!important;font-weight:650}
-.voice-settings{background:#141b20!important;border:1px solid #2b343c!important;border-radius:15px!important}
-.auth-card{border:1px solid #2c363d!important;border-radius:22px!important;background:#12171c!important;box-shadow:0 24px 80px rgba(0,0,0,.3)}
-.auth-card .brandmark{display:none!important}.auth-card .brandname{font-size:30px!important}
-.auth-card input{background:#0b1014!important;color:#eef2f3!important;border:1px solid #303a43!important;border-radius:12px!important}
-.auth-card .auth-actions button:first-child{background:#c6e4df!important;border-color:#c6e4df!important;color:#12201e!important;font-weight:650;border-radius:12px!important}
-.auth-card .auth-link{background:transparent!important;border-color:#303a43!important;color:#d6dfe1!important;border-radius:12px!important}
-@media(max-width:760px){html,body{width:100%;height:100%;min-height:0;overflow:hidden}body{height:100dvh}.shell{display:flex;flex-direction:column;width:100%;height:100dvh;min-height:0;max-width:none!important;padding:max(10px,env(safe-area-inset-top)) 12px max(8px,env(safe-area-inset-bottom))!important;gap:8px!important;overflow:hidden}.topbar{flex:0 0 auto;min-height:54px;padding:4px 0 10px!important;align-items:center}.brandname{font-size:23px!important}.brandtag{display:none!important}.top-actions{gap:5px!important;justify-content:flex-end}.account-chip{max-width:115px;padding:8px;font-size:11px}.connection{display:none!important}.voice-settings-button{min-height:38px;padding:0 10px!important}.iconbutton{min-width:38px;min-height:38px;padding:0 10px!important}.workspace{display:flex!important;flex:1 1 auto;width:100%;min-height:0;height:auto;margin:0!important;overflow:hidden;flex-direction:column}.welcome{flex:0 0 auto;padding:16px!important;margin:0 0 8px!important;border-radius:15px!important}.welcome h1,.welcome h2{font-size:22px!important}.welcome p{font-size:12px;margin-bottom:0}.main{display:flex;flex:1 1 auto;min-height:0;overflow:hidden}.chat{display:flex;flex:1 1 auto;width:100%;height:100%;min-height:0;max-height:none;border-radius:16px!important}.chat-head{flex:0 0 auto;min-height:48px;padding:11px 12px!important}.messages{flex:1 1 0;height:0;min-height:0;padding:13px 10px;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}.message{max-width:92%;font-size:14px;padding:11px 12px}#chatForm{flex:0 0 auto;width:100%;min-width:0;gap:6px!important;padding:8px!important;padding-bottom:max(8px,env(safe-area-inset-bottom))!important}#chatForm input{width:0;flex:1 1 0;min-width:0;min-height:44px;padding:10px;font-size:16px}#chatForm .mic{width:40px;min-width:40px;height:42px}#chatForm .send{min-width:58px;height:42px;padding:0 11px}.hint{display:none}.voice-settings{margin:0 0 8px;max-width:100%}}
-@media(max-width:390px){.shell{padding-left:8px!important;padding-right:8px!important}.top-actions{gap:4px!important}.account-chip{max-width:85px}.welcome{padding:13px!important}.welcome h1,.welcome h2{font-size:20px!important}#chatForm{gap:5px!important;padding:6px!important}#chatForm .mic{width:36px;min-width:36px}#chatForm .send{min-width:52px;padding:0 8px}}
-
-/* AVI NAV / ACCOUNT POLISH */
-.top-actions{gap:8px!important;align-items:center}
-.home-button{font-size:22px!important;min-width:42px}
-.profile-button{display:inline-flex;align-items:center;gap:8px;max-width:220px;cursor:pointer}
-.profile-icon{display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:50%;background:#293d3b;color:#c6e4df;font-size:10px;flex-shrink:0}
-.profile-email{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
-.profile-caret{color:#8f9da4;font-size:12px}
-.connection{display:inline-flex!important;align-items:center;gap:7px}
-.connection-dot{width:8px;height:8px;border-radius:50%;background:#d4ae65;box-shadow:0 0 0 3px rgba(212,174,101,.12);flex-shrink:0}
-.connection:has(.connection-text){white-space:nowrap}
-.new-chat-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:40px;padding:0 14px;border-radius:11px;border:1px solid #b8dcd7;background:#c6e4df;color:#14201f;font-weight:650;font-size:12px;cursor:pointer}
-.new-chat-button:hover{background:#d8efeb}
-.private-label{font-size:10px;letter-spacing:1.1px;color:#7f9698!important}
-@media(max-width:760px){.top
-/* AVI PREMIUM UI REFRESH — visual-only overrides */
 :root{
- --bg:#05070f;--panel:rgba(255,255,255,.05);--panel2:rgba(255,255,255,.07);
- --line:rgba(255,255,255,.10);--text:#f4f7ff;--muted:#a1abc1;
- --cyan:#22d3ee;--violet:#8b5cf6;--green:#6ee7b7;
- --avi-gradient:linear-gradient(120deg,#22d3ee 0%,#8b5cf6 100%);
- --avi-glow:0 0 32px rgba(34,211,238,.13),0 0 54px rgba(139,92,246,.10);
+  color-scheme:dark;
+  --bg:#04050c;--bg-2:#070a14;--surface:rgba(12,17,31,.78);--surface-2:rgba(16,23,42,.78);
+  --line:rgba(120,164,202,.19);--line-strong:rgba(0,240,255,.38);
+  --text:#edf6ff;--muted:#a3b2c7;--subtle:#8191aa;
+  --cyan:#00f0ff;--magenta:#ff2bd6;--violet:#8a5cff;--green:#5affb1;
+  --orbit-font:"Orbitron",ui-monospace,monospace;--body-font:"Space Grotesk",Inter,system-ui,sans-serif;
+  --header-height:72px;--nav-height:66px;--radius:20px;
 }
-html{background:#05070f;min-height:100%;scroll-behavior:smooth}
-body{
- min-height:100vh;color:var(--text);
- background:radial-gradient(ellipse at 15% -15%,rgba(34,211,238,.12),transparent 38%),
- radial-gradient(ellipse at 90% 5%,rgba(139,92,246,.14),transparent 36%),#05070f;
- font-family:Inter,ui-sans-serif,system-ui,sans-serif;
-}
-body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.42;
- background:radial-gradient(ellipse at 30% 40%,rgba(34,211,238,.055),transparent 40%),
- radial-gradient(ellipse at 75% 70%,rgba(139,92,246,.07),transparent 42%);
- animation:avi-aurora 22s ease-in-out infinite alternate}
-@keyframes avi-aurora{to{transform:translate3d(0,-1.5%,0) scale(1.035);opacity:.7}}
-h1,h2,h3,.brandname,.panel-heading strong,.chat-identity strong{font-family:"Space Grotesk",Inter,sans-serif}
-button,input,textarea,select{font:inherit}
-button{transition:background .2s ease,border-color .2s ease,box-shadow .2s ease,transform .2s ease}
-button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,a:focus-visible{
- outline:2px solid #22d3ee!important;outline-offset:3px!important;box-shadow:0 0 0 5px rgba(34,211,238,.12)!important}
-.shell{width:100%;max-width:1600px;min-height:100dvh;padding:18px;gap:14px;grid-template-rows:auto minmax(0,1fr) auto}
-.topbar,.panel,.voice-settings,.auth-card,.memory-card,.shortcut{
- background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.10);
- backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:18px;
-}
-.topbar{padding:12px 16px;box-shadow:0 10px 45px rgba(0,0,0,.14)}
-.brandmark{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);border-radius:14px}
-.brandname{font-size:21px;letter-spacing:-.8px}
-.brandtag{color:#aab5cb;font-size:11px}
-.workspace{grid-template-columns:235px minmax(0,1fr) 235px;gap:14px;min-height:0}
-.sidebar{padding:15px 12px}
-.navbutton{min-height:44px;font-size:13px;border-radius:12px}
-.navbutton.active{background:linear-gradient(115deg,rgba(34,211,238,.13),rgba(139,92,246,.12));border-color:rgba(34,211,238,.23)}
-.navbutton .navicon{border-radius:10px;background:rgba(255,255,255,.07)}
-.welcome{border-radius:20px;background:linear-gradient(125deg,rgba(34,211,238,.07),rgba(255,255,255,.025) 52%,rgba(139,92,246,.09));min-height:235px}
-.overline{color:#9eeefa}
-h1{font-family:"Space Grotesk",sans-serif;font-size:clamp(30px,3.5vw,48px);letter-spacing:-1.7px}
-h1 span{background:var(--avi-gradient);background-clip:text;-webkit-background-clip:text;color:transparent}
-.core{background:radial-gradient(circle at 30% 24%,#ecfeff 0%,#67e8f9 8%,#22d3ee 23%,#635bdb 53%,#1b1745 78%,#0b1021 100%);box-shadow:0 0 0 8px rgba(34,211,238,.06),0 0 38px rgba(34,211,238,.24),0 0 76px rgba(139,92,246,.18),inset -10px -12px 24px rgba(5,7,15,.55)}
-.core:before{border-color:rgba(34,211,238,.30)}
-.core:after{border-color:rgba(139,92,246,.27)}
-.core-caption{color:#b9c9f4}
-.shortcuts{padding:15px}
-.shortcut{border-radius:15px;min-height:72px;background:rgba(255,255,255,.035);border-color:rgba(255,255,255,.09)}
-.shortcut:hover{border-color:rgba(34,211,238,.38);box-shadow:var(--avi-glow);transform:translateY(-2px)}
-.shortcut-icon{background:linear-gradient(135deg,rgba(34,211,238,.15),rgba(139,92,246,.18));border:1px solid rgba(255,255,255,.08);border-radius:11px}
-.chat{min-height:0;border-radius:20px;background:rgba(7,10,20,.68);box-shadow:var(--avi-glow)}
-.chat-head{background:rgba(255,255,255,.025);border-color:rgba(255,255,255,.08);padding:13px 16px}
-.tiny-mark{background:linear-gradient(135deg,rgba(34,211,238,.16),rgba(139,92,246,.20));border:1px solid rgba(34,211,238,.24);border-radius:11px}
-.messages{flex:1 1 auto;min-height:160px;max-height:none;padding:20px;scrollbar-width:thin;scrollbar-color:rgba(148,163,184,.35) transparent}
-.message{font-size:14px;line-height:1.7;border-radius:16px;padding:13px 16px;animation:avi-message-in .2s ease both}
-.message.avi{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);border-bottom-left-radius:5px}
-.message.user{background:linear-gradient(125deg,rgba(34,211,238,.19),rgba(139,92,246,.25));border:1px solid rgba(139,92,246,.30);border-bottom-right-radius:5px}
-@keyframes avi-message-in{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-#chatForm{align-items:flex-end;gap:9px;padding:12px;background:rgba(255,255,255,.025);border-top:1px solid rgba(255,255,255,.08)}
-#chatInput{min-height:48px;font-size:16px;background:rgba(5,7,15,.82);border:1px solid rgba(255,255,255,.12);border-radius:14px;color:#f4f7ff;padding:13px 15px}
-#chatInput:focus{border-color:rgba(34,211,238,.7);box-shadow:0 0 0 3px rgba(34,211,238,.09),0 0 24px rgba(34,211,238,.08)}
-#chatInput::placeholder{color:#8591aa}
-#chatForm .send,#chatForm .mic,.send,.mic{
- min-height:46px;border-radius:13px;border:1px solid rgba(255,255,255,.16);
- background:var(--avi-gradient);color:#05070f;font-weight:700;box-shadow:0 5px 24px rgba(34,211,238,.13)
-}
-#chatForm .send:hover,#chatForm .mic:hover,.send:hover,.mic:hover{transform:translateY(-1px);box-shadow:0 7px 28px rgba(139,92,246,.24)}
-#chatForm .send:disabled{opacity:.4;filter:saturate(.5);box-shadow:none}
-#micButton{background:rgba(255,255,255,.06);color:#dbeafe;border-color:rgba(255,255,255,.12)}
-.hint{color:#8793ab}
-.connection{background:rgba(16,185,129,.09);border-color:rgba(110,231,183,.2);color:#86efc2;min-height:36px}
-.connection:before{animation:avi-online-pulse 2s infinite}
-@keyframes avi-online-pulse{50%{box-shadow:0 0 0 5px rgba(110,231,183,.08),0 0 12px currentColor}}
-.iconbutton,.clear-chat,.voice-settings-button,.new-chat-button,.account-chip{min-height:44px;border-radius:12px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.11);color:#e7ecfa}
-.new-chat-button{background:linear-gradient(120deg,rgba(34,211,238,.17),rgba(139,92,246,.18));border-color:rgba(34,211,238,.24)}
-.auth-gate{position:fixed;inset:0;z-index:20;min-height:100dvh;background:rgba(5,7,15,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:grid!important;grid-template-columns:minmax(0,1fr) minmax(340px,460px);align-items:center;gap:clamp(24px,7vw,100px);padding:clamp(24px,6vw,90px)!important}
+*{box-sizing:border-box}
+html,body{width:100%;min-height:100%;margin:0;background:var(--bg);color:var(--text)}
+html{scrollbar-color:#263b56 #060811;scrollbar-width:thin}
+body{font-family:var(--body-font);font-size:14px;line-height:1.5;overflow-x:hidden}
+button,input,select{font:inherit}
+button{color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+[hidden]{display:none!important}
+body:before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(55,120,171,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(55,120,171,.07) 1px,transparent 1px);background-size:38px 38px;mask-image:radial-gradient(ellipse at 50% 36%,#000 0%,rgba(0,0,0,.62) 42%,transparent 84%);opacity:.45}
+body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(174,217,255,.015) 4px);opacity:.38}
+.shell{position:relative;z-index:1;width:100%;max-width:1760px;height:100dvh;min-height:660px;margin:0 auto;padding:18px 20px;display:grid;grid-template-rows:auto minmax(0,1fr);gap:16px}
+.topbar{position:relative;z-index:12;display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:68px;padding:11px 15px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(120deg,rgba(13,20,37,.94),rgba(7,10,21,.9));box-shadow:inset 0 1px rgba(255,255,255,.035),0 15px 48px rgba(0,0,0,.18);backdrop-filter:blur(18px)}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.brandmark{width:43px;height:43px;display:grid;place-items:center;flex:0 0 auto;border:1px solid rgba(0,240,255,.38);border-radius:14px;background:radial-gradient(circle at 32% 18%,rgba(0,240,255,.15),rgba(8,13,29,.9) 67%);box-shadow:inset 0 0 18px rgba(0,240,255,.06),0 0 22px rgba(0,240,255,.06)}
+.brandmark svg{width:31px;height:31px}
+.brandname{font:700 23px/1 var(--orbit-font);letter-spacing:-1px;color:#f4fbff}
+.brandtag{margin-top:6px;color:#95a9c2;font-size:11px;letter-spacing:.09em}
+.top-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;min-width:0}
+.iconbutton,.voice-settings-button,.new-chat-button,.profile-button{min-height:40px;border:1px solid rgba(141,173,208,.22);border-radius:12px;background:rgba(17,25,44,.8);color:#d6e4f4;transition:border-color .18s ease,background .18s ease,box-shadow .18s ease,transform .18s ease}
+.iconbutton{width:41px;height:41px;display:inline-grid;place-items:center;padding:0;flex:0 0 auto}
+.iconbutton svg{width:18px;height:18px}
+.iconbutton:hover,.voice-settings-button:hover,.profile-button:hover{border-color:rgba(0,240,255,.48);background:rgba(15,40,57,.9);box-shadow:0 0 20px rgba(0,240,255,.07)}
+.home-button{color:var(--cyan)}
+.profile-button{display:inline-flex;align-items:center;gap:8px;max-width:230px;padding:6px 10px}
+.profile-icon{width:25px;height:25px;display:inline-grid;place-items:center;flex:0 0 auto;border:1px solid rgba(0,240,255,.35);border-radius:50%;background:rgba(0,240,255,.11);color:var(--cyan);font:700 10px var(--orbit-font)}
+.profile-email{max-width:155px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
+.profile-caret{font-size:11px;color:#90a4bd}
+.connection{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 12px;border:1px solid rgba(90,255,177,.2);border-radius:12px;background:rgba(8,26,29,.74);color:#c9ffe5;font-size:11px;white-space:nowrap}
+.connection-dot{width:7px;height:7px;flex:0 0 auto;border-radius:50%;background:#d8b56b;box-shadow:0 0 0 4px rgba(216,181,107,.09),0 0 12px rgba(216,181,107,.32)}
+.connection-text{max-width:125px;overflow:hidden;text-overflow:ellipsis}
+.voice-settings-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 13px;font-size:12px;white-space:nowrap}
+.voice-settings-button svg{width:16px;height:16px;color:var(--cyan)}
+.new-chat-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:112px;padding:0 15px;background:linear-gradient(115deg,rgba(0,240,255,.17),rgba(138,92,255,.19));border-color:rgba(0,240,255,.43);color:#f3fdff;font-size:12px;font-weight:650;white-space:nowrap}
+.new-chat-button svg{width:17px;height:17px;color:var(--cyan)}
+.new-chat-button:hover{border-color:var(--cyan);box-shadow:0 0 22px rgba(0,240,255,.14);transform:translateY(-1px)}
+.connection:has(.connection-text){white-space:nowrap}
+.workspace{display:grid;grid-template-columns:208px minmax(0,1fr) 250px;gap:15px;min-height:0;overflow:hidden}
+.glass-panel,.panel{min-width:0;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(135deg,rgba(13,19,35,.84),rgba(7,10,22,.88));box-shadow:inset 0 1px rgba(255,255,255,.035),0 18px 55px rgba(0,0,0,.18);backdrop-filter:blur(18px)}
+.sidebar{display:flex;flex-direction:column;min-height:0;padding:17px 12px;overflow:hidden}
+.section-label,.eyebrow{font:600 9px/1.5 var(--orbit-font);letter-spacing:.19em;color:#91a7c4;text-transform:uppercase}
+.section-label{padding:3px 10px 13px}
+.nav{display:grid;gap:5px}
+.navbutton{width:100%;display:flex;align-items:center;gap:11px;min-height:45px;padding:8px 10px;border:1px solid transparent;border-radius:12px;background:transparent;text-align:left;color:#a6b5ca;font-size:12px;transition:color .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease}
+.navbutton .navicon{width:29px;height:29px;display:grid;place-items:center;flex:0 0 auto;border:1px solid transparent;border-radius:9px;color:#94aac8;font-size:17px}
+.navbutton.active{color:#edfcff;background:linear-gradient(105deg,rgba(0,240,255,.12),rgba(138,92,255,.06));border-color:rgba(0,240,255,.27);box-shadow:inset 2px 0 var(--cyan),0 0 22px rgba(0,240,255,.035)}
+.navbutton.active .navicon{color:var(--cyan);border-color:rgba(0,240,255,.19);background:rgba(0,240,255,.08)}
+.navbutton:hover:not(.active){color:#effaff;background:rgba(110,153,199,.07);border-color:rgba(110,153,199,.12)}
+.sidebar-bottom{margin-top:auto;padding:14px 12px 5px;border-top:1px solid rgba(141,173,208,.13)}
+.loyalty-mark{width:33px;height:33px;display:grid;place-items:center;border:1px solid rgba(255,43,214,.25);border-radius:11px;background:rgba(255,43,214,.08);color:#ff8be8;margin-bottom:10px}
+.sidebar-bottom strong{font:600 10px var(--orbit-font);letter-spacing:.07em;color:#d9e8fb}
+.sidebar-bottom p{margin:6px 0 0;color:#8294ad;font-size:10px;line-height:1.65}
+.main{display:grid;grid-template-rows:auto minmax(0,1fr);gap:14px;min-width:0;min-height:0}
+.welcome{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 230px;align-items:center;gap:12px;min-height:210px;padding:22px 27px;overflow:hidden;border-color:rgba(0,240,255,.19);background:radial-gradient(ellipse at 82% 45%,rgba(138,92,255,.12),transparent 38%),linear-gradient(120deg,rgba(14,22,40,.92),rgba(7,12,27,.89) 68%,rgba(18,8,31,.84))}
+.welcome:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,rgba(0,240,255,.025),transparent 42%,rgba(255,43,214,.025));mask-image:linear-gradient(90deg,#000,transparent 94%)}
+.welcome-copy{position:relative;z-index:1;min-width:0}
+.overline{display:flex;align-items:center;gap:9px;margin:0 0 13px;color:#8fdae6;font:600 9px/1.4 var(--orbit-font);letter-spacing:.2em;text-transform:uppercase}
+.overline:before{content:"";width:19px;height:1px;background:var(--cyan);box-shadow:0 0 10px rgba(0,240,255,.5)}
+h1{margin:0;color:#f2f8ff;font:600 clamp(26px,2.25vw,38px)/1.15 var(--orbit-font);letter-spacing:-.055em}
+h1 span{display:block;margin-top:6px;color:#b7c4ff;font-weight:500}
+.intro{max-width:520px;margin:13px 0 0;color:#a9bad0;font-size:13px;line-height:1.75}
+.hero-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.hero-prompt{display:inline-flex;align-items:center;gap:8px;min-height:33px;padding:7px 11px;border:1px solid rgba(137,163,198,.2);border-radius:10px;background:rgba(14,22,39,.67);color:#cbd9ec;font-size:10px;transition:border-color .18s,background .18s,transform .18s}
+.hero-prompt svg{width:14px;height:14px;color:var(--cyan)}
+.hero-prompt:hover{border-color:rgba(0,240,255,.43);background:rgba(0,240,255,.07);transform:translateY(-1px)}
+.core-wrap{position:relative;z-index:1;display:grid;place-items:center;min-width:0;padding:9px 0}
+.orb-stage{position:relative;display:grid;place-items:center;width:210px;height:170px;isolation:isolate}
+.orb-rings{position:absolute;inset:0;border:1px solid rgba(0,240,255,.22);border-radius:50%;transform:rotateX(65deg) rotate(-20deg);animation:ringSpin 22s linear infinite}
+.orb-rings:before,.orb-rings:after{content:"";position:absolute;border:1px solid rgba(138,92,255,.32);border-radius:50%;inset:12px -13px;transform:rotate(45deg)}
+.orb-rings:after{inset:28px -4px;border-color:rgba(255,43,214,.25);transform:rotate(-42deg)}
+.core{position:absolute;width:126px;height:126px;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle at 32% 23%,#d7ffff 0%,#5ceeff 5%,#0a829f 22%,#13315d 52%,#080d23 79%);border:1px solid rgba(0,240,255,.77);box-shadow:0 0 0 7px rgba(0,240,255,.035),0 0 30px rgba(0,240,255,.23),inset 0 0 34px rgba(0,240,255,.09),inset -12px -16px 30px rgba(0,0,0,.56);animation:orbBreathe 5.5s ease-in-out infinite;transition:filter .3s,border-color .3s,box-shadow .3s,background .3s}
+.core:before,.core:after{content:"";position:absolute;inset:-13px;border:1px solid rgba(0,240,255,.42);border-radius:50%;transform:rotateX(66deg) rotate(28deg);animation:ringSpin 17s linear infinite}
+.core:after{inset:-22px;border-color:rgba(138,92,255,.4);transform:rotateX(66deg) rotate(-22deg);animation-direction:reverse;animation-duration:27s}
+.core svg{position:relative;z-index:1;width:65px;height:65px;filter:drop-shadow(0 0 9px rgba(0,240,255,.48))}
+.core-caption{position:absolute;bottom:-1px;color:#81b5d3;font:600 8px/1.3 var(--orbit-font);letter-spacing:.2em;text-align:center;white-space:nowrap}
+#mainOrb.listening{border-color:rgba(90,255,177,.95);background:radial-gradient(circle at 32% 23%,#e7fff2 0%,#7dffc0 5%,#187d60 23%,#103b4d 52%,#080d23 79%);box-shadow:0 0 0 8px rgba(90,255,177,.05),0 0 38px rgba(90,255,177,.28),inset 0 0 32px rgba(90,255,177,.14);animation:orbBreathe 1.7s ease-in-out infinite}
+#mainOrb.listening:before{border-color:rgba(90,255,177,.7)}
+#mainOrb.listening:after{border-color:rgba(0,240,255,.45)}
+#mainOrb.thinking{border-color:rgba(138,92,255,.95);background:radial-gradient(circle at 32% 23%,#f0e8ff 0%,#b39aff 5%,#6b42b9 23%,#292b68 53%,#080d23 79%);box-shadow:0 0 0 8px rgba(138,92,255,.06),0 0 38px rgba(138,92,255,.32),inset 0 0 32px rgba(138,92,255,.15)}
+#mainOrb.thinking:before{border-color:rgba(138,92,255,.75)}
+#mainOrb.speaking{border-color:rgba(255,43,214,.95);background:radial-gradient(circle at 32% 23%,#ffeaff 0%,#ff9aeb 5%,#9b368f 24%,#43265f 54%,#080d23 79%);box-shadow:0 0 0 8px rgba(255,43,214,.05),0 0 40px rgba(255,43,214,.32),inset 0 0 30px rgba(255,43,214,.13)}
+#mainOrb.speaking:after{border-color:rgba(255,43,214,.72)}
+@keyframes orbBreathe{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-4px) scale(1.025)}}
+@keyframes ringSpin{to{rotate:360deg}}
+.chat{display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.chat-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:0 0 auto;padding:13px 16px;border-bottom:1px solid rgba(120,164,202,.15);background:rgba(10,15,27,.7)}
+.chat-identity{display:flex;align-items:center;gap:10px;min-width:0}
+.tiny-mark{width:35px;height:35px;display:grid;place-items:center;flex:0 0 auto;border:1px solid rgba(0,240,255,.27);border-radius:12px;background:rgba(0,240,255,.06);color:var(--cyan)}
+.tiny-mark svg{width:22px;height:22px}
+.chat-identity strong{display:block;color:#eaf6ff;font:600 10px/1.4 var(--orbit-font);letter-spacing:.08em}
+.chat-identity small{display:block;margin-top:3px;color:#95a7c0;font-size:11px}
+.chat-tools{display:flex;align-items:center;gap:8px}
+.private-label{color:#8198b2;font:500 8px/1.4 var(--orbit-font);letter-spacing:.16em;white-space:nowrap}
+.clear-chat{width:35px;height:35px;display:inline-grid;place-items:center;flex:0 0 auto;border:1px solid rgba(141,173,208,.2);border-radius:11px;background:rgba(17,25,44,.65);color:#b1c8df;transition:border-color .18s,color .18s,background .18s}
+.clear-chat svg{width:16px;height:16px}
+.clear-chat:hover{color:var(--magenta);border-color:rgba(255,43,214,.4);background:rgba(255,43,214,.06)}
+.messages{display:flex;flex:1 1 auto;flex-direction:column;gap:12px;min-height:0;overflow-x:hidden;overflow-y:auto;padding:19px 18px;scroll-behavior:smooth;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#29405a transparent}
+.message{position:relative;max-width:min(84%,680px);padding:12px 15px;border:1px solid transparent;border-radius:15px;font-size:13px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;animation:messageIn .22s ease-out both}
+.message.avi{align-self:flex-start;color:#e2efff;border-color:rgba(0,240,255,.2);border-top-left-radius:5px;background:linear-gradient(135deg,rgba(17,29,48,.86),rgba(9,17,32,.88));box-shadow:inset 0 1px rgba(255,255,255,.025)}
+.message.user{align-self:flex-end;color:#fbfdff;border-color:rgba(165,136,255,.42);border-bottom-right-radius:5px;background:linear-gradient(120deg,rgba(0,240,255,.19),rgba(98,91,255,.2) 58%,rgba(138,92,255,.26));box-shadow:inset 0 1px rgba(255,255,255,.07),0 4px 18px rgba(60,75,190,.08)}
+@keyframes messageIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+#chatForm{position:relative;z-index:4;display:flex;align-items:center;gap:8px;flex:0 0 auto;width:100%;margin:0;padding:12px;border-top:1px solid rgba(120,164,202,.17);background:linear-gradient(180deg,rgba(8,12,23,.92),rgba(7,10,19,.98))}
+#chatForm input{flex:1 1 auto;width:0;min-width:0;min-height:46px;padding:12px 14px;border:1px solid rgba(123,156,194,.23);border-radius:13px;background:rgba(4,8,17,.92);color:var(--text);font:400 14px/1.4 var(--body-font);outline:none;box-shadow:inset 0 1px 6px rgba(0,0,0,.28);transition:border-color .18s,box-shadow .18s}
+#chatForm input::placeholder{color:#8091a8}
+#chatForm input:focus{border-color:rgba(0,240,255,.56);box-shadow:0 0 0 3px rgba(0,240,255,.07),inset 0 1px 6px rgba(0,0,0,.28)}
+#chatForm .mic,#chatForm .send{position:relative;display:grid;place-items:center;flex:0 0 46px;width:46px;height:46px;min-width:46px;margin:0;padding:0;border:1px solid rgba(0,240,255,.3);border-radius:13px;background:rgba(0,240,255,.07);color:var(--cyan);font-size:0;overflow:hidden;transition:border-color .18s,background .18s,box-shadow .18s,transform .18s}
+#chatForm .mic:before{content:"";width:19px;height:19px;background:currentColor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='9' y='2' width='6' height='12' rx='3'/%3E%3Cpath d='M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8'/%3E%3C/svg%3E") center/contain no-repeat}
+#chatForm .mic:hover{background:rgba(0,240,255,.13);border-color:rgba(0,240,255,.7);box-shadow:0 0 17px rgba(0,240,255,.11)}
+#chatForm .mic.listening{border-color:rgba(90,255,177,.7);color:var(--green);background:rgba(90,255,177,.1);box-shadow:0 0 0 0 rgba(90,255,177,.18);animation:micPulse 1.8s ease-out infinite}
+#chatForm .mic.listening:before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Crect x='6' y='6' width='12' height='12' rx='2'/%3E%3C/svg%3E")}
+@keyframes micPulse{0%{box-shadow:0 0 0 0 rgba(90,255,177,.18)}75%,100%{box-shadow:0 0 0 9px rgba(90,255,177,0)}}
+#chatForm .send{border-color:rgba(0,240,255,.52);background:linear-gradient(135deg,rgba(0,240,255,.22),rgba(138,92,255,.22));color:#eaffff}
+#chatForm .send:after{content:"";width:18px;height:18px;background:currentColor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 2 11 13M22 2l-7 20-4-9-9-4 20-7Z'/%3E%3C/svg%3E") center/contain no-repeat}
+#chatForm .send:hover{box-shadow:0 0 20px rgba(0,240,255,.14);border-color:var(--cyan);transform:translateY(-1px)}
+#chatForm .send:disabled,#chatForm .mic:disabled{opacity:.42;cursor:not-allowed;transform:none}
+.hint{display:none}
+.rightbar{display:flex;flex-direction:column;gap:13px;min-height:0;padding:17px 14px;overflow:hidden}
+.rightbar .section-label{padding:3px 6px 4px;color:#8ea4c0}
+.status-hero{position:relative;padding:16px 13px;border:1px solid rgba(138,92,255,.2);border-radius:15px;background:radial-gradient(circle at 50% 0%,rgba(138,92,255,.11),transparent 70%),rgba(10,15,29,.76);text-align:center}
+.status-orbit{width:68px;height:68px;margin:0 auto 12px;display:grid;place-items:center;border:1px solid rgba(0,240,255,.4);border-radius:50%;color:var(--cyan);background:radial-gradient(circle,rgba(0,240,255,.12),rgba(7,12,27,.85) 65%);box-shadow:0 0 22px rgba(0,240,255,.09),inset 0 0 15px rgba(0,240,255,.07)}
+.status-orbit svg{width:32px;height:32px}
+.status-hero strong{display:block;font:600 10px/1.5 var(--orbit-font);letter-spacing:.1em}
+.status-hero p{margin:7px 0 0;color:#9bacc2;font-size:11px;line-height:1.65}
+.divider{height:1px;flex:0 0 auto;background:linear-gradient(90deg,transparent,rgba(120,164,202,.24),transparent)}
+.info-row{display:flex;align-items:center;gap:10px;padding:8px 4px}
+.info-icon{width:34px;height:34px;display:grid;place-items:center;flex:0 0 auto;border:1px solid rgba(120,164,202,.16);border-radius:10px;background:rgba(14,23,41,.8);color:#b3c9e3}
+.info-icon svg{width:16px;height:16px}
+.info-row small{display:block;margin-bottom:3px;color:#8a9eb9;font:500 8px/1.4 var(--orbit-font);letter-spacing:.12em}
+.info-row strong{display:block;color:#d9e8f8;font-size:11px;font-weight:500;line-height:1.5}
+.quick-prompts{display:grid;gap:8px}
+.quick-title{margin:0 0 2px;padding:0 6px;color:#91a6c0;font:600 9px var(--orbit-font);letter-spacing:.16em;text-transform:uppercase}
+.quick-prompt{display:flex;align-items:center;gap:9px;min-height:43px;padding:9px 10px;border:1px solid rgba(120,164,202,.15);border-radius:11px;background:rgba(12,19,34,.7);color:#bccde0;text-align:left;font-size:11px;transition:border-color .18s,background .18s}
+.quick-prompt svg{width:16px;height:16px;flex:0 0 auto;color:var(--cyan)}
+.quick-prompt:hover{border-color:rgba(0,240,255,.36);background:rgba(0,240,255,.055)}
+.voice-settings{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(190px,260px);gap:10px 18px;align-items:center;margin:0 0 1px;padding:16px 18px;border-color:rgba(0,240,255,.22);border-radius:16px;background:linear-gradient(135deg,rgba(12,19,35,.95),rgba(9,11,24,.95))}
+.voice-settings[hidden]{display:none!important}
+.voice-settings-copy{grid-row:span 2;display:flex;flex-direction:column;gap:6px}
+.voice-settings-copy strong{font:600 10px var(--orbit-font);letter-spacing:.08em;color:#edf7ff}
+.voice-settings-copy span,.voice-settings-note{color:#9caec4;font-size:11px;line-height:1.6}
+.voice-select-label{font:500 9px var(--orbit-font);letter-spacing:.1em;color:#b7cce3}
+.voice-select{width:100%;padding:10px 12px;border:1px solid rgba(120,164,202,.28);border-radius:10px;background:#080d19;color:#eaf4ff;font-size:12px}
+.voice-settings-note{grid-column:2;margin:0}
+.footer{display:none}
 .auth-gate[hidden]{display:none!important}
-.auth-gate:before{content:"Meet Avi. Your intelligent assistant.";display:flex;align-items:flex-start;justify-content:center;flex-direction:column;min-height:300px;max-width:600px;font:600 clamp(34px,5vw,62px)/1.08 "Space Grotesk",sans-serif;letter-spacing:-2px;color:#f5f7ff;text-shadow:0 0 45px rgba(34,211,238,.12)}
-.auth-gate:after{content:"A calmer, more capable space to think, create, and get things done.";position:absolute;left:clamp(24px,6vw,90px);top:calc(50% + 48px);max-width:420px;color:#a4aec5;font-size:15px;line-height:1.7;pointer-events:none}
-.auth-card{position:relative;z-index:1;width:100%;max-width:460px;margin:0;padding:34px;box-shadow:0 25px 100px rgba(0,0,0,.4),var(--avi-glow);border-radius:22px}
-.auth-card h2{font-size:29px;letter-spacing:-1px;margin:0 0 10px}
-.auth-card p:not(.auth-status){font-size:14px;line-height:1.7;color:#a5b0c7;margin:0 0 25px}
-.auth-card label{display:block;margin:15px 0 7px;font-size:12px;font-weight:600;color:#dce4f7}
-.auth-card input{width:100%;min-height:48px;background:rgba(5,7,15,.75);border:1px solid rgba(255,255,255,.12);border-radius:12px;color:#f5f7ff;font-size:15px;padding:12px 14px}
-.auth-card input:focus{border-color:#22d3ee;box-shadow:0 0 0 3px rgba(34,211,238,.1)}
-.auth-actions{display:flex;gap:10px;margin-top:22px}
-.auth-actions button{min-height:48px;border-radius:12px;padding:12px 16px}
-#authSubmit{background:var(--avi-gradient);color:#05070f;border:0;font-weight:750;box-shadow:0 8px 26px rgba(34,211,238,.16)}
-#authModeToggle{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:#e5e7eb}
-.auth-status{font-size:12px;line-height:1.6;color:#fda4af;overflow-wrap:anywhere}
-.auth-card button:disabled{opacity:.6;cursor:wait}
-.voice-settings{border-radius:16px}
-.footer{color:#8994aa}
-@media(max-width:1120px){.workspace{grid-template-columns:205px minmax(0,1fr)}}
-@media(max-width:760px){
- .shell{width:100%;height:100dvh;min-height:100dvh;max-width:none;margin:0;padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:9px;overflow:hidden}
- .topbar{flex:0 0 auto;padding:8px 9px;gap:6px;border-radius:15px}
- .brand{gap:8px;flex:0 1 auto}
- .brandmark{width:34px;height:34px;border-radius:11px}
- .brandmark svg{width:25px;height:25px}
- .brandname{font-size:19px}
+.auth-gate{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:24px;overflow:auto;background:radial-gradient(ellipse at 18% 12%,rgba(0,240,255,.13),transparent 34%),radial-gradient(ellipse at 82% 74%,rgba(255,43,214,.13),transparent 35%),radial-gradient(ellipse at 50% 50%,rgba(138,92,255,.09),transparent 50%),#04050c}
+.auth-gate:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(0,240,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(0,240,255,.045) 1px,transparent 1px);background-size:32px 32px;mask-image:radial-gradient(ellipse at center,#000,transparent 75%)}
+.auth-card{position:relative;z-index:1;display:block;width:min(100%,430px);max-width:430px;margin:auto;padding:30px;border:1px solid rgba(0,240,255,.24);border-radius:23px;background:linear-gradient(145deg,rgba(14,22,40,.92),rgba(6,9,20,.94));box-shadow:inset 0 1px rgba(255,255,255,.05),0 25px 90px rgba(0,0,0,.45),0 0 40px rgba(0,240,255,.05);backdrop-filter:blur(22px)}
+.auth-brand{display:flex;align-items:center;gap:11px;margin-bottom:23px}
+.auth-brand-symbol{width:42px;height:42px;display:grid;place-items:center;border:1px solid rgba(0,240,255,.4);border-radius:13px;background:rgba(0,240,255,.09);color:var(--cyan)}
+.auth-brand-symbol svg{width:25px;height:25px}
+.auth-brand strong{display:block;font:700 20px var(--orbit-font);letter-spacing:-.06em}
+.auth-brand small{display:block;margin-top:5px;color:#91a9c3;font-size:10px;letter-spacing:.07em}
+.auth-card h2{margin:0 0 9px;color:#f3f8ff;font:600 clamp(25px,5vw,32px)/1.18 var(--orbit-font);letter-spacing:-.05em}
+.auth-card p{color:#a5b6cb;font-size:12px;line-height:1.75}
+.auth-card p:not(.auth-status){margin:0 0 22px}
+.auth-card label{display:block;margin:15px 0 7px;color:#bacbe0;font:500 9px var(--orbit-font);letter-spacing:.1em;text-transform:uppercase}
+.auth-card input{display:block;width:100%;min-height:47px;margin:0;padding:12px 13px;border:1px solid rgba(128,161,202,.27);border-radius:12px;background:rgba(3,7,16,.92);color:#f0f6ff;font:400 13px var(--body-font)}
+.auth-card input::placeholder{color:#70829c}
+.auth-card input:focus{border-color:rgba(0,240,255,.7);box-shadow:0 0 0 3px rgba(0,240,255,.08)}
+.auth-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:22px}
+.auth-actions button{min-height:45px;padding:10px 12px;border:1px solid rgba(0,240,255,.42);border-radius:12px;background:linear-gradient(105deg,rgba(0,240,255,.17),rgba(138,92,255,.16));color:#f0fcff;font-size:12px;font-weight:650;transition:box-shadow .18s,border-color .18s,transform .18s}
+.auth-actions button:first-child{background:linear-gradient(110deg,rgba(0,240,255,.28),rgba(138,92,255,.28));border-color:rgba(0,240,255,.65);box-shadow:inset 0 1px rgba(255,255,255,.08)}
+.auth-actions button:hover{border-color:var(--cyan);box-shadow:0 0 22px rgba(0,240,255,.12);transform:translateY(-1px)}
+.auth-actions .auth-link{background:rgba(14,21,39,.6);border-color:rgba(128,161,202,.23);color:#c5d6e9}
+.auth-status{min-height:18px;margin:13px 0 0!important;color:#98fff0!important;font-size:11px!important;overflow-wrap:anywhere}
+.auth-status:empty{min-height:0}
+@media(max-width:1100px){
+ .workspace{grid-template-columns:184px minmax(0,1fr)}
+ .rightbar{display:none}
+ .welcome{grid-template-columns:minmax(0,1fr) 190px}
+ .orb-stage{transform:scale(.9)}
+}
+@media(max-width:880px){
+ :root{--header-height:60px;--nav-height:66px}
+ html,body{width:100%;height:100%;min-height:0;overflow:hidden}
+ body{height:100dvh;min-height:0}
+ .shell{display:grid;grid-template-rows:auto minmax(0,1fr);gap:8px;width:100%;height:100dvh;min-height:0;padding:max(8px,env(safe-area-inset-top)) 10px 0;overflow:hidden}
+ .topbar{min-height:55px;gap:8px;padding:7px 9px;border-radius:15px}
+ .brand{gap:8px}
+ .brandmark{width:33px;height:33px;border-radius:10px}
+ .brandmark svg{width:24px;height:24px}
+ .brandname{font-size:18px}
  .brandtag{display:none}
- .top-actions{gap:5px;flex-wrap:wrap;justify-content:flex-end}
- .top-actions button,.top-actions .button{min-height:40px;padding:7px 8px;font-size:11px}
- .connection{padding:6px 8px;min-height:32px;font-size:10px}
- .workspace{display:flex!important;flex:1 1 auto;min-height:0;width:100%;overflow:hidden;gap:0}
- .sidebar,.rightbar{display:none!important}
- .main{display:flex;flex:1 1 auto;min-height:0;gap:0;overflow:hidden}
- .welcome,.shortcuts{display:none!important}
- .chat{display:flex;flex:1 1 auto;min-height:0;width:100%;border-radius:17px;overflow:hidden}
- .chat-head{flex:0 0 auto;padding:10px 11px}
- .chat-identity strong{font-size:14px}
+ .top-actions{gap:5px}
+ .iconbutton{width:34px;height:34px;min-height:34px;border-radius:10px}
+ .iconbutton svg{width:17px;height:17px}
+ .profile-button{width:38px;max-width:38px;min-height:34px;justify-content:center;padding:4px}
+ .profile-icon{width:23px;height:23px}
+ .profile-email,.profile-caret{display:none}
+ .connection{display:none!important}
+ .voice-settings-button{width:37px;min-height:34px;padding:0;font-size:0}
+ .voice-settings-button svg{width:18px;height:18px}
+ .new-chat-button{width:38px;min-width:38px;min-height:34px;padding:0;border-radius:10px;font-size:0}
+ .new-chat-button svg{width:18px;height:18px}
+ .workspace{display:block;width:100%;height:100%;min-height:0;padding-bottom:calc(var(--nav-height) + env(safe-area-inset-bottom));overflow:hidden}
+ .main{display:grid;width:100%;height:100%;min-height:0;grid-template-rows:clamp(132px,22dvh,178px) minmax(0,1fr);gap:8px;overflow:hidden}
+ .welcome{display:grid;grid-template-columns:minmax(0,1fr) 105px;gap:5px;min-height:0;padding:14px 13px;border-radius:17px}
+ .overline{margin-bottom:8px;font-size:8px;letter-spacing:.14em}
+ .overline:before{width:12px}
+ h1{font-size:clamp(20px,5.1vw,28px);letter-spacing:-.06em}
+ h1 span{margin-top:4px}
+ .intro{font-size:11px;line-height:1.5;margin:8px 0 0;max-width:40ch}
+ .hero-actions{display:none}
+ .core-wrap{padding:0;overflow:visible}
+ .orb-stage{width:112px;height:105px;transform:none}
+ .core{width:72px;height:72px}
+ .core:before{inset:-8px}
+ .core:after{inset:-14px}
+ .core svg{width:42px;height:42px}
+ .core-caption{bottom:-3px;font-size:6px;letter-spacing:.12em}
+ .chat{height:100%;min-height:0;border-radius:16px}
+ .chat-head{min-height:53px;padding:9px 11px}
+ .tiny-mark{width:31px;height:31px;border-radius:10px}
+ .chat-identity strong{font-size:9px}
+ .chat-identity small{max-width:52vw;font-size:10px}
  .private-label{display:none}
- .messages{flex:1 1 auto;min-height:0;height:auto;max-height:none;overflow-y:auto;padding:12px 9px;gap:10px;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
- .message{max-width:93%;font-size:15px;line-height:1.6;padding:12px 13px}
- #chatForm{flex:0 0 auto;align-items:flex-end;gap:6px;padding:8px;padding-bottom:max(8px,env(safe-area-inset-bottom))}
- #chatInput{flex:1 1 auto;width:0;min-width:0;min-height:46px;max-height:120px;font-size:16px;padding:12px;border-radius:13px}
- #chatForm .send,#chatForm .mic,#micButton,#sendButton{flex:0 0 44px;width:44px;min-width:44px;height:46px;min-height:46px;padding:0;display:inline-flex;align-items:center;justify-content:center}
- .hint{display:none}
- .auth-gate{grid-template-columns:minmax(0,1fr);align-content:center;gap:0;padding:18px!important;overflow:auto}
- .auth-gate:before{content:"Avi.";display:block;min-height:0;font-size:31px;letter-spacing:-1px;margin:0 0 20px;background:var(--avi-gradient);background-clip:text;-webkit-background-clip:text;color:transparent}
- .auth-gate:after{display:none}
- .auth-card{padding:24px 20px;border-radius:20px;margin:0 auto}
- .auth-card .brandmark{margin-bottom:15px!important}
- .auth-card h2{font-size:26px}
- .auth-actions{display:grid;grid-template-columns:1fr}
- .auth-actions button{width:100%;min-height:48px}
+ .clear-chat{width:32px;height:32px;border-radius:10px}
+ .messages{padding:12px 10px;gap:10px}
+ .message{max-width:92%;padding:10px 12px;font-size:13px;line-height:1.55}
+ #chatForm{padding:8px;gap:6px}
+ #chatForm input{min-height:43px;padding:10px 11px;font-size:16px}
+ #chatForm .mic,#chatForm .send{flex-basis:41px;width:41px;min-width:41px;height:41px;border-radius:12px}
+ #chatForm .mic:before,#chatForm .send:after{width:18px;height:18px}
+ .sidebar{position:fixed;z-index:50;left:9px;right:9px;bottom:max(7px,env(safe-area-inset-bottom));height:var(--nav-height);display:flex;flex-direction:row;align-items:center;justify-content:center;padding:5px;border:1px solid rgba(120,164,202,.22);border-radius:18px;background:rgba(6,10,21,.94);box-shadow:0 12px 40px rgba(0,0,0,.48),inset 0 1px rgba(255,255,255,.04);backdrop-filter:blur(22px)}
+ .sidebar .section-label,.sidebar-bottom{display:none}
+ .sidebar .nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));width:100%;gap:3px}
+ .navbutton{display:flex;flex-direction:column;justify-content:center;gap:3px;min-width:0;min-height:52px;padding:4px 1px;border-radius:12px;text-align:center;font-size:9px;line-height:1.2}
+ .navbutton .navicon{width:25px;height:23px;font-size:17px}
+ .navbutton.active{box-shadow:inset 0 2px var(--cyan),0 0 18px rgba(0,240,255,.04)}
+ .voice-settings{grid-template-columns:minmax(0,1fr);gap:8px;margin:0 0 8px;padding:13px}
+ .voice-settings-copy{grid-row:auto}
+ .voice-settings-note{grid-column:1}
 }
 @media(max-width:390px){
- .topbar{padding:7px}
- .brandname{font-size:17px}
+ .shell{padding-left:7px;padding-right:7px}
+ .topbar{padding-left:7px;padding-right:7px}
  .top-actions{gap:4px}
- .top-actions button,.top-actions .button{padding:6px;min-height:38px;font-size:10px}
- .connection{display:none}
- #chatForm{gap:5px;padding:6px}
- #chatForm .send,#chatForm .mic,#micButton,#sendButton{flex-basis:40px;width:40px;min-width:40px}
+ .profile-button{width:34px;max-width:34px}
+ .iconbutton{width:32px;min-width:32px}
+ .voice-settings-button{width:34px}
+ .new-chat-button{width:34px;min-width:34px}
+ .welcome{grid-template-columns:minmax(0,1fr) 83px;padding:12px 10px}
+ .orb-stage{width:91px;height:96px}
+ h1{font-size:20px}
+ .intro{font-size:10px}
+ .message{max-width:95%;font-size:12px}
+ #chatForm{padding:7px;gap:5px}
+ #chatForm .mic,#chatForm .send{flex-basis:38px;width:38px;min-width:38px;height:40px}
 }
 @media(prefers-reduced-motion:reduce){
- *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+ *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
 
--actions{gap:5px!important}.profile-button{max-width:130px;padding:7px 9px!important}.profile-email{max-width:68px}.new-chat-button{min-width:38px;width:38px;padding:0;font-size:20px}.new-chat-button span{display:none}.home-button{min-width:36px}.connection{display:none!important}}
 </style>
 <meta name="avi-ui-version" content="minimal-redesign-2">
 </head>
 <body>
-
-<section class="auth-gate" id="authGate" aria-label="Avi sign in">
+<section class="auth-gate" id="authGate" aria-label="Sign in to Avi" hidden>
  <form class="auth-card" id="authForm">
-  <div class="brandmark" style="margin-bottom:16px"><img src="./avi-icon.svg" alt="" width="30" height="30"></div>
+  <div class="auth-brand">
+   <span class="auth-brand-symbol" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M16 3 26 8v8c0 6-4.3 10.3-10 13C10.3 26.3 6 22 6 16V8l10-5Z" stroke="currentColor" stroke-width="1.6"/><path d="m11 16 3.2 3.1L21.5 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+   <span><strong>avi.</strong><small>PERSONAL INTELLIGENCE</small></span>
+  </div>
   <h2 id="authHeading">Welcome back.</h2>
-  <p id="authDescription">Sign in to sync your personal memories across your devices.</p>
-  <label for="authEmail">Email address</label><input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com">
-  <label for="authPassword">Password</label><input id="authPassword" type="password" minlength="6" autocomplete="current-password" required placeholder="At least 6 characters">
+  <p id="authDescription">Sign in to continue to your personal AI space and access your saved memories.</p>
+  <label for="authEmail">Email address</label>
+  <input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com">
+  <label for="authPassword">Password</label>
+  <input id="authPassword" type="password" minlength="6" autocomplete="current-password" required placeholder="Enter your password">
   <div class="auth-actions"><button id="authSubmit" type="submit">Sign in</button><button class="auth-link" id="authModeToggle" type="button">Create account</button></div>
-  <p class="auth-status" id="authStatus" role="status"></p>
+  <p class="auth-status" id="authStatus" role="status" aria-live="polite"></p>
  </form>
 </section>
 <main class="shell">
-<header class="topbar">
- <div class="brand">
-  <div class="brandmark" aria-label="Avi emblem">
-  <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
-<path d="M13 8 23 17 32 13 41 17 51 8 48 28 43 43 32 54 21 43 16 28 13 8Z" fill="#101c29" stroke="#70dce8" stroke-width="2" stroke-linejoin="round"/>
-<path d="M22 31 28 28 32 31 36 28 42 31" stroke="#e5f4f7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M24 38 32 35 40 38 36 43 28 43 24 38Z" fill="#8a9eff"/>
-<path d="M27 47 32 49 37 47" stroke="#70dce8" stroke-width="1.8" stroke-linecap="round"/>
-</svg>
+ <header class="topbar">
+  <div class="brand">
+   <div class="brandmark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M16 3 26 8v8c0 6-4.3 10.3-10 13C10.3 26.3 6 22 6 16V8l10-5Z" stroke="#00f0ff" stroke-width="1.6"/><path d="m11 16 3.2 3.1L21.5 12" stroke="#d8fcff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+   <div><div class="brandname">AVI<span style="color:#00f0ff">.</span></div><div class="brandtag">Your intelligence. Your space.</div></div>
   </div>
-  <div><div class="brandname">avi<span style="color:#a5dce0">.</span></div><div class="brandtag">A calmer, thoughtful AI companion</div></div>
- </div>
- <div class="top-actions"><button class="iconbutton home-button" id="homeAvi" type="button" title="Home" aria-label="Home">⌂</button><button id="accountChip" class="account-chip profile-button" type="button" title="Account profile" aria-label="Account profile" hidden><span class="profile-icon">●</span><span class="profile-email"></span><span class="profile-caret">▾</span></button><button class="iconbutton" id="installAvi" type="button" title="Install Avi on this device" aria-label="Install Avi" hidden>⇩</button><button class="iconbutton" id="signOutAvi" type="button" title="Sign out" aria-label="Sign out" hidden>↪</button><div class="connection" id="connectionStatus"><span class="connection-dot"></span><span class="connection-text">Connecting...</span></div><button class="voice-settings-button" type="button" id="voiceSettingsToggle" aria-expanded="false" aria-controls="voiceSettings">⚙ Settings</button><button class="new-chat-button" type="button" id="topClear" title="Start a new chat">＋ <span>New chat</span></button></div>
-</header>
-<section class="voice-settings panel" id="voiceSettings" hidden aria-label="Voice preferences">
- <div class="voice-settings-copy"><strong>Voice preference</strong><span>Choose how Avi sounds. Your choice is saved on this device.</span></div>
- <label class="voice-select-label" for="voicePreference">Avi’s voice</label>
- <select id="voicePreference" class="voice-select">
-  <option value="Aoede">Aoede — Breezy</option>
-  <option value="Kore">Kore — Firm</option>
-  <option value="Leda">Leda — Youthful</option>
-  <option value="Achird">Achird — Friendly</option>
-  <option value="Callirrhoe">Callirrhoe — Easy-going</option>
-  <option value="Zephyr">Zephyr — Bright</option>
-  <option value="Sulafat">Sulafat — Warm</option>
-  <option value="Charon">Charon — Informative</option>
-  <option value="Puck">Puck — Upbeat</option>
-  <option value="Enceladus">Enceladus — Breathy</option>
- </select>
- <p class="voice-settings-note" id="voiceSettingsNote">Changes apply when you next start live voice.</p>
-</section>
-<div class="workspace">
- <aside class="panel sidebar">
-  <div class="section-label">WORKSPACE</div>
-  <nav class="nav" aria-label="Workspace navigation">
-   <button class="navbutton active" type="button" data-view="home"><span class="navicon">⌂</span>Overview</button>
-   <button class="navbutton" type="button" data-view="ideas"><span class="navicon">✳</span>Ideas & planning</button>
-   <button class="navbutton" type="button" data-view="focus"><span class="navicon">◷</span>Daily focus</button>
-   <button class="navbutton" type="button" data-view="learn"><span class="navicon">⌘</span>Learning space</button>
-   <button class="navbutton" type="button" data-view="memories"><span class="navicon">♡</span>Memories</button>
-  </nav>
-  <div class="sidebar-bottom"><div class="loyalty-mark">✦</div><strong>Inspired by loyalty.</strong><p>A quiet nod to Avicii: loyal, brave, and always close. No photos needed.</p></div>
- </aside>
- <section class="main">
-  <section class="panel welcome">
-   <div class="welcome-copy">
-    <div class="overline">A calmer kind of intelligence</div>
-    <h1>Good to see you.<span>I'm Avi.</span></h1>
-    <p class="intro">A personal space to think out loud, untangle ideas, plan your next move, or simply talk. Let's make something good.</p>
-    <div class="chips"><span class="chip">✦ Personal AI</span><span class="chip">◉ Voice enabled</span><span class="chip">Made with meaning</span></div>
-   </div>
-   <div class="core-wrap"><div><div class="core orb" id="mainOrb" aria-label="Animated Avi AI core">
-    <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
-<path d="M13 8 23 17 32 13 41 17 51 8 48 28 43 43 32 54 21 43 16 28 13 8Z" fill="#101c29" stroke="#70dce8" stroke-width="2" stroke-linejoin="round"/>
-<path d="M22 31 28 28 32 31 36 28 42 31" stroke="#e5f4f7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M24 38 32 35 40 38 36 43 28 43 24 38Z" fill="#8a9eff"/>
-<path d="M27 47 32 49 37 47" stroke="#70dce8" stroke-width="1.8" stroke-linecap="round"/>
-</svg>
-   </div><div class="core-caption">AVI CORE · ONLINE</div></div></div>
-  </section>
-  <section class="panel chat">
-   <div class="chat-head">
-    <div class="chat-identity"><div class="tiny-mark"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
-<path d="M13 8 23 17 32 13 41 17 51 8 48 28 43 43 32 54 21 43 16 28 13 8Z" fill="#101c29" stroke="#70dce8" stroke-width="2" stroke-linejoin="round"/>
-<path d="M22 31 28 28 32 31 36 28 42 31" stroke="#e5f4f7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M24 38 32 35 40 38 36 43 28 43 24 38Z" fill="#8a9eff"/>
-<path d="M27 47 32 49 37 47" stroke="#70dce8" stroke-width="1.8" stroke-linecap="round"/>
-</svg></div><div><strong>Talk to Avi</strong><small id="chatStatus">Ready when you are</small></div></div>
-    <div class="chat-tools"><span class="private-label">YOUR CONVERSATION</span><button type="button" class="clear-chat" id="clearChat" title="Start a fresh conversation" aria-label="Clear conversation">↻</button></div>
-   </div>
-   <div class="messages" id="messages" aria-live="polite"><div class="message avi">Hey, I'm here. 💙 What's on your mind?</div></div>
-   <form id="chatForm"><input id="chatInput" type="text" placeholder="Message Avi..." autocomplete="off" aria-label="Message Avi" required><button class="mic" id="micButton" type="button" aria-label="Talk to Avi" title="Talk to Avi">🎙</button><button class="send" id="sendButton" type="submit" aria-label="Send message">Send ↗</button></form>
-   <div class="hint" id="micHint">You can type or use your microphone.</div>
-  </section>
+  <div class="top-actions">
+   <button class="iconbutton home-button" id="homeAvi" type="button" title="Home" aria-label="Home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9M9 21v-7h6v7"/></svg></button>
+   <button id="accountChip" class="profile-button" type="button" title="Account profile" aria-label="Account profile" hidden><span class="profile-icon">U</span><span class="profile-email"></span><span class="profile-caret">▾</span></button>
+   <button class="iconbutton" id="installAvi" type="button" title="Install Avi on this device" aria-label="Install Avi" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5"/><path d="M5 17v4h14v-4"/></svg></button>
+   <button class="iconbutton" id="signOutAvi" type="button" title="Sign out" aria-label="Sign out" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 17l5-5-5-5M15 12H3"/><path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7"/></svg></button>
+   <div class="connection" id="connectionStatus" aria-live="polite"><span class="connection-dot"></span><span class="connection-text">Ready to connect</span></div>
+   <button class="voice-settings-button" type="button" id="voiceSettingsToggle" aria-expanded="false" aria-controls="voiceSettings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.1.9-1.1 1.9-1.4-.5a8 8 0 0 1-1.6.9l-.3 1.5h-2.2l-.3-1.5a8 8 0 0 1-1.6-.9l-1.4.5-1.1-1.9 1.1-.9a7 7 0 0 1 0-1.9l-1.1-.9 1.1-1.9 1.4.5a8 8 0 0 1 1.6-.9l.3-1.5h2.2l.3 1.5a8 8 0 0 1 1.6.9l1.4-.5 1.1 1.9-1.1.9a7 7 0 0 1 0 1.8Z" transform="translate(-2 -2) scale(1.1)"/></svg><span>Settings</span></button>
+   <button class="new-chat-button" type="button" id="topClear" title="Start a new chat" aria-label="New chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>New chat</span></button>
+  </div>
+ </header>
+
+ <section class="voice-settings panel glass-panel" id="voiceSettings" hidden aria-label="Voice settings">
+  <div class="voice-settings-copy"><strong>VOICE PROFILE</strong><span>Choose the voice Avi uses in live conversations. The selection is saved on this device.</span></div>
+  <label class="voice-select-label" for="voicePreference">Avi's voice</label>
+  <select id="voicePreference" class="voice-select">
+   <option value="Aoede">Aoede — Breezy</option><option value="Kore">Kore — Firm</option><option value="Leda">Leda — Youthful</option><option value="Achird">Achird — Friendly</option><option value="Callirrhoe">Callirrhoe — Easy-going</option><option value="Zephyr">Zephyr — Bright</option><option value="Sulafat">Sulafat — Warm</option><option value="Charon">Charon — Informative</option><option value="Puck">Puck — Upbeat</option><option value="Enceladus">Enceladus — Breathy</option>
+  </select>
+  <p class="voice-settings-note" id="voiceSettingsNote">Changes apply when you next start live voice.</p>
  </section>
- <aside class="panel rightbar">
-  <div class="section-label">COMPANION STATUS</div>
-  <div class="mini-core"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
-<path d="M13 8 23 17 32 13 41 17 51 8 48 28 43 43 32 54 21 43 16 28 13 8Z" fill="#101c29" stroke="#70dce8" stroke-width="2" stroke-linejoin="round"/>
-<path d="M22 31 28 28 32 31 36 28 42 31" stroke="#e5f4f7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M24 38 32 35 40 38 36 43 28 43 24 38Z" fill="#8a9eff"/>
-<path d="M27 47 32 49 37 47" stroke="#70dce8" stroke-width="1.8" stroke-linecap="round"/>
-</svg></div>
-  <div class="right-intro">Here for the big plans<br>and the little things.</div>
-  <div class="divider"></div>
-  <div class="info-row"><span class="info-icon">✧</span><div><small>PERSONALITY</small><strong>Curious, calm, helpful</strong></div></div>
-  <div class="info-row"><span class="info-icon">◉</span><div><small>VOICE</small><strong>Browser voice and speech input</strong></div></div>
-  <div class="info-row"><span class="info-icon">⌁</span><div><small>AI ENGINE</small><strong>Connected through your secure function</strong></div></div>
-  <div class="memory-card"><strong>✦ A little meaning</strong><p>The emblem takes subtle inspiration from Avicii's Rottweiler spirit: strength, warmth, and loyalty. His photos stay out of the interface.</p></div>
- </aside>
-</div>
-<footer class="footer"><span><strong>avi.</strong> — your personal AI companion</span><span>Designed with loyalty · Built for everyday life</span></footer>
+
+ <div class="workspace">
+  <aside class="sidebar glass-panel">
+   <div class="section-label">NAVIGATION</div>
+   <nav class="nav" aria-label="Avi navigation">
+    <button class="navbutton active" type="button" data-view="home"><span class="navicon" aria-hidden="true">⌂</span><span>Home</span></button>
+    <button class="navbutton" type="button" data-view="ideas"><span class="navicon" aria-hidden="true">✳</span><span>Ideas</span></button>
+    <button class="navbutton" type="button" data-view="focus"><span class="navicon" aria-hidden="true">◷</span><span>Focus</span></button>
+    <button class="navbutton" type="button" data-view="learn"><span class="navicon" aria-hidden="true">⌘</span><span>Learn</span></button>
+    <button class="navbutton" type="button" data-view="memories"><span class="navicon" aria-hidden="true">◇</span><span>Memories</span></button>
+   </nav>
+   <div class="sidebar-bottom"><div class="loyalty-mark" aria-hidden="true">✳</div><strong>BUILT AROUND YOU</strong><p>A personal space for your conversations, plans, and the details you choose to keep.</p></div>
+  </aside>
+
+  <section class="main">
+   <section class="welcome glass-panel">
+    <div class="welcome-copy">
+     <div class="overline">PERSONAL AI / ONLINE</div>
+     <h1>Good to see you.<span>I'm Avi.</span></h1>
+     <p class="intro">Think out loud, ask anything, or work through your next step. I’m here to help you make sense of it.</p>
+     <div class="hero-actions">
+      <button class="hero-prompt" type="button" data-prompt="Help me plan my day and choose my top priorities."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 14.5 9.5 21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z"/></svg>Plan my day</button>
+      <button class="hero-prompt" type="button" data-prompt="Help me think through an idea and turn it into a plan."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 22h4M8.5 14.5A7 7 0 1 1 15.5 14.5c-.8.5-1.3 1.4-1.5 2.5h-4c-.2-1.1-.7-2-1.5-2.5Z"/></svg>Explore an idea</button>
+     </div>
+    </div>
+    <div class="core-wrap" aria-label="Avi status">
+     <div class="orb-stage">
+      <div class="orb-rings" aria-hidden="true"></div>
+      <div class="core orb" id="mainOrb" role="img" aria-label="Avi AI core">
+       <svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M32 5 51 16v24L32 59 13 40V16L32 5Z" stroke="rgba(215,252,255,.87)" stroke-width="1.35"/><path d="M32 13 44 20v16L32 49 20 36V20l12-7Z" stroke="rgba(0,240,255,.8)" stroke-width="1.2"/><circle cx="32" cy="31" r="8" stroke="white" stroke-width="1.3"/><circle cx="32" cy="31" r="2.5" fill="#e9ffff"/><path d="M32 2v7M32 54v8M9 17l6 3M49 43l6 4" stroke="#b7faff" stroke-width="1.3" stroke-linecap="round"/></svg>
+      </div>
+      <div class="core-caption">AVI CORE · READY</div>
+     </div>
+    </div>
+   </section>
+
+   <section class="chat glass-panel">
+    <div class="chat-head">
+     <div class="chat-identity">
+      <div class="tiny-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 2 20 7v10l-8 5-8-5V7l8-5Z"/><circle cx="12" cy="12" r="3"/><path d="M12 6v3M12 15v3"/></svg></div>
+      <div><strong>TALK TO AVI</strong><small id="chatStatus">Ready when you are</small></div>
+     </div>
+     <div class="chat-tools"><span class="private-label">CONVERSATION</span><button type="button" class="clear-chat" id="clearChat" title="Clear conversation" aria-label="Clear conversation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/></svg></button></div>
+    </div>
+    <div class="messages" id="messages" aria-live="polite" aria-relevant="additions text"><div class="message avi">Hey, I'm Avi. 💠 What's on your mind?</div></div>
+    <form id="chatForm">
+     <input id="chatInput" type="text" placeholder="Message Avi..." autocomplete="off" aria-label="Message Avi" required>
+     <button class="mic" id="micButton" type="button" aria-label="Talk to Avi" title="Start live voice"></button>
+     <button class="send" id="sendButton" type="submit" aria-label="Send message" title="Send message"></button>
+    </form>
+    <div class="hint" id="micHint">You can type or use your microphone.</div>
+   </section>
+  </section>
+
+  <aside class="rightbar glass-panel" aria-label="Assistant tools">
+   <div class="section-label">SYSTEM OVERVIEW</div>
+   <div class="status-hero">
+    <div class="status-orbit" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 2 26 8v12L16 30 6 20V8L16 2Z"/><circle cx="16" cy="16" r="4"/><path d="M16 7v5M16 20v5"/></svg></div>
+    <strong>YOUR AI COMPANION</strong>
+    <p>One place to think, talk, plan, and keep track of what matters to you.</p>
+   </div>
+   <div class="divider"></div>
+   <div class="info-row"><span class="info-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="8"/></svg></span><div><small>INTERACTION</small><strong>Text and live voice</strong></div></div>
+   <div class="info-row"><span class="info-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-8-4.5-8-11a4.5 4.5 0 0 1 8-2 4.5 4.5 0 0 1 8 2c0 6.5-8 11-8 11Z"/></svg></span><div><small>MEMORY</small><strong>Tell Avi what to remember</strong></div></div>
+   <div class="divider"></div>
+   <div class="quick-title">QUICK START</div>
+   <div class="quick-prompts">
+    <button class="quick-prompt" type="button" data-prompt="Help me plan my day and choose my top priorities."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 10h16M8 14h3"/></svg>Plan my day</button>
+    <button class="quick-prompt" type="button" data-prompt="Help me brainstorm ideas and turn one into a clear plan."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8m7.2 7.2 2.8 2.8m0-12.8-2.8 2.8m-7.2 7.2-2.8 2.8"/><circle cx="12" cy="12" r="4"/></svg>Explore an idea</button>
+    <button class="quick-prompt" type="button" data-prompt="Help me learn something new step by step."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21V5.5Z"/><path d="M4 17a2.5 2.5 0 0 1 2.5-2.5H20"/></svg>Learn something</button>
+   </div>
+  </aside>
+ </div>
 </main>
 <script>
 /*
