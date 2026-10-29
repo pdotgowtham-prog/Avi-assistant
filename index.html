@@ -629,22 +629,122 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 }
 @media(prefers-reduced-motion:reduce){.welcome *{scroll-behavior:auto!important}}
 
+
+/* Approved Avi mockup alignment — presentation only; existing auth, chat and voice hooks are preserved. */
+:root{--bg:#0b0b0d;--bg-2:#111114;--surface:#141418;--surface-2:#1b1a1c;--rust:#8b3a1a;--rust-bright:#a94f25;--tan:#c58b4e;--glow:#c58b4e;--line:rgba(197,139,78,.22);--line-strong:rgba(197,139,78,.5);--text:#f4eee7;--muted:#c7bdb2;--subtle:#978b80}
+body:before{background-image:none;mask-image:none;opacity:0}
+body:after{background:radial-gradient(ellipse at 18% 20%,rgba(139,58,26,.2),transparent 36%),radial-gradient(ellipse at 82% 78%,rgba(197,139,78,.09),transparent 34%);opacity:1}
+.brandmark,.auth-brand-symbol{border-color:rgba(197,139,78,.55)!important;color:var(--tan)!important;box-shadow:0 0 22px rgba(197,139,78,.08)!important}
+.brandname{color:#f7f0e8!important}.brandname span{color:var(--tan)!important}.brandtag,.auth-brand small{color:#c58b4e!important;letter-spacing:.13em!important}
+.auth-gate{grid-template-columns:minmax(0,1.08fr) minmax(390px,.92fr)!important;gap:14px!important;padding:12px!important;background:#0b0b0d!important}
+.auth-showcase{min-height:calc(100dvh - 24px)!important;border-color:rgba(197,139,78,.42)!important;border-radius:18px!important;background-image:linear-gradient(180deg,rgba(5,5,6,.05),rgba(5,5,6,.15) 48%,rgba(5,5,6,.88)),url('./assets/avi-login-portrait.png')!important;background-position:center!important;background-size:cover!important}
+.auth-showcase:after{background:linear-gradient(180deg,rgba(5,5,6,.06),rgba(5,5,6,.12) 48%,rgba(5,5,6,.82))!important}
+.auth-showcase-brand{font-size:clamp(34px,3.2vw,54px)!important;letter-spacing:-.055em!important}
+.auth-showcase-brand span{display:none!important}
+.auth-showcase-brand:after{content:"LOYAL. ALERT. YOURS.";margin-top:9px;color:#e5b477;font:600 11px var(--orbit-font);letter-spacing:.2em}
+.auth-showcase-brand small{font-size:14px!important;color:#e1d5c8!important}
+.auth-showcase-copy strong{font-size:clamp(36px,3.5vw,54px)!important}
+.auth-showcase-copy small{color:#e0cdb9!important}
+.auth-gate .auth-card{width:min(100%,490px)!important;padding:clamp(26px,3vw,42px)!important;border-color:rgba(197,139,78,.28)!important;background:linear-gradient(145deg,rgba(30,25,22,.94),rgba(12,12,14,.97))!important;border-radius:18px!important}
+.auth-card h2{margin-top:25px!important;color:#f4e8d9!important}
+.auth-card p:not(.auth-status){color:#c9bfb4!important}
+.auth-card label{color:#d5b99a!important}
+.auth-card input{background:rgba(9,9,11,.88)!important;border-color:rgba(197,139,78,.28)!important}
+.auth-card input:focus{border-color:rgba(197,139,78,.8)!important;box-shadow:0 0 0 3px rgba(197,139,78,.1)!important}
+.auth-actions button:first-child{background:linear-gradient(110deg,#e99b37,#c58b4e)!important;border-color:#e5ac61!important;color:#17100a!important}
+.auth-actions .auth-link,.auth-forgot{color:#e5b477!important}
+.shell{max-width:1800px!important;height:100dvh!important;min-height:620px!important;padding:12px!important;gap:12px!important;grid-template-rows:64px minmax(0,1fr)!important}
+.topbar{min-height:64px!important;padding:8px 16px!important;border-color:rgba(197,139,78,.22)!important;background:rgba(15,14,15,.88)!important;backdrop-filter:blur(18px)!important}
+.workspace{height:100%!important;min-height:0!important;grid-template-columns:250px minmax(0,1fr)!important;gap:12px!important;overflow:hidden!important}
+.sidebar{border-radius:18px!important;padding:19px 14px!important;background:linear-gradient(165deg,rgba(23,22,23,.97),rgba(12,12,14,.97))!important;border-color:rgba(197,139,78,.2)!important}
+.sidebar .section-label{font-size:10px!important;color:#d5c4b3!important;letter-spacing:.17em!important;padding:4px 9px 15px!important}
+.side-new-chat{min-height:48px!important;border-radius:13px!important;background:linear-gradient(110deg,rgba(139,58,26,.75),rgba(197,139,78,.32))!important;border-color:rgba(197,139,78,.65)!important;font-size:13px!important}
+.history-caption{margin:18px 9px 8px!important;font-size:9px!important}
+.history-caption small{font-size:7px!important}
+.nav{gap:5px!important}
+.navbutton{min-height:45px!important;border-radius:11px!important;font-size:12px!important}
+.navbutton.active{background:linear-gradient(100deg,rgba(139,58,26,.24),rgba(197,139,78,.06))!important;border-color:rgba(197,139,78,.4)!important;box-shadow:inset 3px 0 #e9a044!important}
+.navbutton .navicon{color:var(--tan)!important}
+.main{position:relative!important;display:block!important;min-height:0!important;height:100%!important;overflow:hidden!important;border-radius:20px!important}
+.welcome{position:absolute!important;inset:0!important;min-height:0!important;height:100%!important;padding:0!important;border-radius:20px!important;border-color:rgba(197,139,78,.24)!important;background:radial-gradient(ellipse at 30% 50%,rgba(139,58,26,.18),transparent 42%),linear-gradient(130deg,#111012,#090a0c 68%,#17110d)!important;overflow:hidden!important}
+.welcome:after{background:linear-gradient(90deg,rgba(7,8,9,.03),transparent 42%,rgba(7,8,9,.18)),linear-gradient(0deg,rgba(7,8,9,.6),transparent 46%)!important}
+.welcome:before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(circle at 15% 15%,transparent 0 95px,rgba(197,139,78,.2) 96px,transparent 97px),radial-gradient(circle at 15% 15%,transparent 0 122px,rgba(197,139,78,.05) 123px,transparent 144px)!important}
+.welcome-copy{top:11%!important;right:5%!important;width:min(47%,550px)!important;max-width:550px!important}
+.welcome .overline{color:#e7aa53!important;font-size:10px!important;letter-spacing:.18em!important}
+.welcome h1{display:flex!important;flex-direction:column!important;gap:3px!important;font-size:clamp(30px,3.2vw,48px)!important;line-height:1.13!important;color:#f6eee4!important;letter-spacing:-.045em!important}
+.welcome h1 span+span{color:#e5b477!important}
+.welcome p{max-width:45ch!important;color:#d1c7bc!important;font-size:15px!important;line-height:1.75!important}
+.hero-actions{display:flex!important;gap:8px!important;margin-top:18px!important}
+.hero-prompt{border-color:rgba(197,139,78,.3)!important;background:rgba(23,21,21,.68)!important;color:#f0e5d8!important;border-radius:12px!important;font-size:12px!important}
+.hero-shortcuts{display:none!important}
+.home-portrait{left:0!important;bottom:0!important;width:min(54%,650px)!important;height:92%!important;object-fit:contain!important;object-position:bottom left!important;filter:drop-shadow(0 22px 30px rgba(0,0,0,.45))!important}
+.core-wrap{display:none!important}
+.chat{position:absolute!important;z-index:5!important;left:0!important;right:0!important;bottom:0!important;height:47%!important;min-height:290px!important;display:flex!important;flex-direction:column!important;border:1px solid rgba(197,139,78,.28)!important;border-radius:18px!important;background:linear-gradient(145deg,rgba(17,17,19,.88),rgba(8,9,11,.92))!important;backdrop-filter:blur(20px)!important;box-shadow:0 -16px 50px rgba(0,0,0,.2)!important;overflow:hidden!important}
+.chat-head{flex:0 0 auto!important;min-height:54px!important;background:rgba(24,22,22,.82)!important;border-bottom:1px solid rgba(197,139,78,.18)!important}
+.chat-identity strong{font-size:12px!important;letter-spacing:.04em!important}.chat-identity small{font-size:11px!important;color:#bdb0a3!important}
+.messages{flex:1 1 auto!important;min-height:0!important;padding:13px 18px!important;gap:9px!important;background:rgba(8,9,11,.26)!important}
+.message{max-width:min(80%,720px)!important;padding:11px 14px!important;border-radius:16px!important;font-size:13px!important;line-height:1.55!important}
+.message.user{align-self:flex-end!important;background:linear-gradient(115deg,#a85d2d,#7650a1)!important;border-color:rgba(232,169,111,.3)!important;color:#fff!important;border-bottom-right-radius:5px!important}
+.message.avi{align-self:flex-start!important;background:rgba(42,36,33,.86)!important;border-color:rgba(197,139,78,.2)!important;border-bottom-left-radius:5px!important}
+#chatForm{flex:0 0 auto!important;display:flex!important;align-items:center!important;gap:8px!important;margin:0 12px 8px!important;padding:8px!important;border:1px solid rgba(197,139,78,.32)!important;border-radius:15px!important;background:rgba(8,9,11,.94)!important}
+#chatForm input{min-width:0!important;flex:1 1 auto!important;color:#f7eee4!important}
+#chatForm .mic,#chatForm .send{border-color:rgba(197,139,78,.5)!important;background:linear-gradient(135deg,rgba(139,58,26,.42),rgba(197,139,78,.14))!important;color:#e9b36c!important}
+.hint{flex:0 0 auto!important;padding:0 16px 7px!important;color:#a89b8e!important;font-size:10px!important}
+.rightbar{display:none!important}
+@media(min-width:881px){.shell{overflow:hidden!important}.sidebar{height:100%!important;align-self:stretch!important}.workspace{height:100%!important}.main{height:100%!important}.welcome{height:100%!important}}
+@media(max-width:1100px) and (min-width:881px){.workspace{grid-template-columns:210px minmax(0,1fr)!important}.home-portrait{width:53%!important}.welcome-copy{width:50%!important;right:3%!important}.chat{height:49%!important}}
+@media(max-width:880px){
+ .shell{height:auto!important;min-height:100dvh!important;padding:9px 9px 88px!important;grid-template-rows:56px minmax(780px,1fr)!important;gap:9px!important}
+ .topbar{min-height:56px!important;padding:7px 10px!important}
+ .brandname{font-size:22px!important}.brandmark{width:36px!important;height:36px!important}
+ .workspace{height:auto!important;min-height:780px!important;display:flex!important;flex-direction:column!important;overflow:visible!important}
+ .sidebar{position:fixed!important;z-index:50!important;left:9px!important;right:9px!important;bottom:max(7px,env(safe-area-inset-bottom))!important;top:auto!important;height:62px!important;padding:5px!important;border-radius:17px!important;background:rgba(15,14,15,.97)!important}
+ .sidebar .section-label,.sidebar-bottom,.side-new-chat,.history-caption{display:none!important}
+ .sidebar .nav{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:2px!important}
+ .navbutton{min-height:48px!important;display:flex!important;flex-direction:column!important;justify-content:center!important;gap:1px!important;padding:2px!important;font-size:9px!important}
+ .navbutton .navicon{width:auto!important;height:auto!important;font-size:16px!important}
+ .main{height:780px!important;min-height:780px!important;overflow:hidden!important}
+ .welcome-copy{top:8%!important;right:4%!important;width:56%!important}
+ .welcome h1{font-size:clamp(24px,5vw,35px)!important}
+ .welcome p{font-size:12px!important;line-height:1.55!important}
+ .home-portrait{left:-6%!important;width:60%!important;height:70%!important;object-position:bottom left!important}
+ .hero-actions{display:none!important}
+ .chat{height:49%!important;min-height:350px!important}
+ .messages{padding:10px!important}.message{max-width:88%!important;font-size:12px!important}
+ .rightbar{display:none!important}
+}
+@media(max-width:520px){
+ .auth-gate{display:block!important;padding:10px!important}.auth-showcase{display:none!important}
+ .auth-gate .auth-card{width:min(100%,430px)!important;margin:4dvh auto!important;padding:24px!important}
+ .shell{grid-template-rows:54px minmax(760px,1fr)!important}
+ .top-actions{gap:5px!important}.top-actions .connection{display:none!important}.voice-settings-button{width:38px!important;min-height:38px!important;padding:0!important;font-size:0!important}.voice-settings-button svg{width:18px!important;height:18px!important}.new-chat-button{width:38px!important;min-width:38px!important;min-height:38px!important;padding:0!important;font-size:0!important}.new-chat-button svg{width:18px!important;height:18px!important}
+ .workspace,.main{min-height:760px!important;height:760px!important}
+ .welcome-copy{top:7%!important;right:4%!important;width:61%!important}
+ .welcome h1{font-size:23px!important}.welcome .overline{font-size:7px!important}.welcome p{font-size:11px!important}
+ .home-portrait{left:-15%!important;width:74%!important;height:61%!important}
+ .chat{height:53%!important;min-height:380px!important}
+ .chat-head{min-height:48px!important;padding:8px 10px!important}.chat-tools .private-label{display:none!important}
+ #chatForm{margin:0 7px 7px!important;padding:6px!important;gap:5px!important}
+ #chatForm .mic,#chatForm .send{width:39px!important;height:39px!important;min-width:39px!important;flex-basis:39px!important}
+ #chatForm input{font-size:12px!important}
+}
+
 </style>
-<meta name="avi-ui-version" content="avi-calm-brand-voicefix-1">
+<meta name="avi-ui-version" content="avi-approved-mockup-v1">
 </head>
 <body>
 <section class="auth-gate" id="authGate" aria-label="Sign in to Avi">
  <div class="auth-showcase" aria-hidden="true">
-  <div class="auth-showcase-brand">Avi<span>+</span><small>Your intelligent assistant</small></div>
-  <div class="auth-showcase-copy"><strong>Meet <em>Avi.</em></strong><span>Your intelligent<br>assistant.</span><small>Think. Plan. Ask. Anywhere.</small></div>
+  <div class="auth-showcase-brand">AVI AI<span>+</span><small>Loyal. Alert. Yours.</small></div>
+  <div class="auth-showcase-copy"><strong>Meet <em>Avi.</em></strong><span>Your personal AI companion.</span><small>For work, life, and everything in between.</small></div>
  </div>
  <form class="auth-card" id="authForm">
   <div class="auth-brand">
    <span class="auth-brand-symbol" aria-hidden="true"><svg class="avi-mark" viewBox="0 0 64 64" aria-hidden="true"><path class="avi-ear" d="M17 27 10 9l18 10 4 5-4 5Z"/><path class="avi-ear" d="m47 27 7-18-18 10-4 5 4 5Z"/><path class="avi-head" d="M16 25 32 18l16 7v14c0 10-7 17-16 21-9-4-16-11-16-21Z"/><path class="avi-mask" d="M18 38 25 34l7 3 7-3 7 4-4 10-10 5-10-5Z"/><circle class="avi-brow" cx="25" cy="32" r="2.7"/><circle class="avi-brow" cx="39" cy="32" r="2.7"/><path class="avi-muzzle" d="m27 42 5-2 5 2-2 5h-6Z"/><path class="avi-nose" d="m30 42 2-1 2 1-2 2Z"/></svg></span>
-   <span><strong>Avi AI</strong><small>CALM. CLEAR. PERSONAL.</small></span>
+   <span><strong>Avi AI</strong><small>LOYAL. ALERT. YOURS.</small></span>
   </div>
   <h2 id="authHeading">Welcome back.</h2>
-  <p id="authDescription">A calm, personal AI space. Sign in to continue.</p>
+  <p id="authDescription">Your personal AI companion. Sign in to continue.</p>
   <label for="authEmail">User ID</label>
   <input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com">
   <label for="authPassword">Password</label>
@@ -683,9 +783,9 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 
  <div class="workspace">
   <aside class="sidebar glass-panel">
-   <div class="section-label">CONVERSATIONS</div>
+   <div class="section-label">YOUR CONVERSATIONS</div>
    <button class="side-new-chat" type="button" id="sideClear"><span aria-hidden="true">+</span> New chat</button>
-   <div class="history-caption"><span>RECENT CHAT</span><small>Current conversation</small></div>
+   <div class="history-caption"><span>RECENT CHAT</span><small>Saved on this device</small></div>
    <nav class="nav" aria-label="Avi navigation">
     <button class="navbutton active" type="button" data-view="home"><span class="navicon" aria-hidden="true">⌂</span><span>Home</span></button>
     <button class="navbutton" type="button" data-view="ideas"><span class="navicon" aria-hidden="true">✳</span><span>Ideas</span></button>
