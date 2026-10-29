@@ -268,6 +268,83 @@ input:focus{border-color:#11c6ff;box-shadow:0 0 0 4px #11c6ff13}
  .core{width:82px;height:82px}.core svg{width:58px;height:58px}
  .messages{min-height:150px;padding:12px}
 }
+
+/* FULL DASHBOARD REDESIGN — reference layout */
+:root{--bg:#020814;--panel:#061326;--panel2:#091a30;--line:#12375d;--text:#f0f7ff;--muted:#8faac8;--cyan:#16c8ff;--gold:#ffb64d;--green:#54e8ac}
+html,body{min-height:100%;background:#020713}
+body{background:radial-gradient(ellipse at 55% 10%,#08264b 0%,#020916 45%,#01040a 100%);color:var(--text)}
+.shell{width:100%;max-width:none;min-height:100vh;padding:12px;gap:10px;grid-template-rows:1fr}
+.topbar{position:absolute;top:12px;right:20px;z-index:4;background:transparent;border:0;padding:0;box-shadow:none}
+.topbar .brand{display:none}.top-actions{gap:12px}
+.connection{background:#041d22;border-color:#14533f;color:#62efb4;font-size:12px;padding:10px 14px}
+.iconbutton{width:44px;height:44px;border-radius:50%;background:#07172b;border-color:#143b61}
+.workspace{grid-template-columns:310px minmax(0,1fr) 285px;gap:12px;min-height:calc(100vh - 24px);align-items:stretch}
+.panel{background:linear-gradient(150deg,#061326f5,#030b18f7);border-color:#102f50;border-radius:18px;box-shadow:0 15px 45px #0005}
+.sidebar{padding:24px 15px 15px;position:relative;overflow:hidden}
+.sidebar:before{content:"";position:absolute;bottom:-55px;left:-50px;width:260px;height:220px;background:radial-gradient(ellipse,#073c66aa,transparent 70%);pointer-events:none}
+.sidebar:after{content:"";position:absolute;bottom:0;left:0;right:0;height:155px;background:linear-gradient(0deg,#04101fe0,transparent);pointer-events:none}
+.sidebar .section-label{display:none}
+.sidebar:before{z-index:0}
+.sidebar .nav{position:relative;z-index:1;gap:7px;margin-top:24px}
+.sidebar .nav:before{content:"";display:block;height:118px;background:radial-gradient(circle at 25% 40%,#0a3960,#04101f 68%);border:1px solid #12385d;border-radius:16px;margin-bottom:5px}
+.sidebar .navbutton{font-size:14px;padding:12px 11px;gap:14px;color:#a9c0dc;border-radius:12px}
+.navbutton .navicon{width:34px;height:34px;background:transparent;border:1px solid transparent;color:#b7d5f1;font-size:21px}
+.navbutton.active{background:linear-gradient(100deg,#063b75,#071c39);border-color:#087ecb;box-shadow:inset 4px 0 #16c8ff,0 0 25px #007bff22}
+.navbutton.active .navicon{background:#064d86;color:#29d5ff}
+.sidebar-bottom{position:relative;z-index:2;margin-top:auto;padding:18px 15px;background:linear-gradient(140deg,#0b1d31,#111b2b);border:1px solid #3b3528;border-radius:17px}
+.loyalty-mark{background:#242b32;border-color:#65502d;color:#ffc263}
+.sidebar-bottom strong{font-size:12px}.sidebar-bottom p{font-size:12px;line-height:1.7}
+.main{gap:10px;min-height:0}
+.welcome{min-height:385px;flex:0 0 385px;padding:34px 32px;grid-template-columns:minmax(0,.92fr) minmax(300px,1.08fr);background:radial-gradient(ellipse at 72% 45%,#06366a88,transparent 48%),linear-gradient(120deg,#06152b,#020a17 68%,#0b1b31);border-color:#123d69;border-radius:20px}
+.welcome:after{right:0;top:0;width:55%;height:100%;border-radius:0;background:radial-gradient(ellipse,#0068d51b,transparent 65%);filter:none}
+.overline{font-size:11px;letter-spacing:3px;color:#a9d8ff;margin-bottom:27px}
+.overline:before{width:26px;height:2px;background:var(--gold);box-shadow:0 0 9px #ffb64d70}
+h1{font-size:clamp(42px,4.2vw,66px);line-height:1.02;letter-spacing:-2.5px;font-weight:750}
+h1 span{margin-top:5px;background:linear-gradient(100deg,#18caff,#75dcff 70%,#ffbd5c);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:750}
+.intro{font-size:15px;line-height:1.75;color:#c3d5eb;margin:19px 0 25px;max-width:440px}
+.chips{gap:8px}.chip{font-size:11px;border-radius:999px;padding:10px 12px;background:#07162a;border-color:#1d3a5d;color:#e2efff}
+.core-wrap{width:100%;padding:0}
+.core-wrap>div{width:100%;display:flex;align-items:center;justify-content:center;gap:12px;position:relative}
+.core{width:min(26vw,280px);height:min(26vw,280px);background:radial-gradient(circle at 34% 22%,#b6f7ff 0%,#13bfff 6%,#086ec4 26%,#06244a 58%,#020916 82%);border:1px solid #0dafff;box-shadow:0 0 0 9px #008cff0c,0 0 55px #008cff55,inset -18px -20px 38px #01050bbf}
+.core:before{inset:-15px;border-color:#12baffbb;box-shadow:0 0 25px #008cff35;transform:rotateX(65deg) rotate(-20deg)}
+.core:after{inset:-27px;border-color:#ffb64d88;transform:rotateX(65deg) rotate(20deg)}
+.core svg{width:70%;height:70%;color:#17caff;filter:drop-shadow(0 0 8px #00aaff)}
+.core-caption{position:absolute;bottom:-42px;margin:0;color:#65d9ff;font-size:10px;letter-spacing:3px}
+.shortcuts{padding:16px 18px;border-radius:17px;background:#040d1af2}
+.panel-heading strong{font-size:17px}.panel-heading span{font-size:11px;letter-spacing:1.4px;color:#7eaff1}
+.shortcut-grid{gap:12px}
+.shortcut{padding:15px;min-height:88px;border-radius:15px;background:linear-gradient(135deg,#0a1b32,#061122);border-color:#12375e;gap:13px}
+.shortcut:nth-child(2){border-color:#4c3c25}.shortcut:nth-child(3){border-color:#234b5c}
+.shortcut-icon{width:46px;height:46px;border-radius:13px;background:#073363;color:#18caff;font-size:22px}
+.shortcut:nth-child(2) .shortcut-icon,.shortcut:nth-child(3) .shortcut-icon{background:#292315;color:#ffbd59}
+.shortcut strong{font-size:13px}.shortcut small{font-size:11px;color:#8eaed0}
+.chat{min-height:0;flex:1;background:#030b17;border-color:#12375d}
+.chat-head{background:#071529;border-color:#102c4c;padding:14px 17px}
+.tiny-mark{width:38px;height:38px;background:#061a31;border-color:#087bc0;border-radius:50%;color:#1ccaff}
+.tiny-mark svg{width:31px;height:31px}
+.messages{min-height:90px;max-height:180px;background:#030b17;padding:12px 17px}
+.message{font-size:13px}.avi{background:#0a1c31;border-color:#173e61}.user{background:#073c66;border-color:#0d79b2}
+form{background:#030d1c;border-top-color:#123454;padding:12px}
+input{background:#020916;border-color:#163a5e;font-size:14px;padding:14px}
+.send{background:linear-gradient(135deg,#0c8fe9,#0755a5);border-color:#18bfff;border-radius:50%;width:50px;height:50px;font-size:0;position:relative}
+.send:after{content:"➤";font-size:22px;position:absolute;inset:0;display:grid;place-items:center}
+.mic{display:none}.hint{display:none}
+.rightbar{padding:22px 17px;gap:18px;border-radius:18px}
+.rightbar .section-label{font-size:11px;color:#7eb9f4;letter-spacing:2.3px;margin:2px 7px 6px}
+.mini-core{width:145px;height:145px;background:radial-gradient(circle at 33% 22%,#b8f7ff,#13bfff 8%,#086ec4 33%,#06244a 72%,#020916);border:1px solid #0b9fe8;box-shadow:0 0 0 8px #008cff0d,0 0 38px #008cff40}
+.mini-core:after{inset:-12px;border-color:#16bfff88}
+.mini-core svg{width:95px;height:95px;color:#1ccaff;filter:drop-shadow(0 0 6px #008cff)}
+.right-intro{font-size:13px;color:#a9c7e7;line-height:1.7;margin-top:0}
+.divider{background:#143456}
+.info-row{gap:12px;align-items:center}
+.info-icon{width:42px;height:42px;border-radius:13px;background:#071d36;border:1px solid #123a61;color:#42cfff;font-size:18px}
+.info-row small{font-size:10px;color:#75a7d9;letter-spacing:1.4px}
+.info-row strong{font-size:12px;color:#e0edfc}
+.memory-card{background:linear-gradient(145deg,#0b1d33,#071222);border-color:#203c5c}
+.memory-card strong{font-size:12px;color:#ffc15c}.memory-card p{font-size:11px;line-height:1.65;color:#9ab5d5}
+.footer{display:none}
+@media(max-width:1150px){.workspace{grid-template-columns:220px minmax(0,1fr)}.rightbar{display:none}.welcome{grid-template-columns:minmax(0,1fr) 220px}.core{width:190px;height:190px}}
+@media(max-width:760px){.shell{padding:8px}.topbar{top:10px;right:12px}.workspace{display:block;min-height:0}.sidebar{display:none}.welcome{min-height:300px;flex-basis:auto;padding:22px 17px;grid-template-columns:minmax(0,1fr) 95px}.overline{font-size:8px;letter-spacing:1.5px;margin-bottom:18px}h1{font-size:34px}.intro{font-size:11px;margin:12px 0}.core{width:82px;height:82px}.core svg{width:60px;height:60px}.core:before{inset:-7px}.core:after{inset:-12px}.core-caption{font-size:7px;letter-spacing:1px;bottom:-28px}.shortcut-grid{grid-template-columns:1fr}.shortcut{min-height:68px}.chat{margin-top:10px}.messages{max-height:130px}}
 </style>
 </head>
 <body>
