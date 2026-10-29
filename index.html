@@ -637,7 +637,7 @@ function savePersonalMemory() {
   catch (error) { console.warn("Avi could not save personal memory.", error); }
 }
 function processMemoryCommand(text) {
-  const rememberMatch = text.match(/^\\s*(?:avi[, ]+)?remember(?: that)?\\s+(.+?)\\s*[.!]?\\s*$/i);
+  const rememberMatch = text.match(/^\s*(?:avi[, ]+)?remember(?: that)?\s+(.+?)\s*[.!]?\s*$/i);
   if (rememberMatch) {
     const fact = rememberMatch[1].trim();
     if (fact && !personalMemory.some(x => x.toLowerCase() === fact.toLowerCase())) {
@@ -647,12 +647,12 @@ function processMemoryCommand(text) {
     }
     return { handled: true, reply: fact ? "I'll remember that for future chats on this browser. 💙" : "Tell me what you'd like me to remember." };
   }
-  if (/^\\s*(?:avi[, ]+)?forget (?:everything|all(?: my)? memories|all memories)\\s*[.!]?\\s*$/i.test(text)) {
+  if (/^\s*(?:avi[, ]+)?forget (?:everything|all(?: my)? memories|all memories)\s*[.!]?\s*$/i.test(text)) {
     personalMemory = [];
     savePersonalMemory();
     return { handled: true, reply: "I've cleared the personal memories saved in this browser. 💙" };
   }
-  const forgetMatch = text.match(/^\\s*(?:avi[, ]+)?forget(?: that)?\\s+(.+?)\\s*[.!]?\\s*$/i);
+  const forgetMatch = text.match(/^\s*(?:avi[, ]+)?forget(?: that)?\s+(.+?)\s*[.!]?\s*$/i);
   if (forgetMatch) {
     const target = forgetMatch[1].trim().toLowerCase();
     const before = personalMemory.length;
@@ -863,6 +863,11 @@ if (SpeechRecognition) {
     if (window.speechSynthesis && window.speechSynthesis.speaking) {
       window.speechSynthesis.cancel();
       mainOrb.classList.remove("speaking");
+      if (handsFree) {
+        hint.textContent = "Avi stopped. Speak now.";
+        try { if (!listening) recognition.start(); } catch (error) {}
+        return;
+      }
     }
 
     if (handsFree) {
