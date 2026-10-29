@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0a0e14">
 <title>Avi — Personal AI</title>
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" href="./avi-icon.svg" type="image/svg+xml">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Avi">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}
 :root{--bg:#0a0e14;--panel:#101721;--panel2:#131d29;--line:#263343;--text:#edf3f7;--muted:#8495a7;--cyan:#a5dce0;--gold:#c9a879;--green:#9cddc4}
@@ -546,10 +552,31 @@ button:hover{filter:brightness(1.08)}
 @media(max-width:760px){.shell{padding:8px;gap:9px}.topbar{padding:9px 10px}.workspace,.main{min-height:calc(100vh - 70px)}.workspace{grid-template-columns:minmax(0,1fr)}.sidebar{display:none}.welcome{min-height:205px;padding:22px 16px 18px}.core{width:82px;height:82px}.core svg{width:47px;height:47px}.core-caption{font-size:7px;margin-top:10px}.intro{font-size:12px}.chips{display:none}.messages{min-height:170px;max-height:38vh}.private-label{display:none}.voice-settings-button{font-size:10px;padding:8px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
 
+
+.auth-gate{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:20px;background:radial-gradient(ellipse at 50% -20%,#1c2b39 0%,#0d131c 46%,#090c12 85%)}
+.auth-card{width:min(100%,420px);padding:26px;border:1px solid #263343;border-radius:18px;background:#101721;color:#edf3f7;box-shadow:0 24px 80px #0008}
+.auth-card h2{margin:0 0 8px;font-size:26px}.auth-card p{color:#9eacba;font-size:13px;line-height:1.6}
+.auth-card label{display:block;margin:14px 0 6px;color:#b5c4d0;font-size:12px}
+.auth-card input{width:100%;display:block;margin:0;padding:12px;border:1px solid #2c3c4b;border-radius:10px;background:#0a1119;color:#edf3f7}
+.auth-actions{display:flex;gap:9px;margin-top:18px}.auth-actions button,.auth-link{border:1px solid #47636c;border-radius:10px;padding:11px 13px;background:#263f49;color:#e6f5f4}
+.auth-actions button{flex:1}.auth-link{background:transparent;border-color:#2c3c4b}
+.auth-status{min-height:20px;color:#a5dce0!important;font-size:12px!important}.account-chip{font-size:11px;color:#a5dce0;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:520px){.auth-card{padding:20px}.top-actions{gap:5px}.account-chip{display:none}}
 </style>
 </head>
 <body>
-<main class="shell">
+
+<section class="auth-gate" id="authGate" aria-label="Avi sign in">
+ <form class="auth-card" id="authForm">
+  <div class="brandmark" style="margin-bottom:16px"><img src="./avi-icon.svg" alt="" width="30" height="30"></div>
+  <h2 id="authHeading">Welcome back.</h2>
+  <p id="authDescription">Sign in to sync your personal memories across your devices.</p>
+  <label for="authEmail">Email address</label><input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com">
+  <label for="authPassword">Password</label><input id="authPassword" type="password" minlength="6" autocomplete="current-password" required placeholder="At least 6 characters">
+  <div class="auth-actions"><button id="authSubmit" type="submit">Sign in</button><button class="auth-link" id="authModeToggle" type="button">Create account</button></div>
+  <p class="auth-status" id="authStatus" role="status"></p>
+ </form>
+</section>\n<main class="shell">
 <header class="topbar">
  <div class="brand">
   <div class="brandmark" aria-label="Avi emblem">
@@ -562,7 +589,7 @@ button:hover{filter:brightness(1.08)}
   </div>
   <div><div class="brandname">avi<span style="color:#a5dce0">.</span></div><div class="brandtag">Your personal AI companion</div></div>
  </div>
- <div class="top-actions"><div class="connection" id="connectionStatus">Connecting...</div><button class="voice-settings-button" type="button" id="voiceSettingsToggle" aria-expanded="false" aria-controls="voiceSettings">⚙ Voice</button><button class="iconbutton" type="button" id="topClear" title="Start a new chat" aria-label="Start a new chat">↻</button></div>
+ <div class="top-actions"><span id="accountChip" class="account-chip" hidden></span><button class="iconbutton" id="installAvi" type="button" title="Install Avi on this device" aria-label="Install Avi" hidden>⇩</button><button class="iconbutton" id="signOutAvi" type="button" title="Sign out" aria-label="Sign out" hidden>↪</button><div class="connection" id="connectionStatus">Connecting...</div><button class="voice-settings-button" type="button" id="voiceSettingsToggle" aria-expanded="false" aria-controls="voiceSettings">⚙ Voice</button><button class="iconbutton" type="button" id="topClear" title="Start a new chat" aria-label="Start a new chat">↻</button></div>
 </header>
 <section class="voice-settings panel" id="voiceSettings" hidden aria-label="Voice preferences">
  <div class="voice-settings-copy"><strong>Voice preference</strong><span>Choose how Avi sounds. Your choice is saved on this device.</span></div>
@@ -662,7 +689,93 @@ const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_NOTL9-6RF_nww1wYPhHBzQ_ULiLUXsP";
 
 
-const messages = document.getElementById("messages");
+
+/* Supabase account and cloud memory */
+const AVI_SUPABASE_URL = "https://fbtrcquparflbzuaixuo.supabase.co";
+const aviAuthClient = window.supabase.createClient(AVI_SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+const authGate = document.getElementById("authGate");
+const authForm = document.getElementById("authForm");
+const authEmail = document.getElementById("authEmail");
+const authPassword = document.getElementById("authPassword");
+const authHeading = document.getElementById("authHeading");
+const authDescription = document.getElementById("authDescription");
+const authSubmit = document.getElementById("authSubmit");
+const authModeToggle = document.getElementById("authModeToggle");
+const authStatus = document.getElementById("authStatus");
+const accountChip = document.getElementById("accountChip");
+const signOutAvi = document.getElementById("signOutAvi");
+let aviAuthMode = "signin";
+let aviSession = null;
+let aviMemorySyncReady = false;
+authModeToggle.addEventListener("click", () => {
+ aviAuthMode = aviAuthMode === "signin" ? "signup" : "signin";
+ authHeading.textContent = aviAuthMode === "signin" ? "Welcome back." : "Create your Avi account.";
+ authDescription.textContent = aviAuthMode === "signin" ? "Sign in to sync your personal memories across your devices." : "Create an account to keep your personal memories private and synced.";
+ authSubmit.textContent = aviAuthMode === "signin" ? "Sign in" : "Create account";
+ authModeToggle.textContent = aviAuthMode === "signin" ? "Create account" : "Back to sign in";
+ authPassword.autocomplete = aviAuthMode === "signin" ? "current-password" : "new-password";
+ authStatus.textContent = "";
+});
+authForm.addEventListener("submit", async event => {
+ event.preventDefault();
+ authSubmit.disabled = true; authStatus.textContent = "Connecting securely…";
+ try {
+  const email = authEmail.value.trim();
+  const password = authPassword.value;
+  const result = aviAuthMode === "signup"
+   ? await aviAuthClient.auth.signUp({email, password})
+   : await aviAuthClient.auth.signInWithPassword({email, password});
+  if (result.error) throw result.error;
+  if (aviAuthMode === "signup" && !result.data.session) {
+   authStatus.textContent = "Account created. Check your email to confirm it, then sign in.";
+  } else {
+   aviSession = result.data.session;
+   await aviApplySession(aviSession);
+  }
+ } catch (error) { authStatus.textContent = error.message || "Sign-in failed. Please try again."; }
+ finally { authSubmit.disabled = false; }
+});
+async function aviApplySession(session) {
+ aviSession = session;
+ if (!session) {
+  authGate.hidden = false; accountChip.hidden = true; signOutAvi.hidden = true;
+  return;
+ }
+ authGate.hidden = true;
+ accountChip.hidden = false; accountChip.textContent = session.user.email || "Signed in";
+ signOutAvi.hidden = false;
+ try {
+  const result = await aviAuthClient.from("avi_personal_memories").select("memory").eq("user_id",session.user.id).order("created_at",{ascending:true});
+  if (result.error) throw result.error;
+  personalMemory = [...new Set((result.data || []).map(row => row.memory).filter(Boolean))].slice(-50);
+  savePersonalMemoryLocalOnly();
+  aviMemorySyncReady = true;
+ } catch(error) {
+  console.error("Could not load Avi cloud memory:",error);
+  authStatus.textContent = "Signed in, but memory sync could not load: " + error.message;
+ }
+}
+function savePersonalMemoryLocalOnly() {
+ try { localStorage.setItem(PROFILE_MEMORY_KEY,JSON.stringify(personalMemory.slice(-50))); } catch(error) {}
+}
+async function syncAviMemories() {
+ if (!aviSession || !aviMemorySyncReady) return;
+ try {
+  const removed = await aviAuthClient.from("avi_personal_memories").delete().eq("user_id",aviSession.user.id);
+  if (removed.error) throw removed.error;
+  if (personalMemory.length) {
+   const inserted = await aviAuthClient.from("avi_personal_memories").insert(personalMemory.slice(-50).map(memory=>({user_id:aviSession.user.id,memory})));
+   if (inserted.error) throw inserted.error;
+  }
+ } catch(error) { console.error("Avi memory sync failed:",error); status.textContent = "Memory saved on this device; cloud sync needs attention."; }
+}
+signOutAvi.addEventListener("click", async () => { await aviAuthClient.auth.signOut(); });
+aviAuthClient.auth.onAuthStateChange((_event,session) => { aviApplySession(session); });
+aviAuthClient.auth.getSession().then(({data,error}) => {
+ if (error) authStatus.textContent = error.message;
+ aviApplySession(data.session);
+});
+\nconst messages = document.getElementById("messages");
 const form = document.getElementById("chatForm");
 const input = document.getElementById("chatInput");
 const mic = document.getElementById("micButton");
@@ -1108,7 +1221,22 @@ document.addEventListener("keydown", function(event) {
 // Restore the last conversation from this browser.
 restoreConversationHistory();
 
-// Initial status: this checks configuration only, not actual connectivity.
+
+/* Install Avi on Android/iOS home screen */
+let aviInstallPrompt = null;
+const installAviButton = document.getElementById("installAvi");
+window.addEventListener("beforeinstallprompt", event => {
+ event.preventDefault(); aviInstallPrompt = event; installAviButton.hidden = false;
+});
+installAviButton.addEventListener("click", async () => {
+ if (!aviInstallPrompt) { alert("To add Avi: open your browser menu and choose Add to Home screen or Install app."); return; }
+ aviInstallPrompt.prompt(); await aviInstallPrompt.userChoice; aviInstallPrompt = null; installAviButton.hidden = true;
+});
+window.addEventListener("appinstalled", () => { installAviButton.hidden = true; });
+if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+ window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(error=>console.warn("Avi offline shell registration failed",error)));
+}
+\n// Initial status: this checks configuration only, not actual connectivity.
 if (
   SUPABASE_FUNCTION_URL === "https://fbtrcquparflbzuaixuo.supabase.co/functions/v1/avi-chat" &&
   SUPABASE_PUBLISHABLE_KEY.startsWith("sb_publishable_")
