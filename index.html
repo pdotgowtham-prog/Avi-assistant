@@ -711,7 +711,9 @@ const SUPABASE_PUBLISHABLE_KEY =
 
 /* Supabase account and cloud memory */
 const AVI_SUPABASE_URL = "https://fbtrcquparflbzuaixuo.supabase.co";
-const aviAuthClient = window.supabase.createClient(AVI_SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+const aviAuthClient = window.supabase?.createClient
+ ? window.supabase.createClient(AVI_SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY)
+ : null;
 const authGate = document.getElementById("authGate");
 const authForm = document.getElementById("authForm");
 const authEmail = document.getElementById("authEmail");
@@ -726,52 +728,31 @@ const signOutAvi = document.getElementById("signOutAvi");
 let aviAuthMode = "signin";
 let aviSession = null;
 let aviMemorySyncReady = false;
-authModeToggle.addEventListener("click", async () => {
- if (aviAuthMode === "signin") {
-  // This button performs account creation directly with the entered credentials.
-  aviAuthMode = "signup";
-  authHeading.textContent = "Creating your Avi account…";
-  authDescription.textContent = "Please wait while we securely create your account.";
-  authSubmit.disabled = true;
-  authModeToggle.disabled = true;
-  authStatus.textContent = "Creating account…";
-  try {
-   const email = authEmail.value.trim();
-   const password = authPassword.value;
-   if (!email || !authEmail.checkValidity()) throw new Error("Enter a valid email address first.");
-   if (password.length < 6) throw new Error("Enter a password with at least 6 characters.");
-   const result = await aviAuthClient.auth.signUp({email,password});
-   if (result.error) throw result.error;
-   if (!result.data.session) {
-    authHeading.textContent = "Check your email.";
-    authDescription.textContent = "Your account was created. Confirm your email, then return here and sign in.";
-    authStatus.textContent = "Account created. Check your inbox (and spam folder) for the confirmation email.";
-   } else {
-    await aviApplySession(result.data.session);
-   }
-  } catch(error) {
-   authHeading.textContent = "Create your Avi account.";
-   authDescription.textContent = "Enter your email and a password of at least 6 characters.";
-   authStatus.textContent = error.message || "Account creation failed. Please try again.";
-   aviAuthMode = "signin";
-  } finally {
-   authSubmit.disabled = false;
-   authModeToggle.disabled = false;
-   if (aviAuthMode === "signin") { authSubmit.textContent = "Sign in"; authModeToggle.textContent = "Create account"; }
-  }
- } else {
-  aviAuthMode = "signin";
-  authHeading.textContent = "Welcome back.";
-  authDescription.textContent = "Sign in to sync your personal memories across your devices.";
-  authSubmit.textContent = "Sign in";
-  authModeToggle.textContent = "Create account";
-  authPassword.autocomplete = "current-password";
-  authStatus.textContent = "";
+authModeToggle.addEventListener("click", () => {
+ if (!aviAuthClient) {
+  authStatus.textContent = "Avi could not load the Supabase sign-in library. Check your connection and reload the page.";
+  return;
  }
+ aviAuthMode = aviAuthMode === "signin" ? "signup" : "signin";
+ const signingUp = aviAuthMode === "signup";
+ authHeading.textContent = signingUp ? "Create your Avi account." : "Welcome back.";
+ authDescription.textContent = signingUp
+  ? "Use your email address and a password of at least 6 characters."
+  : "Sign in to sync your personal memories across your devices.";
+ authSubmit.textContent = signingUp ? "Create account" : "Sign in";
+ authModeToggle.textContent = signingUp ? "Back to sign in" : "Create account";
+ authPassword.autocomplete = signingUp ? "new-password" : "current-password";
+ authStatus.textContent = "";
 });
 authForm.addEventListener("submit", async event => {
  event.preventDefault();
- authSubmit.disabled = true; authStatus.textContent = "Connecting securely…";
+ if (!aviAuthClient) {
+  authStatus.textContent = "Avi could not load the Supabase sign-in library. Check your connection and reload the page.";
+  return;
+ }
+ authSubmit.disabled = true;
+ authModeToggle.disabled = true;
+ authStatus.textContent = aviAuthMode === "signup" ? "Creating your account…" : "Signing in…";
  try {
   const email = authEmail.value.trim();
   const password = authPassword.value;
@@ -780,13 +761,23 @@ authForm.addEventListener("submit", async event => {
    : await aviAuthClient.auth.signInWithPassword({email, password});
   if (result.error) throw result.error;
   if (aviAuthMode === "signup" && !result.data.session) {
-   authStatus.textContent = "Account created. Check your email to confirm it, then sign in.";
+   authHeading.textContent = "Check your email.";
+   authDescription.textContent = "Confirm your email address, then return here to sign in.";
+   authStatus.textContent = "Account created. Check your inbox (and spam folder) for the confirmation email.";
+   aviAuthMode = "signin";
+   authSubmit.textContent = "Sign in";
+   authModeToggle.textContent = "Create account";
+   authPassword.autocomplete = "current-password";
   } else {
    aviSession = result.data.session;
    await aviApplySession(aviSession);
   }
- } catch (error) { authStatus.textContent = error.message || "Sign-in failed. Please try again."; }
- finally { authSubmit.disabled = false; }
+ } catch (error) {
+  authStatus.textContent = error?.message || "The request failed. Please try again.";
+ } finally {
+  authSubmit.disabled = false;
+  authModeToggle.disabled = false;
+ }
 });
 async function aviApplySession(session) {
  aviSession = session;
@@ -822,12 +813,16 @@ async function syncAviMemories() {
   }
  } catch(error) { console.error("Avi memory sync failed:",error); status.textContent = "Memory saved on this device; cloud sync needs attention."; }
 }
-signOutAvi.addEventListener("click", async () => { await aviAuthClient.auth.signOut(); });
-aviAuthClient.auth.onAuthStateChange((_event,session) => { aviApplySession(session); });
-aviAuthClient.auth.getSession().then(({data,error}) => {
- if (error) authStatus.textContent = error.message;
- aviApplySession(data.session);
-});
+signOutAvi.addEventListener("click", async () => { if (aviAuthClient) await aviAuthClient.auth.signOut(); });
+if (aviAuthClient) {
+ aviAuthClient.auth.onAuthStateChange((_event,session) => { aviApplySession(session); });
+ aviAuthClient.auth.getSession().then(({data,error}) => {
+  if (error) authStatus.textContent = error.message;
+  aviApplySession(data.session);
+ }).catch(error => { authStatus.textContent = error.message || "Could not check your sign-in status."; });
+} else {
+ authStatus.textContent = "Avi could not load the Supabase sign-in library. Check your connection and reload the page.";
+}
 \nconst messages = document.getElementById("messages");
 const form = document.getElementById("chatForm");
 const input = document.getElementById("chatInput");
