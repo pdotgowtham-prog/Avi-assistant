@@ -581,6 +581,46 @@ button:hover{filter:brightness(1.08)}
  .auth-card .auth-actions button{min-height:48px}
 }
 
+
+/* Mobile-first chat layout: one viewport, one message scroller, bottom composer. */
+@media (max-width: 760px) {
+  html, body { width:100%; min-height:100%; margin:0; }
+  body { min-height:100vh; min-height:100dvh; overflow-x:hidden; }
+  .shell { box-sizing:border-box; width:100%; max-width:none; min-height:100vh; min-height:100dvh; padding:0 12px max(8px, env(safe-area-inset-bottom)); gap:0; }
+  .topbar { position:sticky; top:0; z-index:20; min-height:56px; box-sizing:border-box; padding:8px 0; background:rgba(9,13,20,.96); border:0; border-bottom:1px solid #202d3a; border-radius:0; backdrop-filter:blur(14px); }
+  .brand { min-width:0; gap:8px; }
+  .brandname { font-size:18px; }
+  .brandtag { display:none; }
+  .top-actions { gap:6px; }
+  .connection { max-width:105px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:9px; padding:6px 7px; }
+  .workspace { display:block; width:100%; max-width:none; min-height:0; margin:0; }
+  .main { display:flex; flex-direction:column; gap:0; width:100%; min-width:0; min-height:0; }
+  .welcome { display:none !important; }
+  .chat { display:flex; flex-direction:column; width:100%; height:calc(100vh - 56px); height:calc(100dvh - 56px); min-height:260px; box-sizing:border-box; margin:0; padding:0; overflow:hidden; border:0; border-radius:0; background:transparent; box-shadow:none; }
+  .chat-head { flex:0 0 auto; min-height:55px; box-sizing:border-box; padding:10px 0; background:rgba(9,13,20,.96); border-bottom:1px solid #202d3a; }
+  .chat-identity { gap:9px; min-width:0; }
+  .chat-identity strong { font-size:13px; }
+  .chat-identity small { display:block; max-width:54vw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:10px; }
+  .chat-tools { gap:7px; }
+  .private-label { display:none !important; }
+  .clear-chat { width:34px; height:34px; flex:0 0 34px; border-radius:11px; }
+  .messages { display:flex; flex:1 1 auto; min-height:0; max-height:none; height:auto; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:16px 0 12px; gap:13px; scroll-padding-bottom:12px; }
+  .message { box-sizing:border-box; max-width:92%; overflow-wrap:anywhere; font-size:14px; line-height:1.55; padding:11px 13px; }
+  #chatForm { position:relative; z-index:5; flex:0 0 auto; display:flex; align-items:center; box-sizing:border-box; width:100%; margin:0; padding:7px; gap:5px; border:1px solid #2c3d4c; border-radius:15px; background:#111923; box-shadow:0 -5px 20px #0002; }
+  #chatForm input { flex:1 1 auto; width:0; min-width:0; min-height:42px; box-sizing:border-box; padding:10px 7px; font-size:16px; line-height:1.35; }
+  #chatForm .mic, #chatForm .send { flex:0 0 40px; width:40px; height:40px; min-width:40px; border-radius:12px; }
+  #chatForm .mic { display:grid !important; place-items:center; font-size:17px; }
+  #chatForm .send { display:grid; place-items:center; }
+  .hint { display:none !important; }
+  .voice-settings { margin:8px 0; }
+}
+@media (max-width: 390px) {
+  .shell { padding-left:9px; padding-right:9px; }
+  .connection { max-width:82px; }
+  .message { max-width:95%; font-size:13px; }
+  #chatForm .mic, #chatForm .send { flex-basis:37px; width:37px; min-width:37px; height:37px; }
+}
+
 </style>
 </head>
 <body>
