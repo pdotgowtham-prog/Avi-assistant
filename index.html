@@ -362,6 +362,16 @@ input{background:#020916;border-color:#163a5e;font-size:14px;padding:14px}
 .shortcut:hover{transform:translateY(-2px)}
 .navbutton{transition:background .18s ease,border-color .18s ease}
 @media(min-width:1500px){.workspace{grid-template-columns:310px minmax(0,1fr) 285px}.welcome{min-height:385px}.core{width:280px;height:280px}}
+
+/* Restore visible voice control and unify the chat composer */
+#chatForm{display:flex;align-items:center;gap:9px;padding:12px;background:linear-gradient(110deg,#030d1c,#07172a);border-top:1px solid #123454}
+#chatForm input{flex:1;min-width:0;padding:15px 16px;background:#020916;border:1px solid #163a5e;border-radius:14px;color:#eef8ff;font-size:14px}
+#chatForm .mic{display:grid;place-items:center;flex:0 0 48px;width:48px;height:48px;margin:0;padding:0;border-radius:50%;background:#0a1c32;border:1px solid #1c5279;color:#28ceff;font-size:20px}
+#chatForm .mic:hover,#chatForm .mic.listening{background:#07385b;border-color:#19caff;box-shadow:0 0 18px #008cff30}
+#chatForm .send{display:grid;place-items:center;flex:0 0 50px;width:50px;height:50px;padding:0;border-radius:50%;font-size:0;position:relative}
+#chatForm .send:after{content:"➤";font-size:21px;position:absolute;inset:0;display:grid;place-items:center}
+.mic.listening{background:#07385b!important;border-color:#19caff!important}
+@media(max-width:760px){#chatForm{padding:9px;gap:7px}#chatForm input{font-size:12px;padding:12px 10px}#chatForm .mic{flex-basis:42px;width:42px;height:42px}#chatForm .send{flex-basis:44px;width:44px;height:44px}}
 </style>
 </head>
 <body>
@@ -446,8 +456,7 @@ input{background:#020916;border-color:#163a5e;font-size:14px;padding:14px}
     <div class="chat-tools"><span class="private-label">YOUR PRIVATE SPACE</span><button type="button" class="clear-chat" id="clearChat" title="Start a fresh conversation" aria-label="Clear conversation">↻</button></div>
    </div>
    <div class="messages" id="messages" aria-live="polite"><div class="message avi">Hey, I'm here. 💙 What's on your mind?</div></div>
-   <form id="chatForm"><input id="chatInput" type="text" placeholder="Write a message…" autocomplete="off" aria-label="Message Avi" required><button class="send" id="sendButton" type="submit">Send ↗</button></form>
-   <button class="mic" id="micButton" type="button">♩ &nbsp; Talk to Avi</button>
+   <form id="chatForm"><input id="chatInput" type="text" placeholder="Message Avi..." autocomplete="off" aria-label="Message Avi" required><button class="mic" id="micButton" type="button" aria-label="Talk to Avi" title="Talk to Avi">🎙</button><button class="send" id="sendButton" type="submit" aria-label="Send message">Send ↗</button></form>
    <div class="hint" id="micHint">You can type or use your microphone.</div>
   </section>
  </section>
