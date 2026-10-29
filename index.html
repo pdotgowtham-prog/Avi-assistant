@@ -417,13 +417,36 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
  .welcome p{font-size:12px!important}
  .welcome:after{width:78px;height:78px;right:4%;top:25%}.welcome:before{font-size:29px;right:8%;top:37%}
 }
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}/* Reference-inspired screen composition. UI-only; existing interaction hooks remain intact. */
+.auth-gate{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(390px,.92fr);place-items:stretch;gap:22px;padding:18px;background:#070809;isolation:isolate}
+.auth-showcase{position:relative;display:flex;min-height:calc(100dvh - 36px);overflow:hidden;flex-direction:column;justify-content:space-between;padding:45px;border:1px solid rgba(197,139,78,.28);border-radius:25px;background:linear-gradient(90deg,rgba(3,3,4,.20),rgba(3,3,4,.72)),url('./assets/avi-login-portrait.png') 33% center/cover no-repeat;box-shadow:inset 0 1px rgba(255,255,255,.04),0 22px 60px rgba(0,0,0,.45)}
+.auth-showcase:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(5,5,6,.08),rgba(5,5,6,.35) 74%,rgba(5,5,6,.82))}
+.auth-showcase-brand,.auth-showcase-copy{position:relative;z-index:1}.auth-showcase-brand{display:flex;flex-direction:column;color:#F9F5EF;font:700 clamp(34px,3vw,54px)/1 var(--body-font);letter-spacing:-.07em}.auth-showcase-brand span{margin-left:5px;color:var(--tan);font-size:.6em}.auth-showcase-brand small{margin-top:12px;color:#C9C7CE;font:400 17px/1.35 var(--body-font);letter-spacing:0}.auth-showcase-copy{display:grid;gap:6px;max-width:340px}.auth-showcase-copy strong{display:block;color:#F8F4ED;font:600 clamp(34px,3.5vw,52px)/1.07 var(--body-font);letter-spacing:-.07em}.auth-showcase-copy em{font-style:normal;color:var(--tan)}.auth-showcase-copy>span{display:block;color:#F8F4ED;font:400 clamp(26px,2.2vw,38px)/1.05 var(--body-font);letter-spacing:-.05em}.auth-showcase-copy small{margin-top:14px;color:#B9B2AB;font:400 16px/1.5 var(--body-font);letter-spacing:.03em}
+.auth-gate .auth-card{align-self:center;justify-self:center;width:min(100%,440px);margin:0;padding:38px;border-radius:22px;background:linear-gradient(150deg,rgba(25,25,28,.96),rgba(10,11,13,.98));box-shadow:0 24px 80px rgba(0,0,0,.5),inset 0 1px rgba(255,255,255,.06)}.auth-card h2{margin-top:26px;font-size:30px}.auth-card p:not(.auth-status){font-size:14px}.auth-card input{min-height:50px;border-radius:13px}.auth-actions{grid-template-columns:1fr;margin-top:25px}.auth-actions button{min-height:48px}.auth-actions .auth-link{order:3;background:transparent;border:0;color:var(--tan)}.auth-forgot{order:2}.auth-brand{margin-bottom:0}
+.shell{max-width:1600px;padding:18px;gap:12px}.topbar{min-height:66px;padding:10px 18px;border-radius:18px;background:rgba(13,15,17,.94)}.brandmark{width:39px;height:39px}.brandname{font-size:27px}.brandtag{display:none}.workspace{grid-template-columns:235px minmax(0,1fr);gap:12px}.rightbar{display:none}.sidebar{padding:16px 11px;border-radius:18px;background:linear-gradient(180deg,rgba(17,18,20,.96),rgba(11,12,14,.96))}.sidebar .section-label{padding:5px 8px 14px;font-size:8px;letter-spacing:.15em}.side-new-chat{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:43px;padding:0 12px;border:1px solid rgba(197,139,78,.75);border-radius:12px;background:linear-gradient(105deg,rgba(139,58,26,.64),rgba(197,139,78,.33));color:#FFF5E8;font-size:12px;font-weight:600;box-shadow:inset 0 1px rgba(255,255,255,.1)}.side-new-chat span{font-size:21px;font-weight:300}.history-caption{display:flex;align-items:center;justify-content:space-between;gap:6px;margin:24px 9px 8px;color:#9C9083;font:600 8px var(--orbit-font);letter-spacing:.12em}.history-caption small{color:#746A61;font:500 6px var(--orbit-font);letter-spacing:.04em;text-transform:uppercase}.nav{gap:4px}.navbutton{min-height:40px;font-size:11px}.navbutton .navicon{width:26px;height:26px;font-size:15px}.sidebar-bottom{padding-bottom:7px}.sidebar-bottom p{font-size:10px}
+.main{position:relative;display:grid;grid-template-rows:minmax(420px,.98fr) minmax(330px,.75fr);gap:12px;min-height:0}.welcome{display:block;min-height:420px;padding:0;overflow:hidden;border-radius:18px;background:radial-gradient(ellipse at 20% 42%,rgba(139,58,26,.25),transparent 33%),radial-gradient(ellipse at 84% 8%,rgba(197,139,78,.10),transparent 28%),linear-gradient(135deg,#101113,#08090a)}.welcome:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(7,8,9,.04) 12%,transparent 48%,rgba(7,8,9,.16)),radial-gradient(circle at 88% 18%,rgba(197,139,78,.14) 0 12px,transparent 13px),radial-gradient(circle at 94% 27%,rgba(197,139,78,.1) 0 17px,transparent 18px),radial-gradient(circle at 84% 30%,rgba(197,139,78,.08) 0 16px,transparent 17px)}.welcome-copy{position:absolute;z-index:2;top:17%;right:6%;width:min(43%,480px)}.overline{margin-bottom:12px;font-size:8px}.intro{max-width:430px;margin-top:14px;font-size:14px;line-height:1.65}.hero-actions{margin-top:17px}.home-portrait{position:absolute;z-index:1;bottom:-2px;left:3%;width:min(50%,560px);height:95%;object-fit:contain;object-position:bottom center;filter:drop-shadow(0 24px 24px rgba(0,0,0,.35))}.core-wrap{z-index:3;right:18px;top:18px;position:absolute;transform:scale(.58);transform-origin:top right}.hero-shortcuts{position:absolute;z-index:3;right:4%;bottom:22px;display:grid;grid-template-columns:repeat(2,minmax(170px,1fr));gap:10px;width:min(53%,650px)}.hero-shortcut{display:grid;grid-template-columns:38px 1fr;column-gap:11px;align-items:center;min-height:78px;padding:12px;border:1px solid rgba(186,192,201,.22);border-radius:13px;background:linear-gradient(120deg,rgba(30,32,35,.88),rgba(17,18,20,.86));color:var(--text);text-align:left;transition:border-color .18s,transform .18s,background .18s}.hero-shortcut>span{grid-row:span 2;display:grid;place-items:center;width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.06);color:#F0E5D8;font:600 11px var(--orbit-font)}.hero-shortcut strong{font-size:12px;line-height:1.2}.hero-shortcut small{margin-top:4px;color:#AEA8A1;font-size:10px;line-height:1.25}.hero-shortcut:hover{border-color:rgba(197,139,78,.7);background:rgba(54,36,27,.74);transform:translateY(-1px)}
+.chat{border-radius:18px;background:linear-gradient(135deg,rgba(18,19,21,.96),rgba(10,11,13,.98))}.chat-head{min-height:54px;padding:10px 15px}.messages{padding:16px;gap:10px}.message{font-size:13px}.chat .message.avi{background:rgba(43,37,33,.82)}#chatForm{margin:0 12px 12px;width:auto;padding:9px;border:1px solid rgba(184,191,201,.33);border-radius:15px;background:rgba(11,12,14,.84)}#chatForm input{min-height:48px;background:transparent;border-color:transparent;box-shadow:none!important}#chatForm input:focus{border-color:transparent!important;box-shadow:none!important}#chatForm .mic,#chatForm .send{width:48px;height:48px;flex-basis:48px}.chat-tools .private-label{display:block}
+@media(max-width:1100px){.auth-gate{grid-template-columns:minmax(0,1fr) minmax(360px,.85fr)}.workspace{grid-template-columns:205px minmax(0,1fr)}.welcome-copy{right:4%;width:46%}.hero-shortcuts{right:3%;width:55%}.home-portrait{left:-1%;width:51%}}
+@media(max-width:880px){.auth-gate{display:block;padding:12px}.auth-showcase{display:none}.auth-gate .auth-card{min-height:0;margin:min(8dvh,60px) auto;padding:27px}.workspace{display:block}.sidebar .section-label,.sidebar-bottom,.side-new-chat,.history-caption{display:none}.main{display:grid;grid-template-rows:minmax(270px,46dvh) minmax(0,1fr);gap:8px}.welcome{min-height:0}.welcome-copy{top:13%;right:5%;width:48%}.welcome h1{font-size:clamp(22px,5.1vw,31px)}.intro{font-size:11px}.home-portrait{left:-12%;width:62%;height:95%}.hero-shortcuts{right:4%;bottom:14px;width:54%;gap:6px}.hero-shortcut{grid-template-columns:27px 1fr;column-gap:6px;min-height:51px;padding:7px}.hero-shortcut>span{grid-row:span 2;width:27px;height:27px;border-radius:8px;font-size:7px}.hero-shortcut strong{font-size:8px}.hero-shortcut small{margin-top:2px;font-size:7px}.core-wrap{display:none}.chat-head{min-height:47px}.chat-identity strong{font-size:8px}#chatForm{margin:0 7px 7px}.side-new-chat{display:none}}
+@media(max-width:520px){.auth-gate .auth-card{margin:18px auto;padding:23px}.auth-showcase-brand{font-size:38px}.welcome-copy{right:4%;top:11%;width:52%}.welcome h1{font-size:21px}.welcome .overline{font-size:6px}.intro{display:none}.hero-actions{display:none}.home-portrait{left:-19%;width:73%}.hero-shortcuts{right:3%;bottom:10px;width:57%;grid-template-columns:1fr;gap:4px}.hero-shortcut{min-height:38px;padding:5px;grid-template-columns:23px 1fr}.hero-shortcut>span{width:23px;height:23px;font-size:6px}.hero-shortcut small{display:none}.hero-shortcut strong{font-size:8px}.main{grid-template-rows:minmax(235px,41dvh) minmax(0,1fr)}}
+/* Keeps the supplied image-led composition above the shared premium theme. */
+.auth-gate{grid-template-columns:minmax(0,1.08fr) minmax(390px,.92fr)!important;place-items:stretch!important;gap:22px!important;padding:18px!important}
+.auth-gate .auth-card{align-self:center!important;justify-self:center!important;width:min(100%,440px)!important;margin:0!important}
+.welcome{display:block!important;min-height:420px!important;padding:0!important}
+.workspace{grid-template-columns:235px minmax(0,1fr)!important;gap:12px!important}.rightbar{display:none!important}
+.main{grid-template-rows:minmax(420px,.98fr) minmax(330px,.75fr)!important;gap:12px!important}.welcome-copy{position:absolute!important;top:17%!important;right:6%!important;width:min(43%,480px)!important;max-width:none!important}.hero-shortcuts{position:absolute!important;right:4%!important;bottom:22px!important;width:min(53%,650px)!important}.home-portrait{position:absolute!important;z-index:1!important;bottom:-2px!important;left:3%!important;width:min(50%,560px)!important;height:95%!important;object-fit:contain!important}.core-wrap{position:absolute!important;right:18px!important;top:18px!important}
+@media(max-width:880px){.auth-gate{display:block!important;padding:12px!important}.auth-showcase{display:none!important}.auth-gate .auth-card{min-height:0!important;margin:min(8dvh,60px) auto!important;padding:27px!important}.workspace{display:block!important}.main{grid-template-rows:minmax(270px,46dvh) minmax(0,1fr)!important;gap:8px!important}.welcome{min-height:0!important}.welcome-copy{top:13%!important;right:5%!important;width:48%!important}.home-portrait{left:-12%!important;width:62%!important;height:95%!important}.hero-shortcuts{right:4%!important;bottom:14px!important;width:54%!important}.core-wrap{display:none!important}}
+
 
 </style>
 <meta name="avi-ui-version" content="avi-calm-brand-voicefix-1">
 </head>
 <body>
 <section class="auth-gate" id="authGate" aria-label="Sign in to Avi">
+ <div class="auth-showcase" aria-hidden="true">
+  <div class="auth-showcase-brand">Avi<span>+</span><small>Your intelligent assistant</small></div>
+  <div class="auth-showcase-copy"><strong>Meet <em>Avi.</em></strong><span>Your intelligent<br>assistant.</span><small>Think. Plan. Ask. Anywhere.</small></div>
+ </div>
  <form class="auth-card" id="authForm">
   <div class="auth-brand">
    <span class="auth-brand-symbol" aria-hidden="true"><svg class="avi-mark" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15 10 11l2 18c1 13 8 22 20 26 12-4 19-13 20-26l2-18-8 4-14-6-14 6Z"/><path d="M23 30c2-3 5-3 7 0m4 0c2-3 5-3 7 0"/><path d="M26 40c4 3 8 3 12 0"/><path d="M32 17v6"/></svg></span>
@@ -469,7 +492,9 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 
  <div class="workspace">
   <aside class="sidebar glass-panel">
-   <div class="section-label">NAVIGATION</div>
+   <div class="section-label">CHAT HISTORY</div>
+   <button class="side-new-chat" type="button" id="sideClear"><span aria-hidden="true">+</span> New chat</button>
+   <div class="history-caption"><span>START HERE</span><small>History list coming soon</small></div>
    <nav class="nav" aria-label="Avi navigation">
     <button class="navbutton active" type="button" data-view="home"><span class="navicon" aria-hidden="true">⌂</span><span>Home</span></button>
     <button class="navbutton" type="button" data-view="ideas"><span class="navicon" aria-hidden="true">✳</span><span>Ideas</span></button>
@@ -490,7 +515,14 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
       <button class="hero-prompt" type="button" data-prompt="Help me plan my day and choose my top priorities."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 14.5 9.5 21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z"/></svg>Plan my day</button>
       <button class="hero-prompt" type="button" data-prompt="Help me think through an idea and turn it into a plan."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 22h4M8.5 14.5A7 7 0 1 1 15.5 14.5c-.8.5-1.3 1.4-1.5 2.5h-4c-.2-1.1-.7-2-1.5-2.5Z"/></svg>Explore an idea</button>
      </div>
+     <div class="hero-shortcuts" aria-label="Quick starts">
+      <button class="hero-shortcut" type="button" data-prompt="I will paste text next. Help me summarize it into key points."><span aria-hidden="true">[=]</span><strong>Summarize text</strong><small>Get key points quickly</small></button>
+      <button class="hero-shortcut" type="button" data-prompt="Help me write, debug, or explain some code."><span aria-hidden="true">&lt;/&gt;</span><strong>Help me write code</strong><small>Debug, explain or generate</small></button>
+      <button class="hero-shortcut" type="button" data-prompt="Help me plan my day and choose my top priorities."><span aria-hidden="true">[ ]</span><strong>Plan my day</strong><small>Tasks, schedules and ideas</small></button>
+      <button class="hero-shortcut" type="button" data-prompt="Explain a concept in simple words, then help me go deeper."><span aria-hidden="true">*</span><strong>Explain a concept</strong><small>In simple words</small></button>
+     </div>
     </div>
+    <img class="home-portrait" src="./assets/avi-home-portrait.png" alt="">
     <div class="core-wrap" aria-label="Avi status">
      <div class="orb-stage">
       <div class="orb-rings" aria-hidden="true"></div>
@@ -512,7 +544,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
     </div>
     <div class="messages" id="messages" aria-live="polite" aria-relevant="additions text"><div class="message avi">Hey, I'm Avi. 💠 What's on your mind?</div></div>
     <form id="chatForm">
-     <input id="chatInput" type="text" placeholder="Message Avi..." autocomplete="off" aria-label="Message Avi" required>
+     <input id="chatInput" type="text" placeholder="Ask Avi anything..." autocomplete="off" aria-label="Message Avi" required>
      <button class="mic" id="micButton" type="button" aria-label="Talk to Avi" title="Start live voice"></button>
      <button class="send" id="sendButton" type="submit" aria-label="Send message" title="Send message"></button>
     </form>
@@ -1280,7 +1312,9 @@ if (
 <script>
 /* Small UI behaviors; these do not change the AI request logic. */
 const clearTop = document.getElementById("topClear");
+const clearSide = document.getElementById("sideClear");
 if (clearTop) clearTop.addEventListener("click", () => document.getElementById("clearChat").click());
+if (clearSide) clearSide.addEventListener("click", () => document.getElementById("clearChat").click());
 document.querySelectorAll(".navbutton").forEach(button => {
  button.addEventListener("click", () => {
   document.querySelectorAll(".navbutton").forEach(item => item.classList.remove("active"));
