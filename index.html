@@ -727,13 +727,26 @@ let aviAuthMode = "signin";
 let aviSession = null;
 let aviMemorySyncReady = false;
 authModeToggle.addEventListener("click", () => {
- aviAuthMode = aviAuthMode === "signin" ? "signup" : "signin";
- authHeading.textContent = aviAuthMode === "signin" ? "Welcome back." : "Create your Avi account.";
- authDescription.textContent = aviAuthMode === "signin" ? "Sign in to sync your personal memories across your devices." : "Create an account to keep your personal memories private and synced.";
- authSubmit.textContent = aviAuthMode === "signin" ? "Sign in" : "Create account";
- authModeToggle.textContent = aviAuthMode === "signin" ? "Create account" : "Back to sign in";
- authPassword.autocomplete = aviAuthMode === "signin" ? "current-password" : "new-password";
- authStatus.textContent = "";
+ if (aviAuthMode === "signin") {
+  // Make the visible "Create account" action actually start account creation,
+  // instead of requiring a confusing second click on another button.
+  aviAuthMode = "signup";
+  authHeading.textContent = "Create your Avi account.";
+  authDescription.textContent = "Create an account to keep your personal memories private and synced.";
+  authSubmit.textContent = "Create account";
+  authModeToggle.textContent = "Back to sign in";
+  authPassword.autocomplete = "new-password";
+  authStatus.textContent = "";
+  authForm.requestSubmit();
+ } else {
+  aviAuthMode = "signin";
+  authHeading.textContent = "Welcome back.";
+  authDescription.textContent = "Sign in to sync your personal memories across your devices.";
+  authSubmit.textContent = "Sign in";
+  authModeToggle.textContent = "Create account";
+  authPassword.autocomplete = "current-password";
+  authStatus.textContent = "";
+ }
 });
 authForm.addEventListener("submit", async event => {
  event.preventDefault();
