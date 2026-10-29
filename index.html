@@ -930,7 +930,7 @@ async function aviApplySession(session) {
   return;
  }
  authGate.hidden = true;
- accountChip.hidden = false; accountChip.textContent = session.user.email || "Signed in";
+ accountChip.hidden = false; accountChip.querySelector(".profile-email").textContent = session.user.email || "Signed in";
  signOutAvi.hidden = false;
  try {
   const result = await aviAuthClient.from("avi_personal_memories").select("memory").eq("user_id",session.user.id).order("created_at",{ascending:true});
@@ -985,6 +985,20 @@ async function deleteCloudMemories(memories) {
  if (result.error) throw result.error;
 }
 signOutAvi.addEventListener("click", async () => { if (aviAuthClient) await aviAuthClient.auth.signOut(); });
+document.getElementById("homeAvi").addEventListener("click", () => {
+ const overview = document.querySelector('[data-view="home"]');
+ if (overview) overview.click();
+ window.scrollTo({top:0,behavior:"smooth"});
+});
+accountChip.addEventListener("click", () => {
+ if (!aviSession) {
+  document.getElementById("authGate").hidden = false;
+ } else {
+  const menuOpen = accountChip.getAttribute("aria-expanded") === "true";
+  accountChip.setAttribute("aria-expanded", String(!menuOpen));
+  signOutAvi.hidden = menuOpen;
+ }
+});
 if (aviAuthClient) {
  aviAuthClient.auth.onAuthStateChange((_event,session) => { aviApplySession(session); });
  aviAuthClient.auth.getSession().then(({data,error}) => {
@@ -1247,7 +1261,7 @@ async function sendMessage(text) {
       };
       window.speechSynthesis.speak(utterance);
     }
-    connectionStatus.textContent = "AI connected";
+    connectionStatus.querySelector(".connection-text").textContent = "AI connected";
     connectionStatus.style.color = "#a6f2cf";
   } catch (error) {
     console.error("Avi connection error:", error);
@@ -1255,7 +1269,7 @@ async function sendMessage(text) {
     loadingMessage.textContent =
       "Sorry, I couldn't connect to my AI service. Please check the Supabase URL, publishable key, Edge Function deployment, and function logs.";
 
-    connectionStatus.textContent = "Connection issue";
+    connectionStatus.querySelector(".connection-text").textContent = "Connection issue";
     connectionStatus.style.color = "#ffb0b0";
   } finally {
     mainOrb.classList.remove("thinking", "listening");
@@ -1544,10 +1558,10 @@ if (
   SUPABASE_FUNCTION_URL === "https://fbtrcquparflbzuaixuo.supabase.co/functions/v1/avi-chat" &&
   SUPABASE_PUBLISHABLE_KEY.startsWith("sb_publishable_")
 ) {
-  connectionStatus.textContent = "Ready to connect";
+  connectionStatus.querySelector(".connection-text").textContent = "Ready to connect";
   connectionStatus.style.color = "#a6f2cf";
 } else {
-  connectionStatus.textContent = "Setup required";
+  connectionStatus.querySelector(".connection-text").textContent = "Setup required";
   connectionStatus.style.color = "#ffd28a";
 }
 
