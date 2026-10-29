@@ -7,202 +7,20 @@
 
 <style>
 *{box-sizing:border-box}
-
-body{
-  margin:0;
-  min-height:100vh;
-  background:radial-gradient(ellipse at top,#22204b,#080b18 60%);
-  color:#f4f5ff;
-  font-family:Arial,sans-serif
-}
-
-.app{max-width:800px;margin:auto;padding:24px 16px}
-
-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:38px
-}
-
-.brand{display:flex;align-items:center;gap:12px}
-
-.logo{
-  width:44px;height:44px;border-radius:50%;
-  display:grid;place-items:center;
-  font-size:23px;font-weight:bold;
-  background:linear-gradient(135deg,#6d8dff,#a66bff);
-  box-shadow:0 0 25px #8a65ff80
-}
-
-.muted{color:#a3accb;font-size:13px}
-.status{color:#a6f2cf;font-size:12px}
-
-.hero{text-align:center;margin-bottom:30px}
-
-.orb{
-  width:120px;height:120px;border-radius:50%;
-  margin:0 auto 24px;
-  display:grid;place-items:center;
-  font-size:56px;font-weight:bold;
-  background:
-    radial-gradient(circle at 30% 25%,#c1d0ff,transparent 30%),
-    linear-gradient(140deg,#568dff,#8861ff,#d18bff);
-  box-shadow:0 0 45px #6d8dff80;
-  animation:float 4s ease-in-out infinite
-}
-
-@keyframes float{
-  50%{transform:translateY(-8px)}
-}
-
-h1{font-size:clamp(32px,7vw,48px);margin:0}
-
-.gradient{
-  background:linear-gradient(90deg,#7da9ff,#c19aff);
-  color:#a8a9ff;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent
-}
-
-.subtitle{
-  color:#a3accb;
-  line-height:1.7;
-  max-width:480px;
-  margin:14px auto 0
-}
-
-.label{
-  font-size:12px;color:#a3accb;
-  letter-spacing:1.5px;
-  margin:25px 0 12px
-}
-
-.cards{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin-bottom:22px
-}
-
-.card{
-  background:#151b31;color:#f4f5ff;
-  border:1px solid #ffffff18;
-  border-radius:14px;padding:15px;
-  text-align:left;cursor:pointer
-}
-
-.card:hover{border-color:#a66bff}
-.card strong,.card small{display:block}
-.card strong{margin:8px 0}
-.card small{color:#a3accb;line-height:1.5}
-
-.chat{
-  border:1px solid #ffffff20;
-  border-radius:18px;
-  background:#101528;
-  overflow:hidden
-}
-
-.chathead{
-  padding:16px;
-  border-bottom:1px solid #ffffff18
-}
-
-.messages{
-  min-height:180px;
-  max-height:340px;
-  overflow-y:auto;
-  padding:16px;
-  display:flex;
-  flex-direction:column;
-  gap:12px
-}
-
-.message{
-  padding:12px 14px;
-  border-radius:14px;
-  max-width:88%;
-  font-size:14px;
-  line-height:1.6;
-  white-space:pre-wrap;
-  overflow-wrap:anywhere
-}
-
-.avi{align-self:flex-start;background:#1b223a}
-.user{align-self:flex-end;background:linear-gradient(135deg,#405fca,#7951cb)}
-
-form{
-  display:flex;
-  gap:8px;
-  padding:12px;
-  border-top:1px solid #ffffff18
-}
-
-input{
-  min-width:0;
-  flex:1;
-  padding:13px;
-  border:1px solid #ffffff20;
-  border-radius:11px;
-  background:#080c19;
-  color:white;
-  font-size:15px
-}
-
-button{font:inherit}
-
-.send,.mic{
-  padding:12px 15px;
-  border:0;
-  border-radius:11px;
-  color:white;
-  background:linear-gradient(135deg,#547fff,#9259e9);
-  cursor:pointer
-}
-
-.mic{
-  display:block;
-  width:calc(100% - 24px);
-  margin:0 12px 12px;
-  background:#252044;
-  border:1px solid #8e80ff55
-}
-
-.mic.listening{background:#642e51}
-
-button:disabled{opacity:.5;cursor:not-allowed}
-
-.hint{
-  text-align:center;
-  color:#a3accb;
-  font-size:12px;
-  padding:0 12px 16px;
-  line-height:1.6
-}
-
-.tribute{
-  text-align:center;
-  margin:28px 0 12px;
-  color:#d0ccff;
-  font-size:13px
-}
-
-.foot{
-  text-align:center;
-  color:#8993b1;
-  font-size:11px;
-  line-height:1.6
-}
-
-@media(max-width:540px){
-  .cards{grid-template-columns:1fr}
-  .card{display:flex;align-items:center;gap:12px}
-  .card strong{margin:0 0 5px}
-  form{flex-wrap:wrap}
-  input{flex-basis:100%}
-  .send{flex:1}
-}
+:root{--bg:#080b17;--line:rgba(139,157,255,.18);--text:#f5f6ff;--muted:#9ba8ca}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -10%,#20295b 0%,#0d1228 38%,#070a14 78%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background-image:linear-gradient(rgba(111,143,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(111,143,255,.08) 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(to bottom,black,transparent 80%)}
+.app{position:relative;max-width:1320px;margin:auto;padding:24px clamp(16px,3vw,42px) 32px}
+header{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:15px 20px;border:1px solid var(--line);border-radius:20px;background:rgba(13,18,38,.72);backdrop-filter:blur(18px);box-shadow:0 12px 45px #0003;margin-bottom:26px}
+.brand{display:flex;align-items:center;gap:13px}.logo{width:48px;height:48px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(145deg,#1b6075,#5543a5 68%,#8c69ed);border:1px solid #83eaff6b;box-shadow:0 0 25px #43d9f43b;overflow:hidden}.logo svg{width:34px;height:34px;filter:drop-shadow(0 0 5px #70f1ff77)}.brandname{font-size:21px;letter-spacing:.3px;font-weight:750}.muted{color:var(--muted);font-size:12px;margin-top:3px}.header-right{display:flex;align-items:center;gap:12px}.status{color:#a6f2cf;font-size:12px;padding:9px 12px;border:1px solid #7ee6c52a;border-radius:999px;background:#173c3830;white-space:nowrap}.status:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:currentColor;margin-right:7px;box-shadow:0 0 10px currentColor}
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr) 230px;gap:18px;align-items:start}.sidepanel,.rightpanel,.hero,.chat,.card{border:1px solid var(--line);background:linear-gradient(145deg,rgba(22,29,57,.82),rgba(12,17,35,.88));backdrop-filter:blur(18px);box-shadow:0 18px 55px #0002}.sidepanel,.rightpanel{border-radius:20px;padding:17px;min-width:0}.eyebrow,.label{font-size:10px;color:#6de7f1;letter-spacing:1.8px;font-weight:800}.eyebrow{margin:3px 0 15px}.navitem{display:flex;align-items:center;gap:10px;padding:11px 10px;margin:5px 0;border-radius:12px;color:#aab5d5;font-size:12px}.navitem.active{color:#f7f8ff;background:linear-gradient(100deg,#3d7ce52e,#9066ff20);border:1px solid #758cff38}.navicon{width:25px;height:25px;border-radius:8px;display:grid;place-items:center;background:#a2b3ff13;color:#77e7f5;font-size:14px}.side-note{margin-top:22px;padding:13px;border:1px solid #d5a96e2b;border-radius:14px;background:#c2923810}.side-note strong{font-size:11px;color:#f0c990}.side-note p{font-size:11px;color:var(--muted);line-height:1.6;margin:7px 0 0}
+.center{min-width:0}.hero{text-align:center;border-radius:24px;padding:28px 20px 24px;position:relative;overflow:hidden}.hero:before{content:"";position:absolute;width:340px;height:200px;border-radius:50%;background:#5c62ff1c;filter:blur(65px);left:50%;top:10px;transform:translateX(-50%);pointer-events:none}.hero>*{position:relative}.orb{width:112px;height:112px;border-radius:50%;margin:0 auto 18px;display:grid;place-items:center;position:relative;background:radial-gradient(circle at 30% 20%,#c5f8ff 0%,#5ee5f4 8%,#3e74df 38%,#7452e9 68%,#b17cff 100%);box-shadow:0 0 0 8px #70bfff09,0 0 40px #4e9dff57,inset -9px -12px 25px #1a2469a8;animation:float 5s ease-in-out infinite}.orb:before,.orb:after{content:"";position:absolute;inset:-12px;border-radius:50%;border:1px solid #55e7f55c;animation:orbit 10s linear infinite}.orb:after{inset:-21px;border-color:#a47cff45;animation-duration:15s;animation-direction:reverse}.orb svg{width:67px;height:67px;filter:drop-shadow(0 0 8px #e0fbff5e)}@keyframes float{50%{transform:translateY(-7px)}}@keyframes orbit{to{transform:rotate(360deg)}}h1{font-size:clamp(28px,4vw,43px);line-height:1.13;letter-spacing:-1.5px;margin:0}.gradient{background:linear-gradient(90deg,#68eaf4,#879bff 48%,#c38cff);-webkit-background-clip:text;background-clip:text;color:transparent}.subtitle{color:#a6b1d0;line-height:1.7;max-width:540px;margin:12px auto 0;font-size:13px}.quickline{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:18px}.pill{border:1px solid #8ba5ff25;background:#111a35;border-radius:999px;padding:7px 10px;color:#b7c6e8;font-size:10px}
+.label{margin:20px 2px 11px}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:16px}.card{color:var(--text);border-radius:16px;padding:14px;text-align:left;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;min-width:0}.card:hover{transform:translateY(-3px);border-color:#66dce7a1;box-shadow:0 10px 28px #1a91ad1a}.card .symbol{width:33px;height:33px;border-radius:11px;display:grid;place-items:center;color:#6ce7f3;background:linear-gradient(135deg,#55e7f51c,#9273ff26);font-size:17px}.card strong,.card small{display:block}.card strong{font-size:12px;margin:10px 0 5px}.card small{color:var(--muted);line-height:1.5;font-size:10px}
+.chat{border-radius:22px;overflow:hidden}.chathead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px;border-bottom:1px solid var(--line);background:#151c36a6}.chat-title{display:flex;align-items:center;gap:10px}.mini-orb{width:30px;height:30px;display:grid;place-items:center;border-radius:10px;background:linear-gradient(140deg,#5ce5f2,#8067f7);color:#071326;font-weight:900;font-size:12px;box-shadow:0 0 18px #5ce5f22e}.chat-title strong{font-size:13px}.chat-head-right{font-size:10px;color:#79e9d1}.messages{min-height:175px;max-height:340px;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}.message{padding:12px 14px;border-radius:15px;max-width:88%;font-size:13px;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}.avi{align-self:flex-start;background:linear-gradient(135deg,#202b4a,#1a223c);border:1px solid #92a8ff18;border-bottom-left-radius:5px}.user{align-self:flex-end;background:linear-gradient(135deg,#356cc7,#7651ce);border:1px solid #a6b3ff2c;border-bottom-right-radius:5px}
+form{display:flex;gap:9px;padding:12px;border-top:1px solid var(--line)}input{min-width:0;flex:1;padding:14px 15px;border:1px solid #8fa7ff35;border-radius:13px;background:#080d1c;color:white;font-size:14px;outline:none}input:focus{border-color:#65e5f2;box-shadow:0 0 0 3px #65e5f214}button{font:inherit}.send,.mic{padding:12px 17px;border:1px solid #7b91ff44;border-radius:12px;color:white;background:linear-gradient(135deg,#477ff0,#8559e7);cursor:pointer;transition:filter .2s,transform .2s}.send:hover,.mic:hover{filter:brightness(1.13)}.mic{display:block;width:calc(100% - 24px);margin:0 12px 10px;background:linear-gradient(110deg,#132a45,#27204d);border-color:#56dfea4d}.mic.listening{background:linear-gradient(110deg,#6a294e,#34204f);animation:pulse 1.2s infinite}@keyframes pulse{50%{box-shadow:0 0 0 5px #bb6af022}}button:disabled{opacity:.5;cursor:not-allowed}.hint{text-align:center;color:var(--muted);font-size:11px;padding:0 12px 15px;line-height:1.6}
+.rightpanel .statbox{padding:12px 0;border-bottom:1px solid #899bff19}.rightpanel .statbox:last-child{border-bottom:0}.statlabel{font-size:10px;color:var(--muted);margin-bottom:6px}.statvalue{font-size:12px;color:#edf1ff}.memory-orb{width:88px;height:88px;border-radius:50%;margin:12px auto 15px;background:radial-gradient(circle at 35% 25%,#a3fbff,#3985d9 36%,#5d43bc 68%,#151b3d);box-shadow:0 0 30px #4bbde94a;position:relative;animation:float 5s ease-in-out infinite}.memory-orb:after{content:"";position:absolute;inset:-7px;border:1px solid #56e4f447;border-radius:50%;transform:rotateX(65deg) rotate(-20deg)}.right-note{font-size:11px;color:#aab6d7;line-height:1.65;text-align:center}.tribute{text-align:center;margin:24px 0 10px;color:#d4ccff;font-size:12px}.foot{text-align:center;color:#7784a7;font-size:10px;line-height:1.6}
+@media(max-width:1050px){.layout{grid-template-columns:190px minmax(0,1fr)}.rightpanel{display:none}}@media(max-width:700px){.app{padding:13px 11px 24px}header{padding:12px 13px;margin-bottom:15px;border-radius:16px}.brandname{font-size:18px}.logo{width:42px;height:42px}.layout{display:block}.sidepanel{display:none}.hero{padding:26px 14px 22px}.orb{width:90px;height:90px}.orb svg{width:55px;height:55px}h1{font-size:31px}.subtitle{font-size:12px}.cards{grid-template-columns:1fr;gap:8px}.card{display:flex;align-items:center;gap:12px;padding:12px}.card strong{margin:0 0 4px}.card .symbol{flex-shrink:0}.card small{font-size:10px}.label{margin-top:16px}.messages{min-height:160px;padding:13px}.message{max-width:94%;font-size:12px}.status{font-size:10px;padding:8px}.muted{font-size:11px}.chathead{padding:13px}form{flex-wrap:wrap}input{flex-basis:100%}.send{flex:1}.quickline{margin-top:14px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important;transition:none!important}}
 </style>
 </head>
 
@@ -211,29 +29,41 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
 <header>
   <div class="brand">
-    <div class="logo">A</div>
+    <div class="logo" aria-label="Avi Rottweiler-inspired emblem"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M12 14 25 21 32 17 39 21 52 14 50 35 44 47 32 54 20 47 14 35 12 14Z" fill="#101a38" stroke="#c5f8ff" stroke-width="2.2" stroke-linejoin="round"/><path d="M17 20 25 26 28 34 22 38 17 32ZM47 20 39 26 36 34 42 38 47 32Z" fill="#d5a36d"/><path d="M25 37 32 33 39 37 37 45 32 48 27 45Z" fill="#f4f7ff"/><path d="M28 40 32 42 36 40" stroke="#101a38" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="32" r="2" fill="#76f0f7"/><circle cx="40" cy="32" r="2" fill="#76f0f7"/></svg></div>
     <div>
-      <strong style="font-size:22px">Avi</strong>
+      <strong class="brandname">Avi</strong>
       <div class="muted">Your personal companion</div>
     </div>
   </div>
-  <div class="status" id="connectionStatus">● Connecting...</div>
+  <div class="header-right"><div class="status" id="connectionStatus">Connecting...</div></div>
 </header>
 
+<div class="layout">
+<aside class="sidepanel">
+  <div class="eyebrow">YOUR SPACE</div>
+  <div class="navitem active"><span class="navicon">⌂</span> Home base</div>
+  <div class="navitem"><span class="navicon">✧</span> Ideas & thinking</div>
+  <div class="navitem"><span class="navicon">◷</span> Daily focus</div>
+  <div class="navitem"><span class="navicon">⌘</span> Learning lab</div>
+  <div class="navitem"><span class="navicon">♡</span> Memories</div>
+  <div class="side-note"><strong>✦ Built with loyalty</strong><p>A little Rottweiler spirit. A lot of curiosity. Always your companion.</p></div>
+</aside>
+<div class="center">
 <section class="hero">
-  <div class="orb">A</div>
+  <div class="orb"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M12 14 25 21 32 17 39 21 52 14 50 35 44 47 32 54 20 47 14 35 12 14Z" fill="#101a38" stroke="#d9fbff" stroke-width="2.1" stroke-linejoin="round"/><path d="M17 20 25 26 28 34 22 38 17 32ZM47 20 39 26 36 34 42 38 47 32Z" fill="#d6a16c"/><path d="M25 37 32 33 39 37 37 45 32 48 27 45Z" fill="#f4f7ff"/><path d="M28 40 32 42 36 40" stroke="#101a38" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="32" r="2" fill="#76f0f7"/><circle cx="40" cy="32" r="2" fill="#76f0f7"/></svg></div>
   <h1>Your world, <span class="gradient">with Avi.</span></h1>
   <p class="subtitle">
     Your ideas, your projects, your world. A personal space to think,
     explore, and build what's next.
   </p>
+  <div class="quickline"><span class="pill">✦ Personal AI</span><span class="pill">◉ Voice ready</span><span class="pill">🐾 Loyal by design</span></div>
 </section>
 
-<div class="label">WHAT WOULD YOU LIKE TO DO?</div>
+<div class="label">PICK A STARTING POINT</div>
 
 <section class="cards">
   <button class="card" data-prompt="Help me organize my tasks">
-    <span>✦</span>
+    <span class="symbol">✦</span>
     <div>
       <strong>Organize my day</strong>
       <small>Plan tasks and priorities</small>
@@ -241,7 +71,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
   </button>
 
   <button class="card" data-prompt="Help me brainstorm a new project">
-    <span>⌘</span>
+    <span class="symbol">⌘</span>
     <div>
       <strong>Explore an idea</strong>
       <small>Think through something new</small>
@@ -249,7 +79,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
   </button>
 
   <button class="card" data-prompt="Help me with my learning">
-    <span>◇</span>
+    <span class="symbol">◇</span>
     <div>
       <strong>Learn something</strong>
       <small>Practice and improve</small>
@@ -259,8 +89,8 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
 <section class="chat">
   <div class="chathead">
-    <strong>Avi</strong>
-    <div class="muted" id="chatStatus">Ready to chat</div>
+    <div class="chat-title"><span class="mini-orb">A</span><div><strong>Avi chat</strong><div class="muted" id="chatStatus">Ready to chat</div></div></div>
+    <div class="chat-head-right">● PRIVATE SPACE</div>
   </div>
 
   <div class="messages" id="messages" aria-live="polite">
@@ -287,6 +117,17 @@ button:disabled{opacity:.5;cursor:not-allowed}
     Allow microphone access if your browser asks.
   </div>
 </section>
+</div>
+<aside class="rightpanel">
+  <div class="eyebrow">AVI CORE</div>
+  <div class="memory-orb"></div>
+  <div class="right-note">Your companion is ready when you are.</div>
+  <div class="statbox"><div class="statlabel">CONVERSATION</div><div class="statvalue">Thoughtful, focused, yours</div></div>
+  <div class="statbox"><div class="statlabel">VOICE INPUT</div><div class="statvalue">Browser microphone</div></div>
+  <div class="statbox"><div class="statlabel">DESIGN DNA</div><div class="statvalue">Neon • Calm • Loyal</div></div>
+  <div class="statbox"><div class="statlabel">INSPIRATION</div><div class="statvalue">A subtle Rottweiler emblem 🐾</div></div>
+</aside>
+</div>
 
 <div class="tribute">🐾 Forever remembered, Avicii ❤️</div>
 
@@ -309,7 +150,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 */
 
 const SUPABASE_FUNCTION_URL =
-  "https://fbtrcquparflbzuaxiuo.supabase.co/functions/v1/avi-chat";
+  "https://fbtrcquparflbzuaixuo.supabase.co/functions/v1/avi-chat";
 
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_NOTL9-6RF_nww1wYPhHBzQ_ULiLUXsP";
@@ -338,13 +179,13 @@ function addMessage(text, who) {
 
 async function respondToText(text) {
   const response = await fetch(
-    "https://fbtrcquparflbzuaixuo.supabase.co/functions/v1/avi-chat",
+    SUPABASE_FUNCTION_URL,
     {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "apikey": "sb_publishable_NOTL9-6RF_nww1wYPhHBzQ_ULiLUXsP",
-        "Authorization": "Bearer sb_publishable_NOTL9-6RF_nww1wYPhHBzQ_ULiLUXsP"
+        "apikey": SUPABASE_PUBLISHABLE_KEY,
+        "Authorization": "Bearer " + SUPABASE_PUBLISHABLE_KEY
       },
       body: JSON.stringify({ message: text })
     }
@@ -389,7 +230,7 @@ async function sendMessage(text) {
   utterance.lang = "en-US";
   window.speechSynthesis.speak(utterance);
 }
-    connectionStatus.textContent = "● AI connected";
+    connectionStatus.textContent = "AI connected";
     connectionStatus.style.color = "#a6f2cf";
   } catch (error) {
     console.error("Avi connection error:", error);
@@ -397,7 +238,7 @@ async function sendMessage(text) {
     loadingMessage.textContent =
       "Sorry, I couldn't connect to my AI service. Please check the Supabase URL, publishable key, Edge Function deployment, and function logs.";
 
-    connectionStatus.textContent = "● Connection issue";
+    connectionStatus.textContent = "Connection issue";
     connectionStatus.style.color = "#ffb0b0";
   } finally {
     sendButton.disabled = false;
@@ -487,13 +328,12 @@ if (SpeechRecognition) {
 // Initial status: this checks configuration only, not actual connectivity.
 if (
   SUPABASE_FUNCTION_URL === "https://fbtrcquparflbzuaixuo.supabase.co/functions/v1/avi-chat" &&
-  SUPABASE_PUBLISHABLE_KEY !== "sb_publishable_NOTL9-6RF_nww1wYPhHBzQ_ULiLUXsP" &&
-  !SUPABASE_PUBLISHABLE_KEY.includes("sb_publishable_NOTL9-6RF_nww1wYPhHBzQ_ULiLUXsP")
+  SUPABASE_PUBLISHABLE_KEY.startsWith("sb_publishable_")
 ) {
-  connectionStatus.textContent = "● Ready to connect";
+  connectionStatus.textContent = "Ready to connect";
   connectionStatus.style.color = "#a6f2cf";
 } else {
-  connectionStatus.textContent = "● Setup required";
+  connectionStatus.textContent = "Setup required";
   connectionStatus.style.color = "#ffd28a";
 }
 
