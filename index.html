@@ -483,6 +483,69 @@ button:hover{filter:brightness(1.12)}
 .voice-select{width:100%;background:#0b121a;color:var(--text);border:1px solid #344754;border-radius:9px;padding:10px;font:inherit;font-size:12px}
 .voice-settings-note{grid-column:2;margin:0}
 @media(max-width:760px){.voice-settings-button{font-size:10px;padding:8px}.voice-settings{grid-template-columns:1fr;gap:8px;padding:13px}.voice-settings-copy{grid-row:auto}.voice-settings-note{grid-column:1}}
+
+/* Minimal futuristic redesign: restrained Rottweiler-inspired mark, clean panels, soft motion. */
+:root{--bg:#090d14;--panel:#101722;--panel2:#121c29;--line:#202d3a;--text:#edf4f8;--muted:#8797a7;--cyan:#78dce8;--gold:#d2aa75;--green:#8ee1c0}
+html,body{background:var(--bg)}
+body{background:radial-gradient(ellipse at 52% 0%,#16283a 0%,#0a1018 48%,#090d14 82%);letter-spacing:.005em}
+.shell{max-width:1500px;padding:18px 22px;gap:14px}
+.topbar,.panel{background:rgba(15,22,32,.9);border-color:#24313f;box-shadow:0 12px 36px #00000014}
+.topbar{border-radius:14px;padding:11px 15px}
+.brandmark{width:38px;height:38px;border-radius:11px;background:#111d2a;border:1px solid #304653;box-shadow:none}
+.brandmark svg{width:31px;height:31px}
+.brandname{font-size:18px;letter-spacing:-.7px}
+.brandtag{font-size:10px;letter-spacing:.03em}
+.connection{background:#10231f;border-color:#23443c;color:#9ce7c9}
+.iconbutton,.voice-settings-button{background:#151f2b;border-color:#2a3947}
+.workspace{grid-template-columns:190px minmax(0,1fr) 220px;gap:13px}
+.panel{border-radius:13px}
+.sidebar,.rightbar{padding:14px 11px}
+.section-label{font-size:9px;letter-spacing:1.6px;color:#7f94a7}
+.navbutton{border:1px solid transparent;color:#aab8c7;padding:9px 10px;border-radius:9px;font-size:12px}
+.navbutton.active{background:#182b38;border-color:#294957;color:#e6fbff;box-shadow:inset 2px 0 #78dce8}
+.navicon{color:#8fb3c1;font-size:16px}
+.sidebar-bottom{background:#111b27;border:1px solid #233341;border-radius:11px;padding:12px}
+.sidebar-bottom p{line-height:1.55}
+.welcome{min-height:275px;padding:28px 28px 22px;position:relative;overflow:hidden;background:linear-gradient(120deg,#111c29 0%,#101722 60%,#121a2a 100%)}
+.welcome:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #78dce810;border-radius:50%;right:4%;top:-155px;pointer-events:none}
+.overline{color:#83dce8;letter-spacing:1.8px;font-size:9px}
+h1{font-size:clamp(28px,3vw,42px);letter-spacing:-1.7px;font-weight:650;line-height:1.12}
+h1 span{color:#9aaeff}
+.intro{max-width:500px;color:#a2b0bf;line-height:1.7;font-size:13px}
+.chips{gap:7px}
+.chip{border:1px solid #2a3a48;background:#121e2a;color:#a9c0cc;border-radius:7px;padding:6px 9px;font-size:9px}
+.core{width:126px;height:126px;background:radial-gradient(circle at 33% 24%,#273f58,#111a2b 56%,#0b121d 100%);border:1px solid #4b9eaf;box-shadow:0 0 0 7px #69d8e80a,0 0 30px #43c4e51d,inset 0 0 24px #56cfe51b;animation:coreDrift 6s ease-in-out infinite}
+.core svg{width:65px;height:65px;filter:none}
+.core-caption{font-size:8px;letter-spacing:2px;color:#83dce8;margin-top:15px}
+@keyframes coreDrift{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.core.thinking,.orb.thinking{animation:corePulse 1.25s ease-in-out infinite}
+@keyframes corePulse{50%{box-shadow:0 0 0 11px #69d8e80c,0 0 40px #43c4e54a,inset 0 0 28px #56cfe52b}}
+.chat{padding:0 17px 14px;background:rgba(13,19,28,.94)}
+.chat-head{padding:14px 0;border-bottom:1px solid #24313e}
+.tiny-mark{width:30px;height:30px;border-radius:9px;background:#142330;border:1px solid #2b4855}
+.tiny-mark svg{width:24px;height:24px}
+.chat-identity strong{font-size:12px}
+.chat-identity small{font-size:10px;color:#8b9cac}
+.private-label{font-size:8px;letter-spacing:1.4px;color:#8496a7}
+.clear-chat{background:#151f2b;border-color:#2b3b49;color:#b9c9d4;border-radius:8px}
+.messages{min-height:180px;max-height:330px;padding:19px 2px;gap:12px}
+.message{font-size:13px;line-height:1.65;border-radius:13px;padding:11px 14px;box-shadow:none}
+.message.avi{background:#172330;border:1px solid #243541;color:#e3edf3}
+.message.user{background:#27314b;border:1px solid #3c4c70;color:#f1f4ff}
+#chatForm{background:#0b1119;border:1px solid #2c3d4c;border-radius:12px;padding:6px 7px;gap:7px}
+#chatForm:focus-within{border-color:#4c8997;box-shadow:0 0 0 3px #78dce80c}
+#chatForm .mic{color:#9eb9c4}
+#chatForm .send{background:#b7eaf0;color:#0b1820;border-radius:9px}
+.mini-core{background:#111c28;border-color:#273744}
+.mini-core svg{width:40px;height:40px}
+.status-card,.memory-card,.quick-card{background:#111b27;border-color:#263744;border-radius:10px}
+.rightbar .section-label{margin-bottom:11px}
+.voice-settings{background:#101722;border-color:#263744}
+button:hover{filter:brightness(1.08)}
+@media(max-width:1050px){.workspace{grid-template-columns:165px minmax(0,1fr)}.rightbar{display:none}}
+@media(max-width:760px){.shell{padding:8px;gap:9px}.topbar{padding:9px 10px}.workspace,.main{min-height:calc(100vh - 70px)}.workspace{grid-template-columns:minmax(0,1fr)}.sidebar{display:none}.welcome{min-height:205px;padding:22px 16px 18px}.core{width:82px;height:82px}.core svg{width:47px;height:47px}.core-caption{font-size:7px;margin-top:10px}.intro{font-size:12px}.chips{display:none}.messages{min-height:170px;max-height:38vh}.private-label{display:none}.voice-settings-button{font-size:10px;padding:8px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+
 </style>
 </head>
 <body>
@@ -490,17 +553,11 @@ button:hover{filter:brightness(1.12)}
 <header class="topbar">
  <div class="brand">
   <div class="brandmark" aria-label="Avi emblem">
-  <svg viewBox="0 0 120 120" fill="none" aria-hidden="true">
-<defs><linearGradient id="fur" x1="18" y1="12" x2="96" y2="105" gradientUnits="userSpaceOnUse"><stop stop-color="#19d7ff"/><stop offset=".48" stop-color="#087acb"/><stop offset="1" stop-color="#03152c"/></linearGradient><linearGradient id="amber" x1="34" y1="44" x2="88" y2="78" gradientUnits="userSpaceOnUse"><stop stop-color="#ffe6a0"/><stop offset="1" stop-color="#ff8a25"/></linearGradient></defs>
-<path d="M31 29 13 12 16 43 29 59 39 45M89 29 107 12 104 43 91 59 81 45" fill="#07172c" stroke="url(#fur)" stroke-width="4" stroke-linejoin="round"/>
-<path d="M30 28 45 34 60 29 75 34 90 28 94 54Q91 84 60 103Q29 84 26 54Z" fill="#061426" stroke="url(#fur)" stroke-width="4" stroke-linejoin="round"/>
-<path d="M33 45 47 50 53 46M87 45 73 50 67 46" stroke="#18caff" stroke-width="4" stroke-linecap="round"/>
-<path d="M36 46 47 49 42 54 35 52ZM84 46 73 49 78 54 85 52Z" fill="#ffad3f"/>
-<path d="M39 61Q47 54 55 62M81 61Q73 54 65 62" stroke="#0b3555" stroke-width="3" stroke-linecap="round"/>
-<path d="M43 65Q60 57 77 65L72 76Q60 84 48 76Z" fill="#03101f" stroke="url(#amber)" stroke-width="3.5" stroke-linejoin="round"/>
-<path d="M47 89Q60 96 73 89M60 30V42" stroke="#16c8ff" stroke-width="2.5" stroke-linecap="round"/>
-<path d="M29 22 40 34M91 22 80 34M34 37 43 40M86 37 77 40" stroke="#75eaff" stroke-width="2" stroke-linecap="round"/>
-<path d="M20 64Q10 52 16 39M100 64Q110 52 104 39" stroke="#ffb64d" stroke-width="1.8" opacity=".9"/>
+  <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+<path d="M13 8 23 17 32 13 41 17 51 8 48 28 43 43 32 54 21 43 16 28 13 8Z" fill="#101c29" stroke="#70dce8" stroke-width="2" stroke-linejoin="round"/>
+<path d="M22 31 28 28 32 31 36 28 42 31" stroke="#e5f4f7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M24 38 32 35 40 38 36 43 28 43 24 38Z" fill="#8a9eff"/>
+<path d="M27 47 32 49 37 47" stroke="#70dce8" stroke-width="1.8" stroke-linecap="round"/>
 </svg>
   </div>
   <div><div class="brandname">avi<span style="color:#a5dce0">.</span></div><div class="brandtag">Your personal AI companion</div></div>
@@ -545,33 +602,21 @@ button:hover{filter:brightness(1.12)}
     <div class="chips"><span class="chip">✦ Personal AI</span><span class="chip">◉ Voice enabled</span><span class="chip">Made with meaning</span></div>
    </div>
    <div class="core-wrap"><div><div class="core orb" id="mainOrb" aria-label="Animated Avi AI core">
-    <svg viewBox="0 0 120 120" fill="none" aria-hidden="true">
-<defs><linearGradient id="fur" x1="18" y1="12" x2="96" y2="105" gradientUnits="userSpaceOnUse"><stop stop-color="#19d7ff"/><stop offset=".48" stop-color="#087acb"/><stop offset="1" stop-color="#03152c"/></linearGradient><linearGradient id="amber" x1="34" y1="44" x2="88" y2="78" gradientUnits="userSpaceOnUse"><stop stop-color="#ffe6a0"/><stop offset="1" stop-color="#ff8a25"/></linearGradient></defs>
-<path d="M31 29 13 12 16 43 29 59 39 45M89 29 107 12 104 43 91 59 81 45" fill="#07172c" stroke="url(#fur)" stroke-width="4" stroke-linejoin="round"/>
-<path d="M30 28 45 34 60 29 75 34 90 28 94 54Q91 84 60 103Q29 84 26 54Z" fill="#061426" stroke="url(#fur)" stroke-width="4" stroke-linejoin="round"/>
-<path d="M33 45 47 50 53 46M87 45 73 50 67 46" stroke="#18caff" stroke-width="4" stroke-linecap="round"/>
-<path d="M36 46 47 49 42 54 35 52ZM84 46 73 49 78 54 85 52Z" fill="#ffad3f"/>
-<path d="M39 61Q47 54 55 62M81 61Q73 54 65 62" stroke="#0b3555" stroke-width="3" stroke-linecap="round"/>
-<path d="M43 65Q60 57 77 65L72 76Q60 84 48 76Z" fill="#03101f" stroke="url(#amber)" stroke-width="3.5" stroke-linejoin="round"/>
-<path d="M47 89Q60 96 73 89M60 30V42" stroke="#16c8ff" stroke-width="2.5" stroke-linecap="round"/>
-<path d="M29 22 40 34M91 22 80 34M34 37 43 40M86 37 77 40" stroke="#75eaff" stroke-width="2" stroke-linecap="round"/>
-<path d="M20 64Q10 52 16 39M100 64Q110 52 104 39" stroke="#ffb64d" stroke-width="1.8" opacity=".9"/>
+    <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+<path d="M13 8 23 17 32 13 41 17 51 8 48 28 43 43 32 54 21 43 16 28 13 8Z" fill="#101c29" stroke="#70dce8" stroke-width="2" stroke-linejoin="round"/>
+<path d="M22 31 28 28 32 31 36 28 42 31" stroke="#e5f4f7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M24 38 32 35 40 38 36 43 28 43 24 38Z" fill="#8a9eff"/>
+<path d="M27 47 32 49 37 47" stroke="#70dce8" stroke-width="1.8" stroke-linecap="round"/>
 </svg>
    </div><div class="core-caption">AVI CORE · ONLINE</div></div></div>
   </section>
   <section class="panel chat">
    <div class="chat-head">
-    <div class="chat-identity"><div class="tiny-mark"><svg viewBox="0 0 120 120" fill="none" aria-hidden="true">
-<defs><linearGradient id="fur" x1="18" y1="12" x2="96" y2="105" gradientUnits="userSpaceOnUse"><stop stop-color="#19d7ff"/><stop offset=".48" stop-color="#087acb"/><stop offset="1" stop-color="#03152c"/></linearGradient><linearGradient id="amber" x1="34" y1="44" x2="88" y2="78" gradientUnits="userSpaceOnUse"><stop stop-color="#ffe6a0"/><stop offset="1" stop-color="#ff8a25"/></linearGradient></defs>
-<path d="M31 29 13 12 16 43 29 59 39 45M89 29 107 12 104 43 91 59 81 45" fill="#07172c" stroke="url(#fur)" stroke-width="4" stroke-linejoin="round"/>
-<path d="M30 28 45 34 60 29 75 34 90 28 94 54Q91 84 60 103Q29 84 26 54Z" fill="#061426" stroke="url(#fur)" stroke-width="4" stroke-linejoin="round"/>
-<path d="M33 45 47 50 53 46M87 45 73 50 67 46" stroke="#18caff" stroke-width="4" stroke-linecap="round"/>
-<path d="M36 46 47 49 42 54 35 52ZM84 46 73 49 78 54 85 52Z" fill="#ffad3f"/>
-<path d="M39 61Q47 54 55 62M81 61Q73 54 65 62" stroke="#0b3555" stroke-width="3" stroke-linecap="round"/>
-<path d="M43 65Q60 57 77 65L72 76Q60 84 48 76Z" fill="#03101f" stroke="url(#amber)" stroke-width="3.5" stroke-linejoin="round"/>
-<path d="M47 89Q60 96 73 89M60 30V42" stroke="#16c8ff" stroke-width="2.5" stroke-linecap="round"/>
-<path d="M29 22 40 34M91 22 80 34M34 37 43 40M86 37 77 40" stroke="#75eaff" stroke-width="2" stroke-linecap="round"/>
-<path d="M20 64Q10 52 16 39M100 64Q110 52 104 39" stroke="#ffb64d" stroke-width="1.8" opacity=".9"/>
+    <div class="chat-identity"><div class="tiny-mark"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+<path d="M13 8 23 17 32 13 41 17 51 8 48 28 43 43 32 54 21 43 16 28 13 8Z" fill="#101c29" stroke="#70dce8" stroke-width="2" stroke-linejoin="round"/>
+<path d="M22 31 28 28 32 31 36 28 42 31" stroke="#e5f4f7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M24 38 32 35 40 38 36 43 28 43 24 38Z" fill="#8a9eff"/>
+<path d="M27 47 32 49 37 47" stroke="#70dce8" stroke-width="1.8" stroke-linecap="round"/>
 </svg></div><div><strong>Talk to Avi</strong><small id="chatStatus">Ready when you are</small></div></div>
     <div class="chat-tools"><span class="private-label">YOUR PRIVATE SPACE</span><button type="button" class="clear-chat" id="clearChat" title="Start a fresh conversation" aria-label="Clear conversation">↻</button></div>
    </div>
@@ -582,17 +627,11 @@ button:hover{filter:brightness(1.12)}
  </section>
  <aside class="panel rightbar">
   <div class="section-label">COMPANION STATUS</div>
-  <div class="mini-core"><svg viewBox="0 0 120 120" fill="none" aria-hidden="true">
-<defs><linearGradient id="fur" x1="18" y1="12" x2="96" y2="105" gradientUnits="userSpaceOnUse"><stop stop-color="#19d7ff"/><stop offset=".48" stop-color="#087acb"/><stop offset="1" stop-color="#03152c"/></linearGradient><linearGradient id="amber" x1="34" y1="44" x2="88" y2="78" gradientUnits="userSpaceOnUse"><stop stop-color="#ffe6a0"/><stop offset="1" stop-color="#ff8a25"/></linearGradient></defs>
-<path d="M31 29 13 12 16 43 29 59 39 45M89 29 107 12 104 43 91 59 81 45" fill="#07172c" stroke="url(#fur)" stroke-width="4" stroke-linejoin="round"/>
-<path d="M30 28 45 34 60 29 75 34 90 28 94 54Q91 84 60 103Q29 84 26 54Z" fill="#061426" stroke="url(#fur)" stroke-width="4" stroke-linejoin="round"/>
-<path d="M33 45 47 50 53 46M87 45 73 50 67 46" stroke="#18caff" stroke-width="4" stroke-linecap="round"/>
-<path d="M36 46 47 49 42 54 35 52ZM84 46 73 49 78 54 85 52Z" fill="#ffad3f"/>
-<path d="M39 61Q47 54 55 62M81 61Q73 54 65 62" stroke="#0b3555" stroke-width="3" stroke-linecap="round"/>
-<path d="M43 65Q60 57 77 65L72 76Q60 84 48 76Z" fill="#03101f" stroke="url(#amber)" stroke-width="3.5" stroke-linejoin="round"/>
-<path d="M47 89Q60 96 73 89M60 30V42" stroke="#16c8ff" stroke-width="2.5" stroke-linecap="round"/>
-<path d="M29 22 40 34M91 22 80 34M34 37 43 40M86 37 77 40" stroke="#75eaff" stroke-width="2" stroke-linecap="round"/>
-<path d="M20 64Q10 52 16 39M100 64Q110 52 104 39" stroke="#ffb64d" stroke-width="1.8" opacity=".9"/>
+  <div class="mini-core"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+<path d="M13 8 23 17 32 13 41 17 51 8 48 28 43 43 32 54 21 43 16 28 13 8Z" fill="#101c29" stroke="#70dce8" stroke-width="2" stroke-linejoin="round"/>
+<path d="M22 31 28 28 32 31 36 28 42 31" stroke="#e5f4f7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M24 38 32 35 40 38 36 43 28 43 24 38Z" fill="#8a9eff"/>
+<path d="M27 47 32 49 37 47" stroke="#70dce8" stroke-width="1.8" stroke-linecap="round"/>
 </svg></div>
   <div class="right-intro">Here for the big plans<br>and the little things.</div>
   <div class="divider"></div>
