@@ -604,6 +604,38 @@ const connectionStatus = document.getElementById("connectionStatus");
 const mainOrb = document.getElementById("mainOrb");
 const clearChatButton = document.getElementById("clearChat");
 
+// Local conversation memory: stays in this browser, not a separate database.
+const MEMORY_KEY = "avi_conversation_memory_v1";
+let conversationHistory = [];
+try {
+  const savedHistory = JSON.parse(localStorage.getItem(MEMORY_KEY) || "[]");
+  if (Array.isArray(savedHistory)) {
+    conversationHistory = savedHistory.filter(item =>
+      item && (item.role === "user" || item.role === "model") &&
+      typeof item.text === "string"
+    ).slice(-12);
+  }
+} catch (error) {
+  console.warn("Avi could not load saved conversation memory.", error);
+}
+
+function saveConversationHistory() {
+  conversationHistory = conversationHistory.slice(-12);
+  try {
+    localStorage.setItem(MEMORY_KEY, JSON.stringify(conversationHistory));
+  } catch (error) {
+    console.warn("Avi could not save conversation memory.", error);
+  }
+}
+
+function restoreConversationHistory() {
+  if (!conversationHistory.length) return;
+  messages.innerHTML = "";
+  conversationHistory.forEach(item => {
+    addMessage(item.text, item.role === "user" ? "user" : "avi");
+  });
+}
+
 
 function addMessage(text, who) {
   const div = document.createElement("div");
@@ -626,7 +658,7 @@ async function respondToText(text) {
         "apikey": SUPABASE_PUBLISHABLE_KEY,
         "Authorization": "Bearer " + SUPABASE_PUBLISHABLE_KEY
       },
-      body: JSON.stringify({ message: text })
+      body: JSON.stringify({ message: text, history: conversationHistory.slice(-12) })
     }
   );
 
@@ -662,6 +694,9 @@ async function sendMessage(text) {
     const reply = await respondToText(text);
 
     loadingMessage.textContent = reply;
+    conversationHistory.push({ role: "user", text: text });
+    conversationHistory.push({ role: "model", text: reply });
+    saveConversationHistory();
     messages.scrollTop = messages.scrollHeight;
 
     if ("speechSynthesis" in window) {
@@ -699,6 +734,10 @@ form.addEventListener("submit", function(event) {
 clearChatButton.addEventListener("click", function() {
   if (window.speechSynthesis) window.speechSynthesis.cancel();
   messages.innerHTML = "";
+  conversationHistory = [];
+  try { localStorage.removeItem(MEMORY_KEY); } catch (error) {
+    console.warn("Avi could not clear saved conversation memory.", error);
+  }
   addMessage("Fresh start! 🐾 I'm here whenever you're ready. What's on your mind?", "avi");
   mainOrb.classList.remove("thinking", "listening", "speaking");
   status.textContent = "Ready to chat";
@@ -780,6 +819,9 @@ if (SpeechRecognition) {
     "Speech recognition is not supported here. Try Google Chrome.";
 }
 
+
+// Restore the last conversation from this browser.
+restoreConversationHistory();
 
 // Initial status: this checks configuration only, not actual connectivity.
 if (
