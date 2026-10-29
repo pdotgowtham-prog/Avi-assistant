@@ -583,6 +583,52 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
  .welcome-copy h1{font-size:clamp(28px,8vw,38px)!important}
 }
 
+
+/* Calm single-canvas home: no oversized empty hero, chat lives inside the welcome frame. */
+.workspace{grid-template-columns:250px minmax(0,1fr)!important;gap:14px!important;align-items:stretch!important}
+.main{display:grid!important;grid-template-rows:minmax(0,1fr)!important;gap:0!important;min-height:calc(100vh - 210px)!important;max-height:none!important}
+.welcome{position:relative!important;display:block!important;min-height:680px!important;height:100%!important;padding:0!important;overflow:hidden!important;border-radius:24px!important;background:radial-gradient(ellipse at 23% 38%,rgba(139,58,26,.19),transparent 44%),linear-gradient(140deg,#141211 0%,#0c0e11 58%,#090b0e 100%)!important}
+.welcome:after{content:""!important;position:absolute!important;inset:0!important;z-index:1!important;pointer-events:none!important;background:linear-gradient(90deg,rgba(7,8,10,.02) 0%,rgba(7,8,10,.10) 34%,rgba(7,8,10,.75) 57%,rgba(7,8,10,.92) 100%)!important}
+.home-portrait{position:absolute!important;z-index:0!important;left:-5%!important;bottom:0!important;width:68%!important;height:88%!important;max-width:none!important;object-fit:contain!important;object-position:left bottom!important;opacity:.92!important;filter:drop-shadow(0 20px 30px rgba(0,0,0,.4))!important}
+.welcome-copy{position:absolute!important;z-index:2!important;top:8%!important;left:auto!important;right:5%!important;bottom:auto!important;transform:none!important;width:43%!important;max-width:510px!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important}
+.welcome-copy .overline{font-size:9px!important;letter-spacing:.18em!important}
+.welcome-copy h1{font-size:clamp(28px,2.5vw,40px)!important;line-height:1.13!important}
+.welcome-copy .intro{font-size:14px!important;line-height:1.6!important}
+.welcome-copy .hero-actions{display:flex!important;flex-wrap:wrap!important;gap:8px!important;margin-top:13px!important}
+.hero-shortcuts{display:none!important}
+/* Conversation becomes a restrained glass overlay inside the same portrait canvas. */
+.welcome .messages{position:absolute!important;z-index:3!important;left:34%!important;right:3%!important;top:36%!important;bottom:78px!important;display:flex!important;flex-direction:column!important;gap:10px!important;overflow-y:auto!important;padding:14px!important;border:1px solid rgba(197,139,78,.22)!important;border-radius:18px!important;background:rgba(12,14,17,.48)!important;backdrop-filter:blur(16px)!important;box-shadow:0 16px 45px rgba(0,0,0,.16),inset 0 1px rgba(255,255,255,.035)!important}
+.welcome .message{max-width:min(88%,650px)!important;width:fit-content!important;padding:12px 15px!important;border-radius:15px!important;font-size:13px!important;line-height:1.55!important;box-shadow:none!important}
+.welcome .message.user{align-self:flex-end!important;background:linear-gradient(120deg,rgba(139,75,35,.82),rgba(104,66,139,.78))!important;border:1px solid rgba(229,173,103,.28)!important;border-bottom-right-radius:5px!important;color:#fff7ed!important}
+.welcome .message.avi{align-self:flex-start!important;background:rgba(36,34,33,.88)!important;border:1px solid rgba(197,139,78,.20)!important;border-bottom-left-radius:5px!important;color:#eee5db!important}
+.welcome #chatForm{position:absolute!important;z-index:4!important;left:34%!important;right:3%!important;bottom:17px!important;display:flex!important;gap:9px!important;padding:8px!important;border:1px solid rgba(197,139,78,.28)!important;border-radius:17px!important;background:rgba(12,14,17,.86)!important;backdrop-filter:blur(18px)!important;box-shadow:0 10px 28px rgba(0,0,0,.25)!important}
+.welcome #chatInput{min-width:0!important;flex:1!important;border:0!important;background:transparent!important;box-shadow:none!important;font-size:14px!important}
+.welcome #micButton,.welcome #sendButton{flex:0 0 42px!important;width:42px!important;height:42px!important;border-radius:12px!important}
+.welcome .hint{display:none!important}
+.welcome .core-wrap{display:none!important}
+.sidebar{min-width:0!important}
+.sidebar .history-caption{margin-top:18px!important}
+@media(max-width:1000px){
+ .workspace{grid-template-columns:220px minmax(0,1fr)!important}
+ .welcome{min-height:650px!important}
+ .home-portrait{left:-13%!important;width:76%!important;opacity:.68!important}
+ .welcome-copy{width:49%!important;right:4%!important}
+ .welcome .messages,.welcome #chatForm{left:26%!important}
+ .welcome:after{background:linear-gradient(90deg,rgba(7,8,10,.02),rgba(7,8,10,.4) 38%,rgba(7,8,10,.88) 65%)!important}
+}
+@media(max-width:680px){
+ .workspace{grid-template-columns:minmax(0,1fr)!important}
+ .main{min-height:0!important}
+ .welcome{min-height:760px!important}
+ .home-portrait{left:-16%!important;width:100%!important;height:55%!important;opacity:.43!important}
+ .welcome:after{background:linear-gradient(0deg,rgba(7,8,10,.94) 0%,rgba(7,8,10,.8) 50%,rgba(7,8,10,.08) 100%)!important}
+ .welcome-copy{top:5%!important;left:7%!important;right:7%!important;width:86%!important}
+ .welcome .messages{left:4%!important;right:4%!important;top:32%!important;bottom:78px!important;background:rgba(12,14,17,.58)!important}
+ .welcome #chatForm{left:4%!important;right:4%!important;bottom:15px!important}
+ .welcome-copy .intro{font-size:13px!important}
+}
+@media(prefers-reduced-motion:reduce){.welcome *{scroll-behavior:auto!important}}
+
 </style>
 <meta name="avi-ui-version" content="avi-calm-brand-voicefix-1">
 </head>
@@ -637,9 +683,9 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 
  <div class="workspace">
   <aside class="sidebar glass-panel">
-   <div class="section-label">YOUR SPACE</div>
+   <div class="section-label">CONVERSATIONS</div>
    <button class="side-new-chat" type="button" id="sideClear"><span aria-hidden="true">+</span> New chat</button>
-   <div class="history-caption"><span>YOUR TOOLS</span><small>Saved chats coming soon</small></div>
+   <div class="history-caption"><span>RECENT CHAT</span><small>Current conversation</small></div>
    <nav class="nav" aria-label="Avi navigation">
     <button class="navbutton active" type="button" data-view="home"><span class="navicon" aria-hidden="true">⌂</span><span>Home</span></button>
     <button class="navbutton" type="button" data-view="ideas"><span class="navicon" aria-hidden="true">✳</span><span>Ideas</span></button>
