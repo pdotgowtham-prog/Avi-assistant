@@ -814,217 +814,200 @@ const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
 
 
-if (SpeechRecognition) {
-  const recognition = new SpeechRecognition();
+let liveSession = null;
+let liveMicStream = null;
+let liveAudioContext = null;
+let liveProcessor = null;
+let liveHandsFree = false;
+let liveSources = new Set();
+let liveNextPlayTime = 0;
+let liveUserTranscript = "";
+let liveAssistantTranscript = "";
+let liveConnecting = false;
 
-  recognition.lang = "en-IN";
-  recognition.continuous = true;
-  recognition.interimResults = true;
-
-  let listening = false;
-  let bargeInStream = null;
-  let bargeInAudioContext = null;
-  let bargeInFrame = null;
-  let bargeInActiveFrames = 0;
-  let bargeInCooldownUntil = 0;
-  let currentAssistantReply = "";
-
-  async function startBargeInMonitor() {
-    if (bargeInStream || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
-    try {
-      bargeInStream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
-      });
-      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-      if (!AudioContextClass) return;
-      bargeInAudioContext = new AudioContextClass();
-      const source = bargeInAudioContext.createMediaStreamSource(bargeInStream);
-      const analyser = bargeInAudioContext.createAnalyser();
-      analyser.fftSize = 512;
-      source.connect(analyser);
-      const samples = new Uint8Array(analyser.fftSize);
-
-      function monitorVoice() {
-        if (!handsFree || !bargeInAudioContext) return;
-        analyser.getByteTimeDomainData(samples);
-        let sum = 0;
-        for (let i = 0; i < samples.length; i++) {
-          const value = (samples[i] - 128) / 128;
-          sum += value * value;
-        }
-        const rms = Math.sqrt(sum / samples.length);
-        // Avoid cutting Avi off because of speaker bleed or ordinary room noise.
-        // Require a stronger mic signal for several consecutive frames and apply a cooldown.
-        if (
-          window.speechSynthesis &&
-          window.speechSynthesis.speaking &&
-          Date.now() > bargeInCooldownUntil &&
-          rms > 0.075
-        ) {
-          bargeInActiveFrames++;
-          if (bargeInActiveFrames >= 6) {
-            window.speechSynthesis.cancel();
-            mainOrb.classList.remove("speaking");
-            hint.textContent = "Avi stopped — go ahead, I’m listening.";
-            status.textContent = "Listening to you";
-            bargeInActiveFrames = 0;
-            bargeInCooldownUntil = Date.now() + 900;
-            if (!listening) {
-              try { recognition.start(); } catch (error) {}
-            }
-          }
-        } else {
-          bargeInActiveFrames = 0;
-        }
-        bargeInFrame = window.requestAnimationFrame(monitorVoice);
-      }
-      monitorVoice();
-    } catch (error) {
-      // Speech recognition can still work if the browser blocks the extra audio monitor.
-      console.warn("Avi could not start the barge-in audio monitor.", error);
-    }
-  }
-
-  function stopBargeInMonitor() {
-    if (bargeInFrame) window.cancelAnimationFrame(bargeInFrame);
-    bargeInFrame = null;
-    if (bargeInAudioContext) bargeInAudioContext.close().catch(function() {});
-    bargeInAudioContext = null;
-    if (bargeInStream) bargeInStream.getTracks().forEach(function(track) { track.stop(); });
-    bargeInStream = null;
-    bargeInActiveFrames = 0;
-  }
-
-  restartVoiceRecognition = function() {
-    if (!handsFree || listening || sendButton.disabled) return;
-    try { recognition.start(); } catch (error) { /* browser may still be shutting down */ }
-  };
-
-  recognition.onstart = function() {
-    listening = true;
-    mic.classList.add("listening");
-    mic.textContent = "🎙️ Listening...";
-    status.textContent = "Listening to you";
-    mainOrb.classList.remove("thinking", "speaking");
-    mainOrb.classList.add("listening");
-    hint.textContent = "Go ahead — Avi is listening.";
-  };
-
-  recognition.onresult = function(event) {
-    let finalText = "";
-    let interimText = "";
-    for (let i = event.resultIndex; i < event.results.length; i++) {
-      const transcript = event.results[i][0].transcript.trim();
-      if (event.results[i].isFinal) finalText += (finalText ? " " : "") + transcript;
-      else interimText += (interimText ? " " : "") + transcript;
-    }
-
-    // Use interim recognition as a second barge-in signal, but ignore words that
-    // substantially match Avi's current reply to reduce speaker-echo interruptions.
-    if (handsFree && interimText && window.speechSynthesis && window.speechSynthesis.speaking) {
-      const normalize = function(value) {
-        return value.toLowerCase().replace(/[^a-z0-9\s']/g, " ").replace(/\s+/g, " ").trim();
-      };
-      const interimWords = normalize(interimText).split(" ").filter(Boolean);
-      const replyWords = new Set(normalize(currentAssistantReply).split(" ").filter(Boolean));
-      const matchedWords = interimWords.filter(function(word) { return replyWords.has(word); }).length;
-      const replyOverlap = interimWords.length ? matchedWords / interimWords.length : 1;
-      if (interimWords.length >= 2 && replyOverlap < 0.5) {
-        window.speechSynthesis.cancel();
-        mainOrb.classList.remove("speaking");
-        hint.textContent = "Avi stopped — go ahead, I’m listening.";
-        status.textContent = "Listening to you";
-      }
-    }
-
-    const spokenText = finalText.trim();
-    if (!spokenText) return;
-    try { recognition.stop(); } catch (error) {}
-    if (window.speechSynthesis) window.speechSynthesis.cancel();
-    mainOrb.classList.remove("speaking");
-    input.value = spokenText;
-    sendMessage(spokenText);
-  };
-
-  recognition.onerror = function(event) {
-    const errors = {
-      "not-allowed": "Please allow microphone access in Chrome settings.",
-      "no-speech": "I didn't hear anything. Please try again.",
-      "audio-capture": "No microphone was detected.",
-      "network": "Voice recognition had a network issue. Please try again."
-    };
-
-    hint.textContent =
-      errors[event.error] || "Microphone error. Please try again.";
-  };
-
-  recognition.onend = function() {
-    listening = false;
-    mic.classList.remove("listening");
-    mic.textContent = handsFree ? "⏹ Voice on" : "🎙";
-    mic.title = handsFree ? "Turn off hands-free voice" : "Start hands-free voice";
-    mic.setAttribute("aria-label", mic.title);
-    mainOrb.classList.remove("listening");
-
-    if (!sendButton.disabled) {
-      status.textContent = handsFree ? "Hands-free voice enabled" : "Ready to chat";
-      if (handsFree && !(window.speechSynthesis && window.speechSynthesis.speaking)) {
-        setTimeout(function() { if (restartVoiceRecognition) restartVoiceRecognition(); }, 350);
-      }
-    }
-  };
-
-  mic.addEventListener("click", function() {
-    if (mic.disabled) return;
-
-    // If Avi is speaking, tapping the mic interrupts her immediately and starts voice input.
-    if (window.speechSynthesis && window.speechSynthesis.speaking) {
-      window.speechSynthesis.cancel();
-      mainOrb.classList.remove("speaking");
-      if (handsFree) {
-        hint.textContent = "Avi stopped. Speak now.";
-        try { if (!listening) recognition.start(); } catch (error) {}
-        return;
-      }
-    }
-
-    if (handsFree) {
-      handsFree = false;
-      try { recognition.stop(); } catch (error) {}
-      stopBargeInMonitor();
-      mic.textContent = "🎙";
-      mic.title = "Start hands-free voice";
-      mic.setAttribute("aria-label", mic.title);
-      hint.textContent = "Hands-free voice is off.";
-      status.textContent = "Ready to chat";
-      return;
-    }
-
-    handsFree = true;
-    hint.textContent = "Hands-free is on. Speak naturally and interrupt Avi whenever you want.";
-    startBargeInMonitor();
-    try {
-      if (!listening) recognition.start();
-    } catch (error) {
-      hint.textContent = "Couldn't start the microphone. Check microphone permission and try again.";
-      handsFree = false;
-    }
-  });
-
-  // Escape is a quick way to stop speech.
-  document.addEventListener("keydown", function(event) {
-    if (event.key === "Escape" && window.speechSynthesis) {
-      window.speechSynthesis.cancel();
-      mainOrb.classList.remove("speaking");
-    }
-  });
-
-} else {
-  mic.disabled = true;
-  mic.textContent = "Voice input unavailable";
-  hint.textContent =
-    "Speech recognition is not supported here. Try Google Chrome.";
+function liveStatus(message) {
+  status.textContent = message;
+  hint.textContent = message;
 }
+function stopLivePlayback() {
+  liveSources.forEach(function(source) { try { source.stop(); } catch (e) {} });
+  liveSources.clear();
+  liveNextPlayTime = liveAudioContext ? liveAudioContext.currentTime : 0;
+  mainOrb.classList.remove("speaking");
+}
+function decodeBase64Audio(value) {
+  const binary = atob(value);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return bytes;
+}
+function playLivePcm(base64) {
+  if (!liveAudioContext) return;
+  const bytes = decodeBase64Audio(base64);
+  const samples = new Int16Array(bytes.buffer, bytes.byteOffset, Math.floor(bytes.byteLength / 2));
+  const buffer = liveAudioContext.createBuffer(1, samples.length, 24000);
+  const channel = buffer.getChannelData(0);
+  for (let i = 0; i < samples.length; i++) channel[i] = samples[i] / 32768;
+  const source = liveAudioContext.createBufferSource();
+  source.buffer = buffer;
+  source.connect(liveAudioContext.destination);
+  const startAt = Math.max(liveAudioContext.currentTime + 0.02, liveNextPlayTime);
+  liveNextPlayTime = startAt + buffer.duration;
+  liveSources.add(source);
+  source.onended = function() {
+    liveSources.delete(source);
+    if (!liveSources.size && liveSession) mainOrb.classList.remove("speaking");
+  };
+  mainOrb.classList.add("speaking");
+  source.start(startAt);
+}
+function resampleTo16k(floatData, inputRate) {
+  if (inputRate === 16000) return floatData;
+  const ratio = inputRate / 16000;
+  const out = new Float32Array(Math.floor(floatData.length / ratio));
+  for (let i = 0; i < out.length; i++) {
+    const start = Math.floor(i * ratio);
+    const end = Math.min(Math.floor((i + 1) * ratio), floatData.length);
+    let sum = 0;
+    for (let j = start; j < end; j++) sum += floatData[j];
+    out[i] = sum / Math.max(1, end - start);
+  }
+  return out;
+}
+function floatToBase64Pcm(floatData) {
+  const bytes = new Uint8Array(floatData.length * 2);
+  const view = new DataView(bytes.buffer);
+  for (let i = 0; i < floatData.length; i++) {
+    const sample = Math.max(-1, Math.min(1, floatData[i]));
+    view.setInt16(i * 2, sample < 0 ? sample * 32768 : sample * 32767, true);
+  }
+  let binary = "";
+  for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+  return btoa(binary);
+}
+async function stopLiveVoice() {
+  liveHandsFree = false;
+  if (liveProcessor) { try { liveProcessor.disconnect(); } catch (e) {} liveProcessor.onaudioprocess = null; liveProcessor = null; }
+  if (liveMicStream) liveMicStream.getTracks().forEach(function(track) { track.stop(); });
+  liveMicStream = null;
+  if (liveSession) { try { liveSession.close(); } catch (e) {} liveSession = null; }
+  stopLivePlayback();
+  if (liveAudioContext) { try { await liveAudioContext.close(); } catch (e) {} liveAudioContext = null; }
+  mic.classList.remove("listening");
+  mic.textContent = "🎙";
+  mic.title = "Start hands-free live voice";
+  mic.setAttribute("aria-label", mic.title);
+  mainOrb.classList.remove("listening", "thinking", "speaking");
+  liveStatus("Live voice is off.");
+}
+async function startLiveVoice() {
+  if (liveConnecting || liveHandsFree) return;
+  liveConnecting = true;
+  mic.disabled = true;
+  liveStatus("Connecting to Avi's live voice…");
+  try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error("Microphone access requires HTTPS and browser permission.");
+    const tokenResponse = await fetch("https://fbtrcquparflbzuaixuo.supabase.co/functions/v1/avi-live-token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "apikey": SUPABASE_PUBLISHABLE_KEY, "Authorization": "Bearer " + SUPABASE_PUBLISHABLE_KEY },
+      body: "{}"
+    });
+    const tokenData = await tokenResponse.json();
+    if (!tokenResponse.ok || !tokenData.token) throw new Error(tokenData.error || "Could not start a secure live session.");
+    const sdk = await import("https://esm.sh/@google/genai");
+    const ai = new sdk.GoogleGenAI({ apiKey: tokenData.token });
+    liveAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+    await liveAudioContext.resume();
+    liveMicStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
+    liveHandsFree = true;
+    liveSession = await ai.live.connect({
+      model: "gemini-3.8-live",
+      config: {
+        responseModalities: [sdk.Modality.AUDIO],
+        inputAudioTranscription: {},
+        outputAudioTranscription: {},
+        systemInstruction: "You are Avi, a warm and loyal personal AI companion. Speak in natural, clear Indian English. Keep replies concise unless more detail is needed. The user may interrupt at any time; stop the current response and listen to the new thought. Conversation history: " + JSON.stringify(conversationHistory.slice(-12)) + ". Saved personal memories: " + JSON.stringify(personalMemory.slice(-50))
+      },
+      callbacks: {
+        onopen: function() {
+          liveStatus("Avi is listening. Speak naturally and interrupt any time.");
+          mic.classList.add("listening");
+          mic.textContent = "⏹ Live voice on";
+          mic.title = "Turn off live voice";
+          mic.setAttribute("aria-label", mic.title);
+          mainOrb.classList.add("listening");
+        },
+        onmessage: function(message) {
+          const server = message.serverContent || {};
+          if (server.interrupted) stopLivePlayback();
+          if (server.inputTranscription && server.inputTranscription.text) {
+            liveUserTranscript += server.inputTranscription.text;
+          }
+          if (server.outputTranscription && server.outputTranscription.text) {
+            liveAssistantTranscript += server.outputTranscription.text;
+          }
+          const parts = server.modelTurn && server.modelTurn.parts ? server.modelTurn.parts : [];
+          parts.forEach(function(part) {
+            if (part.inlineData && part.inlineData.data) playLivePcm(part.inlineData.data);
+          });
+          if (server.turnComplete) {
+            const userText = liveUserTranscript.trim();
+            const assistantText = liveAssistantTranscript.trim();
+            if (userText) {
+              addMessage(userText, "user");
+              conversationHistory.push({ role: "user", text: userText });
+            }
+            if (assistantText) {
+              addMessage(assistantText, "avi");
+              conversationHistory.push({ role: "model", text: assistantText });
+            }
+            if (userText || assistantText) saveConversationHistory();
+            liveUserTranscript = "";
+            liveAssistantTranscript = "";
+            liveStatus("Avi is listening. Keep talking whenever you're ready.");
+          }
+        },
+        onerror: function(error) {
+          console.error("Avi Live API error:", error);
+          liveStatus("Live voice hit an error. Turn it off and try again.");
+        },
+        onclose: function(event) {
+          if (liveHandsFree) liveStatus("Live voice connection closed. Please restart live voice.");
+          console.info("Avi Live API connection closed:", event && event.reason);
+        }
+      }
+    });
+    const source = liveAudioContext.createMediaStreamSource(liveMicStream);
+    liveProcessor = liveAudioContext.createScriptProcessor(4096, 1, 1);
+    liveProcessor.onaudioprocess = function(event) {
+      if (!liveHandsFree || !liveSession) return;
+      const pcm = resampleTo16k(event.inputBuffer.getChannelData(0), liveAudioContext.sampleRate);
+      if (!pcm.length) return;
+      liveSession.sendRealtimeInput({ audio: { data: floatToBase64Pcm(pcm), mimeType: "audio/pcm;rate=16000" } });
+    };
+    source.connect(liveProcessor);
+    liveProcessor.connect(liveAudioContext.destination);
+    liveStatus("Live voice connected. Speak naturally; you can interrupt Avi at any time.");
+  } catch (error) {
+    console.error("Avi live voice setup failed:", error);
+    await stopLiveVoice();
+    liveStatus("Could not start live voice: " + (error.message || "please check microphone permission and try again."));
+  } finally {
+    liveConnecting = false;
+    mic.disabled = false;
+  }
+}
+mic.addEventListener("click", function() {
+  if (mic.disabled) return;
+  if (liveHandsFree || liveConnecting) {
+    stopLiveVoice();
+  } else {
+    startLiveVoice();
+  }
+});
+document.addEventListener("keydown", function(event) {
+  if (event.key === "Escape" && liveHandsFree) stopLivePlayback();
+});
 
 
 // Restore the last conversation from this browser.
