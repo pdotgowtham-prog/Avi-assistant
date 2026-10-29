@@ -1081,6 +1081,20 @@ let liveSources = new Set();
 let liveNextPlayTime = 0;
 let liveUserTranscript = "";
 let liveAssistantTranscript = "";
+let liveUserMessageEl = null;
+let liveAssistantMessageEl = null;
+
+function updateLiveTranscript(kind, text) {
+  const isUser = kind === "user";
+  const current = isUser ? liveUserMessageEl : liveAssistantMessageEl;
+  if (!text) return current;
+  const element = current || addMessage("", isUser ? "user" : "avi");
+  element.textContent = text;
+  if (isUser) liveUserMessageEl = element;
+  else liveAssistantMessageEl = element;
+  messages.scrollTop = messages.scrollHeight;
+  return element;
+}
 let liveConnecting = false;
 
 function liveStatus(message) {
@@ -1201,9 +1215,11 @@ async function startLiveVoice() {
           if (server.interrupted) stopLivePlayback();
           if (server.inputTranscription && server.inputTranscription.text) {
             liveUserTranscript += server.inputTranscription.text;
+            updateLiveTranscript("user", liveUserTranscript);
           }
           if (server.outputTranscription && server.outputTranscription.text) {
             liveAssistantTranscript += server.outputTranscription.text;
+            updateLiveTranscript("avi", liveAssistantTranscript);
           }
           const parts = server.modelTurn && server.modelTurn.parts ? server.modelTurn.parts : [];
           parts.forEach(function(part) {
@@ -1213,16 +1229,18 @@ async function startLiveVoice() {
             const userText = liveUserTranscript.trim();
             const assistantText = liveAssistantTranscript.trim();
             if (userText) {
-              addMessage(userText, "user");
+              updateLiveTranscript("user", userText);
               conversationHistory.push({ role: "user", text: userText });
             }
             if (assistantText) {
-              addMessage(assistantText, "avi");
+              updateLiveTranscript("avi", assistantText);
               conversationHistory.push({ role: "model", text: assistantText });
             }
             if (userText || assistantText) saveConversationHistory();
             liveUserTranscript = "";
             liveAssistantTranscript = "";
+            liveUserMessageEl = null;
+            liveAssistantMessageEl = null;
             liveStatus("Avi is listening. Keep talking whenever you're ready.");
           }
         },
