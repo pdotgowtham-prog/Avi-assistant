@@ -595,7 +595,8 @@ button:hover{filter:brightness(1.08)}
   <div class="auth-actions"><button id="authSubmit" type="submit">Sign in</button><button class="auth-link" id="authModeToggle" type="button">Create account</button></div>
   <p class="auth-status" id="authStatus" role="status"></p>
  </form>
-</section>\n<main class="shell">
+</section>
+<main class="shell">
 <header class="topbar">
  <div class="brand">
   <div class="brandmark" aria-label="Avi emblem">
@@ -823,7 +824,8 @@ if (aviAuthClient) {
 } else {
  authStatus.textContent = "Avi could not load the Supabase sign-in library. Check your connection and reload the page.";
 }
-\nconst messages = document.getElementById("messages");
+
+const messages = document.getElementById("messages");
 const form = document.getElementById("chatForm");
 const input = document.getElementById("chatInput");
 const mic = document.getElementById("micButton");
@@ -1285,7 +1287,8 @@ window.addEventListener("appinstalled", () => { installAviButton.hidden = true; 
 if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
  window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(error=>console.warn("Avi offline shell registration failed",error)));
 }
-\n// Initial status: this checks configuration only, not actual connectivity.
+
+// Initial status: this checks configuration only, not actual connectivity.
 if (
   SUPABASE_FUNCTION_URL === "https://fbtrcquparflbzuaixuo.supabase.co/functions/v1/avi-chat" &&
   SUPABASE_PUBLISHABLE_KEY.startsWith("sb_publishable_")
