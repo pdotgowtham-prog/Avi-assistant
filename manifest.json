@@ -1,0 +1,18 @@
+{
+  "name": "Avi — Personal AI",
+  "short_name": "Avi",
+  "description": "Your personal AI companion",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0a0e14",
+  "theme_color": "#0a0e14",
+  "icons": [
+    {
+      "src": "avi-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
