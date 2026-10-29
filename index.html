@@ -821,6 +821,7 @@ if (SpeechRecognition) {
   recognition.onresult = function(event) {
     const spokenText = event.results[event.results.length - 1][0].transcript.trim();
     if (!spokenText) return;
+    try { recognition.stop(); } catch (error) {}
     if (window.speechSynthesis) window.speechSynthesis.cancel();
     mainOrb.classList.remove("speaking");
     input.value = spokenText;
