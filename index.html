@@ -604,9 +604,11 @@ const connectionStatus = document.getElementById("connectionStatus");
 const mainOrb = document.getElementById("mainOrb");
 const clearChatButton = document.getElementById("clearChat");
 
-// Local conversation memory: stays in this browser, not a separate database.
+// Browser-local conversation history and long-term facts.
 const MEMORY_KEY = "avi_conversation_memory_v1";
+const PROFILE_MEMORY_KEY = "avi_personal_memory_v1";
 let conversationHistory = [];
+let personalMemory = [];
 try {
   const savedHistory = JSON.parse(localStorage.getItem(MEMORY_KEY) || "[]");
   if (Array.isArray(savedHistory)) {
@@ -615,25 +617,53 @@ try {
       typeof item.text === "string"
     ).slice(-12);
   }
+  const savedFacts = JSON.parse(localStorage.getItem(PROFILE_MEMORY_KEY) || "[]");
+  if (Array.isArray(savedFacts)) {
+    personalMemory = savedFacts.filter(item => typeof item === "string").slice(-50);
+  }
 } catch (error) {
-  console.warn("Avi could not load saved conversation memory.", error);
+  console.warn("Avi could not load saved browser memory.", error);
 }
 
 function saveConversationHistory() {
   conversationHistory = conversationHistory.slice(-12);
-  try {
-    localStorage.setItem(MEMORY_KEY, JSON.stringify(conversationHistory));
-  } catch (error) {
-    console.warn("Avi could not save conversation memory.", error);
-  }
+  try { localStorage.setItem(MEMORY_KEY, JSON.stringify(conversationHistory)); }
+  catch (error) { console.warn("Avi could not save conversation history.", error); }
 }
-
+function savePersonalMemory() {
+  try { localStorage.setItem(PROFILE_MEMORY_KEY, JSON.stringify(personalMemory.slice(-50))); }
+  catch (error) { console.warn("Avi could not save personal memory.", error); }
+}
+function processMemoryCommand(text) {
+  const rememberMatch = text.match(/^\\s*(?:avi[, ]+)?remember(?: that)?\\s+(.+?)\\s*[.!]?\\s*$/i);
+  if (rememberMatch) {
+    const fact = rememberMatch[1].trim();
+    if (fact && !personalMemory.some(x => x.toLowerCase() === fact.toLowerCase())) {
+      personalMemory.push(fact);
+      personalMemory = personalMemory.slice(-50);
+      savePersonalMemory();
+    }
+    return { handled: true, reply: fact ? "I'll remember that for future chats on this browser. 💙" : "Tell me what you'd like me to remember." };
+  }
+  if (/^\\s*(?:avi[, ]+)?forget (?:everything|all(?: my)? memories|all memories)\\s*[.!]?\\s*$/i.test(text)) {
+    personalMemory = [];
+    savePersonalMemory();
+    return { handled: true, reply: "I've cleared the personal memories saved in this browser. 💙" };
+  }
+  const forgetMatch = text.match(/^\\s*(?:avi[, ]+)?forget(?: that)?\\s+(.+?)\\s*[.!]?\\s*$/i);
+  if (forgetMatch) {
+    const target = forgetMatch[1].trim().toLowerCase();
+    const before = personalMemory.length;
+    personalMemory = personalMemory.filter(x => !x.toLowerCase().includes(target));
+    savePersonalMemory();
+    return { handled: true, reply: before === personalMemory.length ? "I couldn't find a matching saved memory. You can ask me to forget all memories if you'd like." : "I've removed the matching saved memory from this browser. 💙" };
+  }
+  return { handled: false };
+}
 function restoreConversationHistory() {
   if (!conversationHistory.length) return;
   messages.innerHTML = "";
-  conversationHistory.forEach(item => {
-    addMessage(item.text, item.role === "user" ? "user" : "avi");
-  });
+  conversationHistory.forEach(item => addMessage(item.text, item.role === "user" ? "user" : "avi"));
 }
 
 
@@ -658,7 +688,7 @@ async function respondToText(text) {
         "apikey": SUPABASE_PUBLISHABLE_KEY,
         "Authorization": "Bearer " + SUPABASE_PUBLISHABLE_KEY
       },
-      body: JSON.stringify({ message: text, history: conversationHistory.slice(-12) })
+      body: JSON.stringify({ message: text, history: conversationHistory.slice(-12), memory: personalMemory })
     }
   );
 
@@ -691,7 +721,8 @@ async function sendMessage(text) {
   const loadingMessage = addMessage("Thinking... 💙", "avi");
 
   try {
-    const reply = await respondToText(text);
+    const memoryCommand = processMemoryCommand(text);
+    const reply = memoryCommand.handled ? memoryCommand.reply : await respondToText(text);
 
     loadingMessage.textContent = reply;
     conversationHistory.push({ role: "user", text: text });
