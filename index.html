@@ -621,6 +621,57 @@ button:hover{filter:brightness(1.08)}
   #chatForm .mic, #chatForm .send { flex-basis:37px; width:37px; min-width:37px; height:37px; }
 }
 
+
+/* MOBILE CHAT LAYOUT FIX — layout only; leave chat, memory and voice logic intact */
+@media (max-width:760px) {
+  html, body { width:100%; height:100%; min-height:0; overflow:hidden; }
+  body { height:100dvh; min-height:0; }
+  .shell {
+    width:100%; max-width:none; height:100dvh; min-height:0;
+    padding: max(8px, env(safe-area-inset-top)) 9px max(8px, env(safe-area-inset-bottom));
+    gap:8px; display:grid; grid-template-rows:auto minmax(0,1fr); overflow:hidden;
+  }
+  .topbar { flex:0 0 auto; min-height:54px; padding:8px 10px; }
+  .workspace { display:block; min-height:0; height:100%; overflow:hidden; }
+  .main { display:flex; flex-direction:column; gap:0; height:100%; min-height:0; overflow:hidden; }
+  .welcome, .shortcuts, .footer { display:none !important; }
+  .chat {
+    display:flex; flex-direction:column; flex:1 1 auto; height:100%; min-height:0;
+    max-height:none; overflow:hidden; border-radius:14px;
+  }
+  .chat-head { flex:0 0 auto; min-height:56px; padding:9px 10px; }
+  .chat-identity { min-width:0; }
+  .chat-identity small { max-width:60vw; }
+  .messages {
+    flex:1 1 0; min-height:0; height:0; max-height:none; width:100%;
+    overflow-x:hidden; overflow-y:auto; overscroll-behavior-y:contain;
+    -webkit-overflow-scrolling:touch; padding:14px 10px;
+  }
+  #chatForm {
+    position:relative; flex:0 0 auto; width:100%; min-width:0;
+    display:flex; align-items:center; gap:6px;
+    padding:8px; margin:0; padding-bottom:max(8px, env(safe-area-inset-bottom));
+    border-top:1px solid var(--line); border-radius:0 0 14px 14px;
+  }
+  #chatForm input { flex:1 1 0; width:0; min-width:0; height:44px; font-size:16px; }
+  #chatForm .mic, #chatForm .send {
+    flex:0 0 42px; width:42px; min-width:42px; height:42px;
+    margin:0; padding:0; display:grid; place-items:center;
+    white-space:nowrap; overflow:hidden; text-overflow:clip;
+  }
+  #chatForm .mic { font-size:17px; }
+  #chatForm .mic.listening { font-size:0; }
+  #chatForm .mic.listening::after { content:"⏹"; font-size:17px; }
+  .hint { display:none !important; }
+}
+@media (max-width:390px) {
+  .shell { padding-left:7px; padding-right:7px; }
+  .chat-head { padding-left:8px; padding-right:8px; }
+  .messages { padding-left:7px; padding-right:7px; }
+  #chatForm { gap:5px; padding:6px; }
+  #chatForm .mic, #chatForm .send { flex-basis:38px; width:38px; min-width:38px; height:40px; }
+}
+
 </style>
 </head>
 <body>
