@@ -792,9 +792,18 @@ async function aviApplySession(session) {
  try {
   const result = await aviAuthClient.from("avi_personal_memories").select("memory").eq("user_id",session.user.id).order("created_at",{ascending:true});
   if (result.error) throw result.error;
-  personalMemory = [...new Set((result.data || []).map(row => row.memory).filter(Boolean))].slice(-50);
+  const cloudMemories = (result.data || []).map(row => row.memory).filter(Boolean);
+  const localMemories = (() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(PROFILE_MEMORY_KEY) || "[]");
+      return Array.isArray(saved) ? saved.filter(item => typeof item === "string") : [];
+    } catch (error) { return []; }
+  })();
+  personalMemory = [...new Set([...cloudMemories, ...localMemories])].slice(-50);
   savePersonalMemoryLocalOnly();
   aviMemorySyncReady = true;
+  // Migrate any memories that existed only on this browser into the signed-in account.
+  await syncAviMemories();
   await aviLoadCloudConversation();
  } catch(error) {
   console.error("Could not load Avi cloud memory:",error);
