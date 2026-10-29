@@ -90,6 +90,100 @@ input:focus{border-color:#78b9c8;box-shadow:0 0 0 3px #78b9c80c}
 @media(max-width:700px){.app{padding:10px 9px 20px}header{padding:10px 12px;margin-bottom:12px}.logo{width:38px;height:38px}.layout{display:block}.hero{padding:23px 13px 20px}.orb{width:82px;height:82px}.orb svg{width:49px;height:49px}h1{font-size:29px}.cards{grid-template-columns:1fr}.card{display:flex;align-items:center;gap:11px}.card strong{margin:0 0 4px}.messages{min-height:150px;padding:12px}.message{max-width:94%;font-size:12px}.status{font-size:10px;padding:7px 8px}.chathead{padding:12px}form{flex-wrap:nowrap}input{flex-basis:auto}.send{flex:0 0 auto}.quickline{margin-top:12px}}
 @media(prefers-reduced-motion:reduce){.orb,.orb:before,.orb:after{animation:none!important}}
 
+
+/* AVI UI refinement — quiet, premium, compact */
+:root{
+ --bg:#080b12;--line:rgba(154,174,211,.13);--text:#edf3ff;--muted:#8794ad;
+ --cyan:#7edbe7;--violet:#9b8cff;--amber:#d6a16c;
+}
+body{background:radial-gradient(ellipse at 50% 0%,#172237 0%,#0b101b 42%,#080b12 78%);color:var(--text)}
+body:before{opacity:.035;background-size:64px 64px}
+.app{max-width:1540px;padding:18px clamp(12px,2vw,28px) 24px}
+header{margin-bottom:14px;padding:11px 15px;border-radius:14px;background:rgba(15,22,36,.88);border-color:#222d42;box-shadow:0 8px 30px #0002}
+.logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,#26374a,#1b2439);border-color:#42536a;box-shadow:0 0 0 3px #7edbe70a}
+.logo svg{width:29px;height:29px}
+.brandname{font-size:18px;letter-spacing:-.5px}
+.muted{font-size:11px;color:#8b9ab5}
+.status{font-size:11px;padding:7px 10px;background:#12251f;border-color:#24473c;color:#8be1bd}
+.layout{grid-template-columns:174px minmax(0,1fr) 196px;gap:12px}
+.sidepanel,.rightpanel,.hero,.chat,.card{backdrop-filter:none;background:rgba(15,22,35,.94);border:1px solid #202b40;box-shadow:0 10px 30px #00000012}
+.sidepanel,.rightpanel{padding:13px;border-radius:14px}
+.eyebrow,.label{font-size:9px;letter-spacing:1.5px;color:#8da4c0}
+.eyebrow{margin:3px 0 13px}
+.navitem{font-size:11px;gap:8px;padding:9px 8px;margin:4px 0;border-radius:9px;color:#a2aec5}
+.navitem.active{background:#1b293b;border:1px solid #33465e;color:#f4f7ff}
+.navicon{width:25px;height:25px;background:#202d40;color:#9edce6;font-size:13px}
+.side-note{margin-top:17px;padding:11px;border-radius:11px;background:#1a1b22;border-color:#3b332c}
+.side-note strong{font-size:10px;color:#e0b987}
+.side-note p{font-size:10px;line-height:1.55}
+.hero{border-radius:16px;padding:22px 16px 19px;background:radial-gradient(ellipse at 50% 0%,#1a2a40 0%,#101623 66%)}
+.hero:before{width:200px;height:120px;background:#7edbe710;filter:blur(45px)}
+.orb{width:86px;height:86px;margin-bottom:16px;background:radial-gradient(circle at 30% 22%,#f0fdff 0%,#9fe7ed 8%,#4f9bb5 35%,#425a80 66%,#27334e 100%);box-shadow:0 0 0 5px #9eeaf007,0 0 27px #72cfe32a,inset -8px -10px 18px #18223a88;animation:float 5s ease-in-out infinite}
+.orb:before{inset:-8px;border-color:#8bdce53d}
+.orb:after{inset:-15px;border-color:#a9a1f32b}
+.orb svg{width:54px;height:54px}
+.orb-ring-label{font-size:7px;letter-spacing:2px;bottom:-25px;color:#94dce7}
+h1{font-size:clamp(25px,3vw,36px);letter-spacing:-1.2px}
+.gradient{background:linear-gradient(90deg,#9bdde8,#a9b4ef 60%,#c4a4ef);-webkit-background-clip:text;background-clip:text}
+.subtitle{font-size:12px;max-width:450px;color:#a2aec4;margin-top:9px}
+.quickline{margin-top:14px;gap:6px}
+.pill{font-size:9px;padding:6px 9px;border-color:#2b394e;background:#151e2e;color:#aebed3}
+.label{margin:15px 2px 9px}
+.cards{gap:8px;margin-bottom:12px}
+.card{padding:11px;border-radius:12px}
+.card:hover{transform:translateY(-2px);border-color:#567c8c;box-shadow:0 7px 20px #0002}
+.card .symbol{width:29px;height:29px;border-radius:9px;background:#1b2a3b;color:#9bdce5;font-size:14px}
+.card strong{font-size:11px;margin:8px 0 4px}
+.card small{font-size:9px;color:#8f9db6}
+.chat{border-radius:15px;overflow:hidden}
+.chathead{padding:12px 14px;background:#131c2b;border-color:#202b40}
+.mini-orb{width:29px;height:29px;border-radius:9px;background:linear-gradient(145deg,#a1e6e9,#6f87b9);color:#102033;box-shadow:none}
+.chat-title strong{font-size:12px}
+.chat-head-right{font-size:9px;color:#91c8b9}
+.clear-chat{border-color:#33445a;color:#9caec4;background:#192334}
+.messages{min-height:145px;max-height:310px;padding:14px;background:#0d1420}
+.message{font-size:12px;line-height:1.65;border-radius:13px;padding:11px 13px}
+.avi{background:#192436;border-color:#29364a}
+.user{background:linear-gradient(135deg,#355a83,#5e568f);border-color:#65749d}
+form{padding:10px;background:#101827;border-color:#202b40;gap:8px}
+input{padding:12px 13px;border-radius:10px;background:#090f19;border-color:#2a394f;font-size:13px}
+input:focus{border-color:#80cdd8;box-shadow:0 0 0 3px #80cdd80c}
+.send,.mic{border-radius:10px;padding:11px 15px;background:#273c52;border-color:#3c566d;color:#e8f5ff}
+.send:hover,.mic:hover{filter:brightness(1.15)}
+.mic{width:calc(100% - 20px);margin:0 10px 8px;background:#172438;border-color:#2b4258;font-size:12px}
+.mic.listening{background:#392b45;border-color:#806092}
+.hint{font-size:10px;padding:0 10px 12px;color:#8190aa}
+.rightpanel .eyebrow{margin-bottom:10px}
+.memory-orb{width:66px;height:66px;margin:8px auto 12px;background:radial-gradient(circle at 34% 25%,#e2fbff,#7dbdce 35%,#4b648b 68%,#27334a);box-shadow:0 0 23px #75c9db20}
+.memory-orb:after{inset:-6px;border-color:#8ddce52e}
+.right-note{font-size:10px;line-height:1.6;color:#9ba9bf}
+.rightpanel .statbox{padding:10px 0;border-color:#222e41}
+.statlabel{font-size:9px;color:#8190aa;letter-spacing:.5px}
+.statvalue{font-size:11px;color:#dce5f5;line-height:1.45}
+.tribute{margin:18px 0 8px;color:#a8b6ca;font-size:11px}
+.foot{color:#687891;font-size:10px}
+@media(max-width:1100px){.layout{grid-template-columns:155px minmax(0,1fr)}.rightpanel{display:none}}
+@media(max-width:720px){
+ .app{padding:10px 9px 20px}
+ header{padding:10px 11px;margin-bottom:10px}
+ .layout{display:block}
+ .sidepanel{display:none}
+ .hero{padding:23px 12px 18px}
+ .orb{width:78px;height:78px}
+ .orb svg{width:49px;height:49px}
+ h1{font-size:29px}
+ .cards{grid-template-columns:1fr;gap:7px}
+ .card{display:flex;align-items:center;gap:11px;padding:10px}
+ .card .symbol{flex-shrink:0}
+ .card strong{margin:0 0 3px}
+ .messages{min-height:140px;max-height:42vh;padding:11px}
+ .message{max-width:94%;font-size:12px}
+ form{flex-wrap:nowrap}
+ input{flex-basis:0;font-size:12px;padding:12px 10px}
+ .send{padding:11px 12px;flex:0 0 auto}
+ .status{font-size:10px;padding:7px 8px}
+}
+
 </style>
 </head>
 
