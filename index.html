@@ -322,6 +322,103 @@ body:after{background:radial-gradient(ellipse at 14% 0%,rgba(139,58,26,.13),tran
 .voice-settings{border-color:rgba(197,139,78,.30);background:linear-gradient(135deg,rgba(35,28,26,.95),rgba(18,18,21,.96))}.voice-settings-copy strong,.voice-select-label{color:var(--tan)}.voice-settings-copy span,.voice-settings-note{color:var(--muted)}.voice-select{border-color:rgba(197,139,78,.33);background:#171619;color:var(--text)}.about-avi{grid-column:1 / -1;margin-top:3px;padding-top:13px;border-top:1px solid rgba(197,139,78,.18)}.about-avi strong{display:block;color:var(--tan);font:600 9px var(--orbit-font);letter-spacing:.14em}.about-avi p{max-width:72ch;margin:6px 0 0;color:var(--muted);font-size:11px;line-height:1.65}.about-avi .placeholder{display:inline-block;margin-top:8px;color:var(--subtle);font:500 9px var(--orbit-font);letter-spacing:.07em;text-transform:uppercase}
 @media(max-width:880px){.sidebar{border-color:rgba(197,139,78,.30);background:rgba(18,17,19,.96)}.navbutton.active{box-shadow:inset 0 2px var(--tan),0 0 18px rgba(139,58,26,.12)}}
 
+
+/* AVI SIGNATURE REDESIGN — Rottweiler-inspired, premium dark */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+:root{
+ --bg:#07090c;--panel:#0d1116;--panel2:#111820;--line:rgba(185,198,212,.15);
+ --tan:#f0a23b;--accent:#ffb84d;--cyan:#66d9ef;--violet:#8d7cff;
+ --text:#f4f5f7;--muted:#aab4c1;--subtle:#788493;
+ --body-font:'DM Sans',Inter,system-ui,sans-serif;--orbit-font:'Manrope',Inter,system-ui,sans-serif;
+}
+html{background:#07090c;color-scheme:dark}
+body{font-family:var(--body-font)!important;color:var(--text)!important;background:
+ radial-gradient(ellipse at 8% 18%,rgba(255,165,66,.09),transparent 32%),
+ radial-gradient(ellipse at 92% 82%,rgba(61,114,146,.09),transparent 35%),
+ linear-gradient(145deg,#090a0d,#06080b 55%,#0b0e12)!important}
+body:before{opacity:.14!important;background-image:linear-gradient(rgba(150,165,180,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(150,165,180,.04) 1px,transparent 1px)!important;background-size:42px 42px!important;mask-image:radial-gradient(ellipse at center,#000,transparent 78%)}
+h1,h2,h3,.brandname,.brandtag,.section-label,.section-label,.navbutton,.connection,.voice-settings-copy strong,.voice-select-label,.about-avi strong{font-family:var(--orbit-font)!important}
+.shell{max-width:1600px!important;width:calc(100% - 36px)!important;margin:20px auto!important;gap:20px!important}
+.topbar,.glass-panel,.panel,.auth-card,.welcome,.chat-panel,.sidebar,.system-overview,.conversation-panel{background:linear-gradient(145deg,rgba(19,23,28,.96),rgba(10,13,17,.97))!important;border:1px solid var(--line)!important;box-shadow:0 22px 70px rgba(0,0,0,.24),inset 0 1px rgba(255,255,255,.025)!important;backdrop-filter:blur(18px)}
+.topbar{border-radius:22px!important;padding:18px 22px!important;gap:18px!important}
+.brand{gap:13px!important}.brandmark,.auth-brand-symbol{width:54px!important;height:54px!important;border-radius:17px!important;background:linear-gradient(145deg,#231a12,#0f1216)!important;border:1px solid rgba(255,184,77,.35)!important;color:var(--accent)!important;box-shadow:0 0 30px rgba(255,166,63,.07)!important}
+.avi-mark{stroke:currentColor!important}
+.brandname{font-size:29px!important;font-weight:800!important;letter-spacing:-.06em!important;color:#fff!important}.brandname span{color:var(--accent)!important}
+.brandtag{font-size:10px!important;letter-spacing:.16em!important;color:#a8b2bf!important}
+.top-actions{gap:9px!important}.iconbutton,.profile-button,.voice-settings-button,.new-chat-button{min-height:48px!important;border-radius:15px!important;background:#12171d!important;border:1px solid var(--line)!important;color:#e9edf2!important;transition:transform .18s ease,border-color .18s ease,background .18s ease}
+.iconbutton:hover,.profile-button:hover,.voice-settings-button:hover,.new-chat-button:hover{border-color:rgba(255,184,77,.52)!important;transform:translateY(-1px)}
+.new-chat-button,.auth-actions button:first-child{background:linear-gradient(135deg,#f0a23b,#ffc15b)!important;color:#15100a!important;border:1px solid #ffc66f!important;box-shadow:0 5px 24px rgba(240,162,59,.15)!important;font-weight:700!important}
+.connection{background:rgba(11,28,25,.8)!important;border:1px solid rgba(78,211,162,.25)!important;border-radius:14px!important;color:#9de6c9!important;padding:13px 15px!important}
+.connection-dot{background:#58e4a5!important;box-shadow:0 0 12px rgba(88,228,165,.65)!important}
+.workspace{gap:20px!important;grid-template-columns:220px minmax(0,1fr)!important}
+.sidebar{border-radius:22px!important;padding:22px 16px!important}
+.section-label{font-size:10px!important;letter-spacing:.18em!important;color:#aab5c3!important}
+.nav{gap:7px!important}.navbutton{border-radius:14px!important;padding:13px 14px!important;color:#b7c0cb!important;font-size:13px!important;gap:12px!important}
+.navbutton.active{background:linear-gradient(110deg,rgba(240,162,59,.18),rgba(255,255,255,.02))!important;border:1px solid rgba(240,162,59,.32)!important;box-shadow:inset 3px 0 #f0a23b!important;color:#fff!important}
+.navicon{color:#f3b45c!important}
+.main{gap:18px!important;min-width:0}
+.welcome{position:relative;overflow:hidden;border-radius:26px!important;padding:34px!important;min-height:260px!important;background:radial-gradient(ellipse at 78% 48%,rgba(219,126,48,.14),transparent 31%),linear-gradient(120deg,rgba(28,25,23,.98),rgba(12,16,20,.98))!important;border-color:rgba(240,162,59,.2)!important}
+.welcome:after{content:"";position:absolute;right:8%;top:12%;width:180px;height:180px;border-radius:50%;border:1px solid rgba(255,184,77,.22);box-shadow:0 0 0 15px rgba(255,184,77,.025),0 0 0 38px rgba(255,184,77,.018),inset 0 0 55px rgba(255,184,77,.06);pointer-events:none}
+.welcome:before{content:"🐾";position:absolute;right:13%;top:26%;font-size:62px;filter:sepia(.5) saturate(.8);opacity:.42;pointer-events:none}
+.welcome-copy{position:relative;z-index:1;max-width:68%!important}
+.welcome h1,.welcome h2{font-family:var(--orbit-font)!important;font-size:clamp(28px,3vw,42px)!important;line-height:1.18!important;letter-spacing:-.05em!important;color:#f5f3f0!important}
+.welcome p{color:#b9c2ce!important;font-size:15px!important;line-height:1.8!important;max-width:58ch!important}
+.welcome .eyebrow,.welcome .section-label{color:#f0b25b!important;letter-spacing:.18em!important}
+.chat-panel,.conversation-panel{border-radius:24px!important;overflow:hidden!important}
+.chat-header,.conversation-header{background:rgba(17,22,28,.9)!important;border-bottom:1px solid var(--line)!important}
+.messages{background:linear-gradient(180deg,rgba(7,10,14,.62),rgba(8,11,15,.92))!important}
+.message,.bubble,.assistant-message{border-radius:17px!important}
+.user-message,.message.user,.message.user .bubble{background:linear-gradient(125deg,#b76d27,#6846a8)!important;border:1px solid rgba(255,191,111,.24)!important;color:#fff!important}
+.avi-message,.message.assistant,.assistant-message,.message.assistant .bubble{background:linear-gradient(145deg,rgba(24,31,38,.96),rgba(15,20,26,.96))!important;border:1px solid rgba(102,217,239,.18)!important;color:#eef2f6!important}
+.chat-input-wrap,.composer,.chat-form-wrap{background:rgba(8,12,16,.96)!important;border-color:rgba(180,194,209,.2)!important;backdrop-filter:blur(18px)!important}
+#chatInput,input,textarea,select{font-family:var(--body-font)!important}
+#chatInput{background:#10161c!important;color:#f5f6f8!important;border-color:rgba(176,190,205,.18)!important}
+#chatInput::placeholder,input::placeholder,textarea::placeholder{color:#8793a1!important}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--cyan)!important;outline-offset:3px}
+.auth-gate{background:radial-gradient(ellipse at 20% 45%,rgba(239,153,59,.17),transparent 34%),radial-gradient(ellipse at 80% 75%,rgba(87,109,150,.13),transparent 36%),#07090c!important}
+.auth-card{border-radius:26px!important;padding:clamp(26px,5vw,44px)!important;max-width:450px!important}
+.auth-brand strong,.auth-brand span strong{font-family:var(--orbit-font)!important;font-size:28px!important;letter-spacing:-.05em}
+.auth-card h2{font-size:30px!important;letter-spacing:-.04em!important}
+.auth-card label{color:#c4ccd5!important}
+.auth-card input{background:#0d1319!important;border:1px solid rgba(180,194,209,.22)!important;border-radius:13px!important;color:#fff!important;min-height:48px!important}
+.auth-actions{gap:12px!important}.auth-actions button{border-radius:13px!important;min-height:48px!important}
+.auth-link,.auth-forgot{color:#f4b45b!important}
+.voice-settings{border-color:var(--line)!important;background:linear-gradient(145deg,#14191f,#0b0e12)!important;border-radius:20px!important}
+.voice-settings-copy strong,.voice-select-label,.about-avi strong{color:#f0b25b!important}
+.voice-select{background:#10161c!important;border-color:var(--line)!important}
+@media(min-width:881px){.workspace{grid-template-columns:220px minmax(0,1fr)!important}.sidebar{position:sticky;top:20px;align-self:start}}
+@media(max-width:880px){
+ .shell{width:100%!important;margin:0 auto!important;padding:10px 10px 92px!important;gap:12px!important}
+ .topbar{border-radius:18px!important;padding:12px!important;align-items:center!important;flex-wrap:wrap!important}
+ .brandmark{width:42px!important;height:42px!important}.brandname{font-size:23px!important}.brandtag{font-size:8px!important}
+ .top-actions{width:100%;display:flex!important;gap:7px!important;overflow-x:auto!important;padding:2px 0 3px!important}
+ .top-actions>*{flex:0 0 auto!important}.connection{padding:10px!important;font-size:11px!important}
+ .workspace{display:flex!important;flex-direction:column!important;gap:12px!important}
+ .sidebar{position:fixed!important;z-index:50!important;left:10px!important;right:10px!important;bottom:max(8px,env(safe-area-inset-bottom))!important;top:auto!important;width:auto!important;padding:8px!important;border-radius:19px!important;box-shadow:0 12px 45px rgba(0,0,0,.6)!important}
+ .sidebar .section-label,.sidebar-bottom{display:none!important}
+ .nav{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:4px!important}
+ .navbutton{display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:4px!important;padding:8px 3px!important;font-size:10px!important;min-height:54px!important;border:1px solid transparent!important}
+ .navicon{font-size:17px!important;line-height:1!important}
+ .navbutton.active{box-shadow:inset 0 2px #f0a23b!important}
+ .welcome{padding:23px 20px!important;min-height:235px!important;border-radius:21px!important}
+ .welcome-copy{max-width:100%!important;padding-right:0!important}
+ .welcome h1,.welcome h2{font-size:29px!important;max-width:75%!important}
+ .welcome p{max-width:70%!important;font-size:13px!important}
+ .welcome:after{width:105px;height:105px;right:5%;top:22%}.welcome:before{right:10%;top:35%;font-size:37px}
+ .chat-panel,.conversation-panel{min-height:52vh!important;border-radius:20px!important}
+ .messages{min-height:36vh!important}
+ #chatInput{font-size:16px!important}
+}
+@media(max-width:420px){
+ .shell{padding-left:7px!important;padding-right:7px!important}
+ .topbar{padding:10px!important}
+ .top-actions{gap:5px!important}.top-actions .connection{max-width:145px!important}
+ .welcome{padding:19px 16px!important}.welcome h1,.welcome h2{font-size:25px!important}
+ .welcome p{font-size:12px!important}
+ .welcome:after{width:78px;height:78px;right:4%;top:25%}.welcome:before{font-size:29px;right:8%;top:37%}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
 </style>
 <meta name="avi-ui-version" content="avi-calm-brand-voicefix-1">
 </head>
