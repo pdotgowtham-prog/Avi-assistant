@@ -821,6 +821,69 @@ if (SpeechRecognition) {
   recognition.interimResults = true;
 
   let listening = false;
+  let bargeInStream = null;
+  let bargeInAudioContext = null;
+  let bargeInFrame = null;
+  let bargeInActiveFrames = 0;
+
+  async function startBargeInMonitor() {
+    if (bargeInStream || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
+    try {
+      bargeInStream = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+      });
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) return;
+      bargeInAudioContext = new AudioContextClass();
+      const source = bargeInAudioContext.createMediaStreamSource(bargeInStream);
+      const analyser = bargeInAudioContext.createAnalyser();
+      analyser.fftSize = 512;
+      source.connect(analyser);
+      const samples = new Uint8Array(analyser.fftSize);
+
+      function monitorVoice() {
+        if (!handsFree || !bargeInAudioContext) return;
+        analyser.getByteTimeDomainData(samples);
+        let sum = 0;
+        for (let i = 0; i < samples.length; i++) {
+          const value = (samples[i] - 128) / 128;
+          sum += value * value;
+        }
+        const rms = Math.sqrt(sum / samples.length);
+        if (window.speechSynthesis && window.speechSynthesis.speaking && rms > 0.055) {
+          bargeInActiveFrames++;
+          if (bargeInActiveFrames >= 5) {
+            window.speechSynthesis.cancel();
+            mainOrb.classList.remove("speaking");
+            hint.textContent = "Avi stopped — go ahead, I’m listening.";
+            status.textContent = "Listening to you";
+            bargeInActiveFrames = 0;
+            if (!listening) {
+              try { recognition.start(); } catch (error) {}
+            }
+          }
+        } else {
+          bargeInActiveFrames = 0;
+        }
+        bargeInFrame = window.requestAnimationFrame(monitorVoice);
+      }
+      monitorVoice();
+    } catch (error) {
+      // Speech recognition can still work if the browser blocks the extra audio monitor.
+      console.warn("Avi could not start the barge-in audio monitor.", error);
+    }
+  }
+
+  function stopBargeInMonitor() {
+    if (bargeInFrame) window.cancelAnimationFrame(bargeInFrame);
+    bargeInFrame = null;
+    if (bargeInAudioContext) bargeInAudioContext.close().catch(function() {});
+    bargeInAudioContext = null;
+    if (bargeInStream) bargeInStream.getTracks().forEach(function(track) { track.stop(); });
+    bargeInStream = null;
+    bargeInActiveFrames = 0;
+  }
+
   restartVoiceRecognition = function() {
     if (!handsFree || listening || sendButton.disabled) return;
     try { recognition.start(); } catch (error) { /* browser may still be shutting down */ }
@@ -908,6 +971,7 @@ if (SpeechRecognition) {
     if (handsFree) {
       handsFree = false;
       try { recognition.stop(); } catch (error) {}
+      stopBargeInMonitor();
       mic.textContent = "🎙";
       mic.title = "Start hands-free voice";
       mic.setAttribute("aria-label", mic.title);
@@ -917,7 +981,8 @@ if (SpeechRecognition) {
     }
 
     handsFree = true;
-    hint.textContent = "Hands-free is on. Speak naturally; tap the mic again to stop.";
+    hint.textContent = "Hands-free is on. Speak naturally and interrupt Avi whenever you want.";
+    startBargeInMonitor();
     try {
       if (!listening) recognition.start();
     } catch (error) {
