@@ -1202,7 +1202,7 @@ accountChip.addEventListener("click", () => {
  menu = document.createElement("div");
  menu.id = "aviProfileMenu";
  menu.className = "profile-menu";
- menu.innerHTML = '<span class="profile-menu-email"></span><button type="button" class="profile-account">Account settings</button><button type="button" class="profile-signout">Sign out</button>';
+ menu.innerHTML = '<span class="profile-menu-email"></span><button type="button" class="profile-account">Voice settings</button><button type="button" class="profile-signout">Sign out</button>';
  menu.querySelector(".profile-menu-email").textContent = aviSession.user.email || "Signed in";
  accountChip.parentElement.appendChild(menu);
  accountChip.setAttribute("aria-expanded","true");
