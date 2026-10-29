@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0a0e14">
-<title>Avi — Personal AI</title>
+<meta name="theme-color" content="#0B0B0D">
+<title>Avi AI — Loyal. Alert. Yours.</title>
 <link rel="manifest" href="./manifest.json">
 <link rel="icon" href="./avi-icon.svg" type="image/svg+xml">
 <meta name="mobile-web-app-capable" content="yes">
@@ -16,16 +16,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 
 :root{
   color-scheme:dark;
-  --bg:#04050c;--bg-2:#070a14;--surface:rgba(12,17,31,.78);--surface-2:rgba(16,23,42,.78);
-  --line:rgba(120,164,202,.19);--line-strong:rgba(0,240,255,.38);
-  --text:#edf6ff;--muted:#a3b2c7;--subtle:#8191aa;
-  --cyan:#00f0ff;--magenta:#ff2bd6;--violet:#8a5cff;--green:#5affb1;
-  --orbit-font:"Orbitron",ui-monospace,monospace;--body-font:"Space Grotesk",Inter,system-ui,sans-serif;
+  --bg:#0B0B0D;--bg-2:#101014;--surface:#141418;--surface-2:#1B1B20;
+  --rust:#8B3A1A;--rust-bright:#A64B23;--tan:#C58B4E;--glow:#3DE0FF;
+  --line:rgba(197,139,78,.20);--line-strong:rgba(61,224,255,.44);
+  --text:#F4F0E9;--muted:#C2B7A9;--subtle:#968A7D;
+  --cyan:var(--glow);--magenta:var(--tan);--violet:var(--rust);--green:#9DCFA7;
+  --orbit-font:"JetBrains Mono",ui-monospace,monospace;--body-font:"Space Grotesk",Inter,system-ui,sans-serif;
   --header-height:72px;--nav-height:66px;--radius:20px;
 }
 *{box-sizing:border-box}
@@ -289,31 +290,64 @@ h1 span{display:block;margin-top:6px;color:#b7c4ff;font-weight:500}
 @keyframes authGlowDrift{from{transform:translate3d(-1%,0,0) scale(1)}to{transform:translate3d(1%,1%,0) scale(1.04)}}
 @media(max-width:880px){.shell{grid-template-rows:auto auto minmax(0,1fr)}}
 
+/* Avi brand layer: warm, protective, and quiet by default. */
+:root{color-scheme:dark;--shadow:rgba(0,0,0,.42);--glass:rgba(20,20,24,.82);--glass-strong:rgba(20,20,24,.94)}
+html,body{background:var(--bg);color:var(--text)}
+html{scrollbar-color:var(--rust) var(--bg)}
+body:before{background-image:linear-gradient(rgba(197,139,78,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(197,139,78,.045) 1px,transparent 1px);opacity:.55}
+body:after{background:radial-gradient(ellipse at 14% 0%,rgba(139,58,26,.13),transparent 38%),radial-gradient(ellipse at 87% 90%,rgba(61,224,255,.07),transparent 36%);opacity:1}
+.topbar{border-color:rgba(197,139,78,.25);background:linear-gradient(118deg,rgba(27,24,23,.95),rgba(15,15,18,.93));box-shadow:inset 0 1px rgba(255,255,255,.045),0 16px 42px var(--shadow)}
+.glass-panel,.panel{border-color:rgba(197,139,78,.20);background:linear-gradient(135deg,rgba(26,24,24,.88),rgba(17,17,20,.92));box-shadow:inset 0 1px rgba(255,255,255,.035),0 18px 55px var(--shadow)}
+.brandmark,.auth-brand-symbol{border-color:rgba(197,139,78,.58);background:radial-gradient(circle at 36% 24%,rgba(197,139,78,.23),rgba(20,20,24,.96) 68%);box-shadow:inset 0 0 18px rgba(197,139,78,.09),0 0 22px rgba(139,58,26,.12);color:var(--tan)}
+.brandname{color:var(--text);letter-spacing:-.075em}.brandname span{color:var(--tan)!important}.brandtag{color:var(--muted)}
+.avi-mark{width:100%;height:100%;overflow:visible}.avi-mark .avi-head{fill:#181619;stroke:currentColor;stroke-width:2;stroke-linejoin:round}.avi-mark .avi-ear{fill:#221C1A;stroke:currentColor;stroke-width:2;stroke-linejoin:round}.avi-mark .avi-muzzle{fill:#2B2524;stroke:rgba(244,240,233,.68);stroke-width:1.4;stroke-linejoin:round}.avi-mark .avi-eye{fill:var(--glow)}.avi-mark .avi-brow{fill:var(--tan);transform-origin:center}.avi-mark .avi-nose{fill:#0B0B0D;stroke:rgba(244,240,233,.55);stroke-width:1}
+.iconbutton,.voice-settings-button,.new-chat-button,.profile-button{border-color:rgba(197,139,78,.25);background:rgba(31,28,28,.86);color:var(--text)}
+.iconbutton:hover,.voice-settings-button:hover,.profile-button:hover{border-color:var(--tan);background:rgba(56,35,27,.76);box-shadow:0 0 20px rgba(197,139,78,.12)}
+.home-button,.voice-settings-button svg,.new-chat-button svg{color:var(--tan)}
+.new-chat-button{background:linear-gradient(115deg,rgba(139,58,26,.40),rgba(197,139,78,.18));border-color:rgba(197,139,78,.52)}.new-chat-button:hover{border-color:var(--tan);box-shadow:0 0 22px rgba(197,139,78,.18)}
+.connection{border-color:rgba(61,224,255,.27);background:rgba(16,31,34,.70);color:#D8FAFF}.connection-dot{color:var(--glow)}
+.sidebar{background:linear-gradient(165deg,rgba(31,27,26,.9),rgba(17,17,20,.91))}.section-label,.eyebrow,.quick-title{color:var(--tan)}
+.navbutton{color:var(--muted)}.navbutton .navicon{color:#B7A693}.navbutton.active{color:var(--text);background:linear-gradient(105deg,rgba(139,58,26,.42),rgba(197,139,78,.10));border-color:rgba(197,139,78,.35);box-shadow:inset 2px 0 var(--tan),0 0 22px rgba(139,58,26,.10)}.navbutton.active .navicon{color:var(--tan);border-color:rgba(197,139,78,.30);background:rgba(197,139,78,.08)}.navbutton:hover:not(.active){color:var(--text);background:rgba(197,139,78,.07);border-color:rgba(197,139,78,.16)}
+.loyalty-mark{border-color:rgba(197,139,78,.35);background:rgba(139,58,26,.22);color:var(--tan)}.sidebar-bottom strong{color:var(--text)}.sidebar-bottom p{color:var(--muted)}
+.welcome{border-color:rgba(197,139,78,.30);background:radial-gradient(ellipse at 82% 45%,rgba(139,58,26,.24),transparent 42%),linear-gradient(120deg,rgba(37,28,25,.95),rgba(18,18,21,.93) 68%,rgba(23,19,19,.92))}.welcome:before{background:linear-gradient(110deg,rgba(197,139,78,.07),transparent 42%,rgba(61,224,255,.04))}.overline{color:var(--tan)}.overline:before{background:var(--tan);box-shadow:0 0 10px rgba(197,139,78,.5)}h1{color:var(--text)}h1 span{color:#D9C3A8}.intro{color:var(--muted)}
+.hero-prompt{border-color:rgba(197,139,78,.25);background:rgba(31,27,27,.70);color:#E9DED0}.hero-prompt svg{color:var(--tan)}.hero-prompt:hover{border-color:rgba(197,139,78,.65);background:rgba(139,58,26,.16)}
+.orb-rings{border-color:rgba(197,139,78,.30)}.orb-rings:before{border-color:rgba(61,224,255,.22)}.orb-rings:after{border-color:rgba(197,139,78,.26)}
+.core{background:radial-gradient(circle at 35% 20%,#F7E5C7 0%,#C58B4E 7%,#8B3A1A 25%,#2B1D1A 55%,#121215 80%);border-color:rgba(197,139,78,.82);box-shadow:0 0 0 7px rgba(197,139,78,.045),0 0 30px rgba(139,58,26,.27),inset 0 0 34px rgba(197,139,78,.10),inset -12px -16px 30px rgba(0,0,0,.56)}.core:before{border-color:rgba(197,139,78,.42)}.core:after{border-color:rgba(61,224,255,.26)}.core svg{color:var(--tan);filter:drop-shadow(0 0 9px rgba(197,139,78,.36))}.core-caption{color:#CDB7A0}
+#mainOrb.listening{border-color:rgba(61,224,255,.90);background:radial-gradient(circle at 35% 20%,#E6FCFF 0%,#3DE0FF 7%,#236E78 26%,#192B30 55%,#121215 80%);box-shadow:0 0 0 8px rgba(61,224,255,.06),0 0 38px rgba(61,224,255,.26),inset 0 0 32px rgba(61,224,255,.13)}#mainOrb.thinking{border-color:var(--tan);background:radial-gradient(circle at 35% 20%,#F7E5C7 0%,#C58B4E 7%,#8B3A1A 25%,#2B1D1A 55%,#121215 80%);box-shadow:0 0 0 8px rgba(197,139,78,.08),0 0 38px rgba(197,139,78,.34),inset 0 0 32px rgba(197,139,78,.16)}#mainOrb.thinking .avi-brow{fill:var(--glow);animation:aviBrowPulse .82s ease-in-out infinite alternate}@keyframes aviBrowPulse{from{filter:drop-shadow(0 0 0 rgba(61,224,255,0));transform:scale(1)}to{filter:drop-shadow(0 0 4px var(--glow));transform:scale(1.2)}}
+.chat-head{border-bottom-color:rgba(197,139,78,.16);background:rgba(25,23,23,.73)}.tiny-mark{border-color:rgba(197,139,78,.35);background:rgba(139,58,26,.16);color:var(--tan)}.chat-identity strong{color:var(--text)}.chat-identity small{color:var(--muted)}.private-label{color:var(--subtle)}.clear-chat{border-color:rgba(197,139,78,.22);background:rgba(31,28,28,.72);color:#D3C0AD}.clear-chat:hover{color:var(--tan);border-color:rgba(197,139,78,.55);background:rgba(139,58,26,.15)}
+.message.avi{color:#F1EAE0;border-color:rgba(197,139,78,.21);background:linear-gradient(135deg,rgba(48,36,31,.89),rgba(27,25,26,.91))}.message.user{border-color:rgba(197,139,78,.50);background:linear-gradient(120deg,rgba(139,58,26,.68),rgba(101,47,28,.77));box-shadow:inset 0 1px rgba(255,255,255,.08),0 4px 18px rgba(0,0,0,.12)}
+#chatForm{border-top-color:rgba(197,139,78,.18);background:linear-gradient(180deg,rgba(22,21,23,.94),rgba(15,15,18,.98))}#chatForm input{border-color:rgba(197,139,78,.25);background:rgba(11,11,13,.96);color:var(--text)}#chatForm input:focus{border-color:rgba(61,224,255,.75);box-shadow:0 0 0 3px rgba(61,224,255,.09),inset 0 1px 6px rgba(0,0,0,.28)}#chatForm .mic,#chatForm .send{border-color:rgba(197,139,78,.38);background:rgba(139,58,26,.18);color:var(--tan)}#chatForm .mic:hover{background:rgba(139,58,26,.30);border-color:var(--tan);box-shadow:0 0 17px rgba(197,139,78,.13)}#chatForm .send{border-color:rgba(197,139,78,.70);background:linear-gradient(135deg,rgba(139,58,26,.72),rgba(197,139,78,.36));color:#FFF7ED}#chatForm .send:hover{box-shadow:0 0 20px rgba(197,139,78,.18);border-color:var(--tan)}
+.status-hero{border-color:rgba(197,139,78,.25);background:radial-gradient(circle at 50% 0%,rgba(139,58,26,.22),transparent 70%),rgba(25,22,23,.78)}.status-orbit{border-color:rgba(197,139,78,.55);color:var(--tan);background:radial-gradient(circle,rgba(197,139,78,.14),rgba(24,21,22,.88) 65%);box-shadow:0 0 22px rgba(139,58,26,.12),inset 0 0 15px rgba(197,139,78,.08)}.status-hero p,.info-row small{color:var(--muted)}.status-hero strong,.info-row strong{color:var(--text)}.divider{background:linear-gradient(90deg,transparent,rgba(197,139,78,.28),transparent)}.info-icon{border-color:rgba(197,139,78,.20);background:rgba(43,34,31,.65);color:#DAC2AA}.quick-prompt{border-color:rgba(197,139,78,.18);background:rgba(28,26,27,.76);color:#E6D9CB}.quick-prompt svg{color:var(--tan)}.quick-prompt:hover{border-color:rgba(197,139,78,.55);background:rgba(139,58,26,.14)}.quick-prompt.coming-soon{opacity:.58;cursor:not-allowed}.soon-badge{margin-left:auto;padding:2px 6px;border:1px solid rgba(197,139,78,.30);border-radius:99px;color:var(--tan);font:600 7px var(--orbit-font);letter-spacing:.06em;text-transform:uppercase}
+.auth-gate{background:radial-gradient(ellipse at 18% 12%,rgba(139,58,26,.24),transparent 34%),radial-gradient(ellipse at 82% 74%,rgba(61,224,255,.10),transparent 35%),#0B0B0D}.auth-gate:before{background:linear-gradient(rgba(197,139,78,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(197,139,78,.045) 1px,transparent 1px)}.auth-gate:after{background:radial-gradient(ellipse at 30% 35%,rgba(139,58,26,.11),transparent 34%),radial-gradient(ellipse at 68% 65%,rgba(61,224,255,.06),transparent 33%)}.auth-card{border-color:rgba(197,139,78,.38);background:linear-gradient(145deg,rgba(35,29,27,.96),rgba(17,17,20,.97));box-shadow:inset 0 1px rgba(255,255,255,.06),0 25px 90px rgba(0,0,0,.52),0 0 40px rgba(139,58,26,.10)}.auth-brand strong{font-family:var(--body-font);letter-spacing:-.08em}.auth-brand small{color:var(--tan)}.auth-card h2{color:var(--text);font-family:var(--body-font);font-weight:600}.auth-card p{color:var(--muted)}.auth-card label{color:#DDC9B3;font-family:var(--orbit-font)}.auth-card input{border-color:rgba(197,139,78,.30);background:rgba(11,11,13,.94);color:var(--text)}.auth-card input:focus{border-color:rgba(61,224,255,.75);box-shadow:0 0 0 3px rgba(61,224,255,.09)}.auth-actions button{border-color:rgba(197,139,78,.52);background:linear-gradient(105deg,rgba(139,58,26,.55),rgba(197,139,78,.25));color:#FFF8EF}.auth-actions button:first-child{background:linear-gradient(110deg,rgba(139,58,26,.82),rgba(197,139,78,.40));border-color:rgba(197,139,78,.75)}.auth-actions button:hover{border-color:var(--tan);box-shadow:0 0 22px rgba(197,139,78,.18)}.auth-actions .auth-link{background:rgba(34,29,29,.8);border-color:rgba(197,139,78,.26);color:#E2D3C3}.auth-forgot{display:flex;align-items:center;justify-content:space-between;width:100%;margin-top:11px;padding:3px 0;border:0;background:transparent;color:var(--tan);font-size:11px;text-align:left}.auth-forgot:disabled{opacity:.66;cursor:not-allowed}.auth-forgot span{font:500 8px var(--orbit-font);letter-spacing:.08em;text-transform:uppercase;color:var(--subtle)}.auth-status{color:#C3F8FF!important}.login-success .auth-brand-symbol .avi-ear{animation:aviEarPerk .48s ease-out both}.login-success .auth-brand-symbol:after{content:"";position:absolute;width:13px;height:5px;border-bottom:2px solid var(--tan);border-radius:50%;right:-13px;bottom:7px;transform-origin:left center;animation:aviTailWag .55s ease-in-out 2}.auth-brand-symbol{position:relative}@keyframes aviEarPerk{0%,100%{transform:translateY(0) rotate(0)}45%{transform:translateY(-2px) rotate(-7deg)}}@keyframes aviTailWag{0%,100%{transform:rotate(-20deg)}50%{transform:rotate(22deg)}}
+.voice-settings{border-color:rgba(197,139,78,.30);background:linear-gradient(135deg,rgba(35,28,26,.95),rgba(18,18,21,.96))}.voice-settings-copy strong,.voice-select-label{color:var(--tan)}.voice-settings-copy span,.voice-settings-note{color:var(--muted)}.voice-select{border-color:rgba(197,139,78,.33);background:#171619;color:var(--text)}.about-avi{grid-column:1 / -1;margin-top:3px;padding-top:13px;border-top:1px solid rgba(197,139,78,.18)}.about-avi strong{display:block;color:var(--tan);font:600 9px var(--orbit-font);letter-spacing:.14em}.about-avi p{max-width:72ch;margin:6px 0 0;color:var(--muted);font-size:11px;line-height:1.65}.about-avi .placeholder{display:inline-block;margin-top:8px;color:var(--subtle);font:500 9px var(--orbit-font);letter-spacing:.07em;text-transform:uppercase}
+@media(max-width:880px){.sidebar{border-color:rgba(197,139,78,.30);background:rgba(18,17,19,.96)}.navbutton.active{box-shadow:inset 0 2px var(--tan),0 0 18px rgba(139,58,26,.12)}}
+
 </style>
-<meta name="avi-ui-version" content="minimal-redesign-2">
+<meta name="avi-ui-version" content="avi-rottweiler-redesign-1">
 </head>
 <body>
 <section class="auth-gate" id="authGate" aria-label="Sign in to Avi">
  <form class="auth-card" id="authForm">
   <div class="auth-brand">
-   <span class="auth-brand-symbol" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M16 3 26 8v8c0 6-4.3 10.3-10 13C10.3 26.3 6 22 6 16V8l10-5Z" stroke="currentColor" stroke-width="1.6"/><path d="m11 16 3.2 3.1L21.5 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-   <span><strong>avi.</strong><small>PERSONAL INTELLIGENCE</small></span>
+   <span class="auth-brand-symbol" aria-hidden="true"><svg class="avi-mark" viewBox="0 0 64 64"><path class="avi-ear" d="M19 28 10 9l19 13Z"/><path class="avi-ear" d="m45 28 9-19-19 13Z"/><path class="avi-head" d="M17 25 32 15l15 10v16c0 9-6.7 15-15 18-8.3-3-15-9-15-18Z"/><circle class="avi-brow" cx="25" cy="31" r="3"/><circle class="avi-brow" cx="39" cy="31" r="3"/><circle class="avi-eye" cx="25" cy="38" r="1.8"/><circle class="avi-eye" cx="39" cy="38" r="1.8"/><path class="avi-muzzle" d="m25 44 7-3 7 3-2 7h-10Z"/><path class="avi-nose" d="m29 45 3-1.5 3 1.5-3 2.5Z"/></svg></span>
+   <span><strong>Avi AI</strong><small>LOYAL. ALERT. YOURS.</small></span>
   </div>
   <h2 id="authHeading">Welcome back.</h2>
-  <p id="authDescription">Sign in to continue to your personal AI space and access your saved memories.</p>
-  <label for="authEmail">Email address</label>
+  <p id="authDescription">Loyal. Alert. Yours. Sign in to return to your private space.</p>
+  <label for="authEmail">User ID</label>
   <input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com">
   <label for="authPassword">Password</label>
   <input id="authPassword" type="password" minlength="6" autocomplete="current-password" required placeholder="Enter your password">
-  <div class="auth-actions"><button id="authSubmit" type="submit">Sign in</button><button class="auth-link" id="authModeToggle" type="button">Create account</button></div>
+  <div class="auth-actions"><button id="authSubmit" type="submit">Login</button><button class="auth-link" id="authModeToggle" type="button">Create account</button></div>
+  <button class="auth-forgot" type="button" disabled aria-disabled="true" title="Password recovery is not connected yet">Forgot password <span>Coming soon</span></button>
   <p class="auth-status" id="authStatus" role="status" aria-live="polite"></p>
  </form>
 </section>
 <main class="shell">
  <header class="topbar">
   <div class="brand">
-   <div class="brandmark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M16 3 26 8v8c0 6-4.3 10.3-10 13C10.3 26.3 6 22 6 16V8l10-5Z" stroke="#00f0ff" stroke-width="1.6"/><path d="m11 16 3.2 3.1L21.5 12" stroke="#d8fcff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-   <div><div class="brandname">AVI<span style="color:#00f0ff">.</span></div><div class="brandtag">Your intelligence. Your space.</div></div>
+   <div class="brandmark" aria-hidden="true"><svg class="avi-mark" viewBox="0 0 64 64"><path class="avi-ear" d="M19 28 10 9l19 13Z"/><path class="avi-ear" d="m45 28 9-19-19 13Z"/><path class="avi-head" d="M17 25 32 15l15 10v16c0 9-6.7 15-15 18-8.3-3-15-9-15-18Z"/><circle class="avi-brow" cx="25" cy="31" r="3"/><circle class="avi-brow" cx="39" cy="31" r="3"/><circle class="avi-eye" cx="25" cy="38" r="1.8"/><circle class="avi-eye" cx="39" cy="38" r="1.8"/><path class="avi-muzzle" d="m25 44 7-3 7 3-2 7h-10Z"/><path class="avi-nose" d="m29 45 3-1.5 3 1.5-3 2.5Z"/></svg></div>
+   <div><div class="brandname">AVI<span>.</span></div><div class="brandtag">LOYAL. ALERT. YOURS.</div></div>
   </div>
   <div class="top-actions">
    <button class="iconbutton home-button" id="homeAvi" type="button" title="Home" aria-label="Home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9M9 21v-7h6v7"/></svg></button>
@@ -333,6 +367,7 @@ h1 span{display:block;margin-top:6px;color:#b7c4ff;font-weight:500}
    <option value="Aoede">Aoede — Breezy</option><option value="Kore">Kore — Firm</option><option value="Leda">Leda — Youthful</option><option value="Achird">Achird — Friendly</option><option value="Callirrhoe">Callirrhoe — Easy-going</option><option value="Zephyr">Zephyr — Bright</option><option value="Sulafat">Sulafat — Warm</option><option value="Charon">Charon — Informative</option><option value="Puck">Puck — Upbeat</option><option value="Enceladus">Enceladus — Breathy</option>
   </select>
   <p class="voice-settings-note" id="voiceSettingsNote">Changes apply when you next start live voice.</p>
+  <div class="about-avi"><strong>ABOUT AVI</strong><p>Named in tribute to Avi, a late Rottweiler remembered for a steady presence and loyal watch. This is a brand note only; personal tribute settings are not connected yet.</p><span class="placeholder">More personal settings coming soon</span></div>
  </section>
 
  <div class="workspace">
@@ -351,9 +386,9 @@ h1 span{display:block;margin-top:6px;color:#b7c4ff;font-weight:500}
   <section class="main">
    <section class="welcome glass-panel">
     <div class="welcome-copy">
-     <div class="overline">PERSONAL AI / ONLINE</div>
-     <h1>Good to see you.<span>I'm Avi.</span></h1>
-     <p class="intro">Think out loud, ask anything, or work through your next step. I’m here to help you make sense of it.</p>
+     <div class="overline">PERSONAL AI / ON WATCH</div>
+     <h1><span id="homeGreeting">Good evening.</span><span>Avi's on watch.</span></h1>
+     <p class="intro">Think out loud, ask anything, or work through your next step. Avi keeps the room steady while you do.</p>
      <div class="hero-actions">
       <button class="hero-prompt" type="button" data-prompt="Help me plan my day and choose my top priorities."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 14.5 9.5 21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z"/></svg>Plan my day</button>
       <button class="hero-prompt" type="button" data-prompt="Help me think through an idea and turn it into a plan."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 22h4M8.5 14.5A7 7 0 1 1 15.5 14.5c-.8.5-1.3 1.4-1.5 2.5h-4c-.2-1.1-.7-2-1.5-2.5Z"/></svg>Explore an idea</button>
@@ -363,7 +398,7 @@ h1 span{display:block;margin-top:6px;color:#b7c4ff;font-weight:500}
      <div class="orb-stage">
       <div class="orb-rings" aria-hidden="true"></div>
       <div class="core orb" id="mainOrb" role="img" aria-label="Avi AI core">
-       <svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M32 5 51 16v24L32 59 13 40V16L32 5Z" stroke="rgba(215,252,255,.87)" stroke-width="1.35"/><path d="M32 13 44 20v16L32 49 20 36V20l12-7Z" stroke="rgba(0,240,255,.8)" stroke-width="1.2"/><circle cx="32" cy="31" r="8" stroke="white" stroke-width="1.3"/><circle cx="32" cy="31" r="2.5" fill="#e9ffff"/><path d="M32 2v7M32 54v8M9 17l6 3M49 43l6 4" stroke="#b7faff" stroke-width="1.3" stroke-linecap="round"/></svg>
+       <svg class="avi-mark" viewBox="0 0 64 64" aria-hidden="true"><path class="avi-ear" d="M19 28 10 9l19 13Z"/><path class="avi-ear" d="m45 28 9-19-19 13Z"/><path class="avi-head" d="M17 25 32 15l15 10v16c0 9-6.7 15-15 18-8.3-3-15-9-15-18Z"/><circle class="avi-brow" cx="25" cy="31" r="3"/><circle class="avi-brow" cx="39" cy="31" r="3"/><circle class="avi-eye" cx="25" cy="38" r="1.8"/><circle class="avi-eye" cx="39" cy="38" r="1.8"/><path class="avi-muzzle" d="m25 44 7-3 7 3-2 7h-10Z"/><path class="avi-nose" d="m29 45 3-1.5 3 1.5-3 2.5Z"/></svg>
       </div>
       <div class="core-caption">AVI CORE · READY</div>
      </div>
@@ -373,7 +408,7 @@ h1 span{display:block;margin-top:6px;color:#b7c4ff;font-weight:500}
    <section class="chat glass-panel">
     <div class="chat-head">
      <div class="chat-identity">
-      <div class="tiny-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 2 20 7v10l-8 5-8-5V7l8-5Z"/><circle cx="12" cy="12" r="3"/><path d="M12 6v3M12 15v3"/></svg></div>
+      <div class="tiny-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 10V5l5 4h8a5 5 0 0 1 5 5v6a5 5 0 0 1-5 5h-5l-5 4v-4H9a5 5 0 0 1-5-5v-5a5 5 0 0 1 4-5Z"/><path d="M11 17h.01M16 17h.01M21 17h.01"/></svg></div>
       <div><strong>TALK TO AVI</strong><small id="chatStatus">Ready when you are</small></div>
      </div>
      <div class="chat-tools"><span class="private-label">CONVERSATION</span><button type="button" class="clear-chat" id="clearChat" title="Clear conversation" aria-label="Clear conversation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/></svg></button></div>
@@ -391,9 +426,9 @@ h1 span{display:block;margin-top:6px;color:#b7c4ff;font-weight:500}
   <aside class="rightbar glass-panel" aria-label="Assistant tools">
    <div class="section-label">SYSTEM OVERVIEW</div>
    <div class="status-hero">
-    <div class="status-orbit" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 2 26 8v12L16 30 6 20V8L16 2Z"/><circle cx="16" cy="16" r="4"/><path d="M16 7v5M16 20v5"/></svg></div>
-    <strong>YOUR AI COMPANION</strong>
-    <p>One place to think, talk, plan, and keep track of what matters to you.</p>
+    <div class="status-orbit" aria-hidden="true"><svg class="avi-mark" viewBox="0 0 64 64"><path class="avi-ear" d="M19 28 10 9l19 13Z"/><path class="avi-ear" d="m45 28 9-19-19 13Z"/><path class="avi-head" d="M17 25 32 15l15 10v16c0 9-6.7 15-15 18-8.3-3-15-9-15-18Z"/><circle class="avi-brow" cx="25" cy="31" r="3"/><circle class="avi-brow" cx="39" cy="31" r="3"/><circle class="avi-eye" cx="25" cy="38" r="1.8"/><circle class="avi-eye" cx="39" cy="38" r="1.8"/><path class="avi-muzzle" d="m25 44 7-3 7 3-2 7h-10Z"/><path class="avi-nose" d="m29 45 3-1.5 3 1.5-3 2.5Z"/></svg></div>
+    <strong>STEADY BY DESIGN</strong>
+    <p>A private place to think, talk, plan, and keep track of what matters to you.</p>
    </div>
    <div class="divider"></div>
    <div class="info-row"><span class="info-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="8"/></svg></span><div><small>INTERACTION</small><strong>Text and live voice</strong></div></div>
@@ -404,6 +439,7 @@ h1 span{display:block;margin-top:6px;color:#b7c4ff;font-weight:500}
     <button class="quick-prompt" type="button" data-prompt="Help me plan my day and choose my top priorities."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 10h16M8 14h3"/></svg>Plan my day</button>
     <button class="quick-prompt" type="button" data-prompt="Help me brainstorm ideas and turn one into a clear plan."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8m7.2 7.2 2.8 2.8m0-12.8-2.8 2.8m-7.2 7.2-2.8 2.8"/><circle cx="12" cy="12" r="4"/></svg>Explore an idea</button>
     <button class="quick-prompt" type="button" data-prompt="Help me learn something new step by step."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21V5.5Z"/><path d="M4 17a2.5 2.5 0 0 1 2.5-2.5H20"/></svg>Learn something</button>
+    <button class="quick-prompt coming-soon" type="button" disabled aria-disabled="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="8"/></svg>Daily brief <span class="soon-badge">Coming soon</span></button>
    </div>
   </aside>
  </div>
@@ -444,9 +480,19 @@ const authModeToggle = document.getElementById("authModeToggle");
 const authStatus = document.getElementById("authStatus");
 const accountChip = document.getElementById("accountChip");
 const signOutAvi = document.getElementById("signOutAvi");
+const homeGreeting = document.getElementById("homeGreeting");
 let aviAuthMode = "signin";
 let aviSession = null;
 let aviMemorySyncReady = false;
+let aviLoginAnimationRequested = false;
+function aviUpdateHomeGreeting(session) {
+ const hour = new Date().getHours();
+ const timeOfDay = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+ const metadata = session?.user?.user_metadata || {};
+ const name = typeof metadata.full_name === "string" ? metadata.full_name.trim() : typeof metadata.name === "string" ? metadata.name.trim() : "";
+ if (homeGreeting) homeGreeting.textContent = name ? `${timeOfDay}, ${name}.` : `${timeOfDay}.`;
+}
+aviUpdateHomeGreeting(null);
 authModeToggle.addEventListener("click", () => {
  if (!aviAuthClient) {
   authStatus.textContent = "Avi could not load the Supabase sign-in library. Check your connection and reload the page.";
@@ -457,8 +503,8 @@ authModeToggle.addEventListener("click", () => {
  authHeading.textContent = signingUp ? "Create your Avi account." : "Welcome back.";
  authDescription.textContent = signingUp
   ? "Use your email address and a password of at least 6 characters."
-  : "Sign in to sync your personal memories across your devices.";
- authSubmit.textContent = signingUp ? "Create account" : "Sign in";
+  : "Loyal. Alert. Yours. Sign in to return to your private space.";
+ authSubmit.textContent = signingUp ? "Create account" : "Login";
  authModeToggle.textContent = signingUp ? "Back to sign in" : "Create account";
  authPassword.autocomplete = signingUp ? "new-password" : "current-password";
  authStatus.textContent = "";
@@ -475,6 +521,7 @@ authForm.addEventListener("submit", async event => {
  try {
   const email = authEmail.value.trim();
   const password = authPassword.value;
+  aviLoginAnimationRequested = true;
   const result = aviAuthMode === "signup"
    ? await aviAuthClient.auth.signUp({email, password})
    : await aviAuthClient.auth.signInWithPassword({email, password});
@@ -484,15 +531,18 @@ authForm.addEventListener("submit", async event => {
    authDescription.textContent = "Confirm your email address, then return here to sign in.";
    authStatus.textContent = "Account created. Check your inbox (and spam folder) for the confirmation email.";
    aviAuthMode = "signin";
-   authSubmit.textContent = "Sign in";
+   authSubmit.textContent = "Login";
    authModeToggle.textContent = "Create account";
    authPassword.autocomplete = "current-password";
+   aviLoginAnimationRequested = false;
   } else {
    aviSession = result.data.session;
    await aviApplySession(aviSession);
   }
  } catch (error) {
-  authStatus.textContent = error?.message || "The request failed. Please try again.";
+  aviLoginAnimationRequested = false;
+  const message = error?.message || "";
+  authStatus.textContent = /invalid login credentials|invalid password|wrong password/i.test(message) ? "Avi doesn't recognize you. Try again." : message || "The request failed. Please try again.";
  } finally {
   authSubmit.disabled = false;
   authModeToggle.disabled = false;
@@ -502,9 +552,18 @@ async function aviApplySession(session) {
  aviSession = session;
  if (!session) {
   authGate.hidden = false; accountChip.hidden = true; signOutAvi.hidden = true;
+  aviUpdateHomeGreeting(null);
   return;
  }
- authGate.hidden = true;
+ const playLoginAnimation = aviLoginAnimationRequested;
+ aviLoginAnimationRequested = false;
+ aviUpdateHomeGreeting(session);
+ if (playLoginAnimation) {
+  authGate.classList.add("login-success");
+  window.setTimeout(() => { if (aviSession) { authGate.hidden = true; authGate.classList.remove("login-success"); } }, 560);
+ } else {
+  authGate.hidden = true;
+ }
  accountChip.hidden = false; accountChip.querySelector(".profile-email").textContent = session.user.email || "Signed in";
  signOutAvi.hidden = false;
  try {
@@ -798,6 +857,7 @@ async function sendMessage(text) {
   sendButton.disabled = true;
   mic.disabled = true;
   status.textContent = "Avi is thinking...";
+  mainOrb.classList.add("thinking");
 
   const loadingMessage = addMessage("Thinking... 💙", "avi");
 
@@ -1011,7 +1071,7 @@ async function startLiveVoice() {
         speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: selectedAviVoice } } },
         inputAudioTranscription: {},
         outputAudioTranscription: {},
-        systemInstruction: "You are Avi, a warm and loyal personal AI companion. Speak in natural, clear Indian English. Keep replies concise unless more detail is needed. The user may interrupt at any time; stop the current response and listen to the new thought. Conversation history: " + JSON.stringify(conversationHistory.slice(-12)) + ". Saved personal memories: " + JSON.stringify(personalMemory.slice(-50))
+        systemInstruction: "You are Avi, a warm and loyal personal AI companion. Speak in natural, clear Indian English. Keep replies concise unless more detail is needed. Be steady, calm, and attentive; never use pet-themed or cartoonish language. The user may interrupt at any time; stop the current response and listen to the new thought. Conversation history: " + JSON.stringify(conversationHistory.slice(-12)) + ". Saved personal memories: " + JSON.stringify(personalMemory.slice(-50))
       },
       callbacks: {
         onopen: function() {
