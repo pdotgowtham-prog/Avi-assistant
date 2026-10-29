@@ -553,7 +553,7 @@ button:hover{filter:brightness(1.08)}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
 
 
-.auth-gate{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:20px;background:radial-gradient(ellipse at 50% -20%,#1c2b39 0%,#0d131c 46%,#090c12 85%)}
+.auth-gate[hidden]{display:none!important}.auth-gate{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:20px;background:radial-gradient(ellipse at 50% -20%,#1c2b39 0%,#0d131c 46%,#090c12 85%)}
 .auth-card{width:min(100%,420px);padding:26px;border:1px solid #263343;border-radius:18px;background:#101721;color:#edf3f7;box-shadow:0 24px 80px #0008}
 .auth-card h2{margin:0 0 8px;font-size:26px}.auth-card p{color:#9eacba;font-size:13px;line-height:1.6}
 .auth-card label{display:block;margin:14px 0 6px;color:#b5c4d0;font-size:12px}
