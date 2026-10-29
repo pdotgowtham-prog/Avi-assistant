@@ -562,6 +562,25 @@ button:hover{filter:brightness(1.08)}
 .auth-actions button{flex:1}.auth-link{background:transparent;border-color:#2c3c4b}
 .auth-status{min-height:20px;color:#a5dce0!important;font-size:12px!important}.account-chip{font-size:11px;color:#a5dce0;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media(max-width:520px){.auth-card{padding:20px}.top-actions{gap:5px}.account-chip{display:none}}
+
+/* FIX: the global chat form is flex-row; the sign-in form must be a vertical card. */
+.auth-gate{display:grid!important;place-items:center!important;padding:24px!important}
+.auth-card{display:block!important;flex:none!important;width:min(100%,440px)!important;max-width:440px!important;margin:0 auto!important;padding:30px!important;overflow:hidden}
+.auth-card .brandmark{display:grid;place-items:center;width:54px;height:54px;margin:0 0 22px!important}
+.auth-card h2{font-size:clamp(27px,4vw,34px);line-height:1.15;letter-spacing:-.8px;margin:0 0 10px}
+.auth-card p:not(.auth-status){margin:0 0 22px;max-width:34ch}
+.auth-card label{display:block!important;margin:16px 0 7px!important}
+.auth-card input{display:block!important;width:100%!important;max-width:none!important;margin:0!important;min-height:48px;padding:13px 14px!important}
+.auth-card .auth-actions{display:grid!important;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
+.auth-card .auth-actions button{display:block;width:100%;min-width:0;min-height:46px;padding:12px 10px;white-space:normal;line-height:1.3}
+.auth-card .auth-status{min-height:0;margin:14px 0 0!important;overflow-wrap:anywhere}
+@media(max-width:520px){
+ .auth-gate{padding:18px!important}
+ .auth-card{padding:23px!important;border-radius:16px}
+ .auth-card .auth-actions{grid-template-columns:1fr}
+ .auth-card .auth-actions button{min-height:48px}
+}
+
 </style>
 </head>
 <body>
