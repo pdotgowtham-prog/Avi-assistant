@@ -750,7 +750,13 @@ async function sendMessage(text) {
       utterance.lang = "en-US";
       utterance.rate = 1.18;
       utterance.pitch = 1;
-      utterance.onstart = function() { mainOrb.classList.add("speaking"); };
+      utterance.onstart = function() {
+        mainOrb.classList.add("speaking");
+        // Keep speech recognition running during playback so the user can barge in naturally.
+        if (handsFree) setTimeout(function() {
+          if (handsFree && !listening && !sendButton.disabled && restartVoiceRecognition) restartVoiceRecognition();
+        }, 250);
+      };
       utterance.onend = function() {
         mainOrb.classList.remove("speaking");
         if (handsFree && !sendButton.disabled && restartVoiceRecognition) restartVoiceRecognition();
@@ -812,11 +818,11 @@ if (SpeechRecognition) {
 
   recognition.lang = "en-IN";
   recognition.continuous = true;
-  recognition.interimResults = false;
+  recognition.interimResults = true;
 
   let listening = false;
   restartVoiceRecognition = function() {
-    if (!handsFree || listening || sendButton.disabled || (window.speechSynthesis && window.speechSynthesis.speaking)) return;
+    if (!handsFree || listening || sendButton.disabled) return;
     try { recognition.start(); } catch (error) { /* browser may still be shutting down */ }
   };
 
@@ -831,7 +837,24 @@ if (SpeechRecognition) {
   };
 
   recognition.onresult = function(event) {
-    const spokenText = event.results[event.results.length - 1][0].transcript.trim();
+    let finalText = "";
+    let interimText = "";
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const transcript = event.results[i][0].transcript.trim();
+      if (event.results[i].isFinal) finalText += (finalText ? " " : "") + transcript;
+      else interimText += (interimText ? " " : "") + transcript;
+    }
+
+    // The first interim words from the user's voice interrupt Avi immediately.
+    // Wait for a final transcript before sending it, so partial words aren't submitted.
+    if (handsFree && interimText && window.speechSynthesis && window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+      mainOrb.classList.remove("speaking");
+      hint.textContent = "I’m listening — go ahead.";
+      status.textContent = "Listening to you";
+    }
+
+    const spokenText = finalText.trim();
     if (!spokenText) return;
     try { recognition.stop(); } catch (error) {}
     if (window.speechSynthesis) window.speechSynthesis.cancel();
