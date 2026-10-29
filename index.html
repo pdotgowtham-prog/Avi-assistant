@@ -372,6 +372,54 @@ input{background:#020916;border-color:#163a5e;font-size:14px;padding:14px}
 #chatForm .send:after{content:"➤";font-size:21px;position:absolute;inset:0;display:grid;place-items:center}
 .mic.listening{background:#07385b!important;border-color:#19caff!important}
 @media(max-width:760px){#chatForm{padding:9px;gap:7px}#chatForm input{font-size:12px;padding:12px 10px}#chatForm .mic{flex-basis:42px;width:42px;height:42px}#chatForm .send{flex-basis:44px;width:44px;height:44px}}
+
+/* Minimalist Avi mode: remove dashboard clutter and focus on conversation */
+body{background:#03070d;color:#eaf4ff}
+.shell{padding:10px;gap:8px}
+.topbar{background:transparent;border:0;box-shadow:none}
+.workspace{grid-template-columns:220px minmax(0,1fr) 220px;gap:10px;min-height:calc(100vh - 20px)}
+.panel{background:#050d18;border-color:#10243a;box-shadow:none;border-radius:14px}
+.sidebar{padding:18px 12px;background:#040a13}
+.sidebar .nav:before{display:none}
+.sidebar .nav{margin-top:14px;gap:4px}
+.sidebar .navbutton{padding:9px 10px;border-color:transparent;background:transparent;box-shadow:none}
+.sidebar .navbutton.active{background:#0a1b2c;border-color:#123b5c;box-shadow:inset 2px 0 #19bfff}
+.navbutton .navicon{background:transparent;border:0;width:28px;height:28px}
+.main{gap:8px;min-height:0}
+.welcome{min-height:250px;flex:0 0 250px;padding:24px 25px;grid-template-columns:minmax(0,1fr) 210px;background:#050d18;border-color:#102a43;box-shadow:none}
+.welcome:after,.welcome:before{display:none}
+.overline{margin-bottom:18px;letter-spacing:2px;font-size:10px;color:#83b7db}
+h1{font-size:clamp(34px,3.3vw,48px);letter-spacing:-1.5px}
+.intro{font-size:13px;line-height:1.65;color:#9eb3c9;margin:13px 0 17px}
+.chip{background:transparent;border-color:#19334a;color:#b6cde2}
+.core{width:175px;height:175px;box-shadow:0 0 24px #008cff18,inset -14px -15px 30px #01050b}
+.core:before{inset:-9px;box-shadow:none}
+.core:after{inset:-17px}
+.core-caption{font-size:9px;letter-spacing:2px;bottom:-30px;color:#69ccef}
+.shortcuts{display:none!important}
+.chat{flex:1;min-height:300px;background:#030912;border-color:#10243a;box-shadow:none}
+.chat-head{padding:11px 14px;background:#050d18;border-color:#10243a}
+.chat-head .tiny-mark{width:32px;height:32px}
+.messages{max-height:none;min-height:140px;padding:16px;background:#030912}
+.message{max-width:82%;font-size:13px;line-height:1.6;box-shadow:none}
+.avi{background:#091522;border-color:#152d42}
+.user{background:#0a2840;border-color:#164563}
+#chatForm{background:#030912;border-top:1px solid #10243a;padding:10px}
+#chatForm input{background:#050d18;border-color:#172c40;border-radius:12px}
+#chatForm .mic{background:transparent;border-color:#1a3449;color:#78cfee}
+#chatForm .send{background:#0b80ba;border-color:#149dd8;box-shadow:none}
+.rightbar{padding:17px 12px;gap:14px;background:#040a13}
+.rightbar .section-label{letter-spacing:1.6px;font-size:10px}
+.mini-core{width:105px;height:105px;box-shadow:0 0 18px #008cff12}
+.mini-core:after{inset:-7px}
+.right-intro{font-size:12px;color:#92a9c0}
+.info-icon{background:transparent;border-color:#183148;color:#68c9ef}
+.info-row{gap:9px}
+.info-row strong{font-size:11px;font-weight:500;color:#c5d7e8}
+.info-row small{font-size:9px}
+.sidebar-bottom,.memory-card{background:#060e18;border-color:#14273a;box-shadow:none}
+@media(max-width:1150px){.workspace{grid-template-columns:190px minmax(0,1fr)}.rightbar{display:none}.welcome{grid-template-columns:minmax(0,1fr) 160px}.core{width:135px;height:135px}}
+@media(max-width:760px){.shell{padding:7px}.workspace{display:block;min-height:0}.sidebar{display:none}.welcome{min-height:185px;flex-basis:auto;padding:17px 14px;grid-template-columns:minmax(0,1fr) 70px}.overline{font-size:8px;margin-bottom:12px}h1{font-size:29px}.intro{font-size:11px;margin:8px 0}.chips{gap:4px}.chip{font-size:9px;padding:6px 7px}.core{width:58px;height:58px}.core svg{width:85%;height:85%}.core:before{inset:-5px}.core:after{inset:-9px}.core-caption{font-size:6px;letter-spacing:.7px;bottom:-20px}.chat{margin-top:8px;min-height:55vh}.messages{min-height:100px;padding:10px}.rightbar{display:none}}
 </style>
 </head>
 <body>
@@ -430,14 +478,6 @@ input{background:#020916;border-color:#163a5e;font-size:14px;padding:14px}
 <path d="M20 64Q10 52 16 39M100 64Q110 52 104 39" stroke="#ffb64d" stroke-width="1.8" opacity=".9"/>
 </svg>
    </div><div class="core-caption">AVI CORE · ONLINE</div></div></div>
-  </section>
-  <section class="panel shortcuts">
-   <div class="panel-heading"><strong>Where should we start?</strong><span>QUICK PROMPTS</span></div>
-   <div class="shortcut-grid">
-    <button class="shortcut" data-prompt="Help me organize my tasks and priorities for today"><span class="shortcut-icon">◷</span><span><strong>Plan my day</strong><small>Make priorities feel manageable</small></span></button>
-    <button class="shortcut" data-prompt="Help me brainstorm a new idea or project"><span class="shortcut-icon">✳</span><span><strong>Explore an idea</strong><small>Think it through together</small></span></button>
-    <button class="shortcut" data-prompt="Help me learn something step by step"><span class="shortcut-icon">⌘</span><span><strong>Learn something</strong><small>Take it one step at a time</small></span></button>
-   </div>
   </section>
   <section class="panel chat">
    <div class="chat-head">
