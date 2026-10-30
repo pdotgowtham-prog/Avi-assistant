@@ -898,7 +898,7 @@ body {margin:0!important}
   <label for="authPassword">Password</label>
   <input id="authPassword" type="password" minlength="6" autocomplete="current-password" required placeholder="Enter your password">
   <div class="auth-actions"><button id="authSubmit" type="submit">Login</button><button class="auth-link" id="authModeToggle" type="button">Create account</button></div>
-  <button class="auth-forgot" type="button" disabled aria-disabled="true" title="Password recovery is not connected yet">Forgot password <span>Coming soon</span></button>
+  <button class="auth-forgot" id="authForgot" type="button">Forgot password <span>Send reset email</span></button>
   <p class="auth-status" id="authStatus" role="status" aria-live="polite"></p>
  </form>
 </section>
@@ -1046,6 +1046,7 @@ const authDescription = document.getElementById("authDescription");
 const authSubmit = document.getElementById("authSubmit");
 const authModeToggle = document.getElementById("authModeToggle");
 const authStatus = document.getElementById("authStatus");
+const authForgot = document.getElementById("authForgot");
 const accountChip = document.getElementById("accountChip");
 const signOutAvi = document.getElementById("signOutAvi");
 const homeGreeting = document.getElementById("homeGreeting");
@@ -1076,6 +1077,30 @@ authModeToggle.addEventListener("click", () => {
  authModeToggle.textContent = signingUp ? "Back to sign in" : "Create account";
  authPassword.autocomplete = signingUp ? "new-password" : "current-password";
  authStatus.textContent = "";
+});
+authForgot.addEventListener("click", async () => {
+ if (!aviAuthClient) {
+  authStatus.textContent = "Avi could not load the sign-in service. Check your connection and reload.";
+  return;
+ }
+ const email = authEmail.value.trim();
+ if (!email) {
+  authStatus.textContent = "Enter your email address above, then tap Forgot password.";
+  authEmail.focus();
+  return;
+ }
+ authForgot.disabled = true;
+ authStatus.textContent = "Sending a password reset email…";
+ try {
+  const redirectTo = window.location.origin + window.location.pathname;
+  const result = await aviAuthClient.auth.resetPasswordForEmail(email, { redirectTo });
+  if (result.error) throw result.error;
+  authStatus.textContent = "If an account exists for that email, a password reset link has been sent. Check your inbox and spam folder.";
+ } catch (error) {
+  authStatus.textContent = error?.message || "Could not request a password reset. Please try again.";
+ } finally {
+  authForgot.disabled = false;
+ }
 });
 authForm.addEventListener("submit", async event => {
  event.preventDefault();
@@ -1117,9 +1142,34 @@ authForm.addEventListener("submit", async event => {
  }
 });
 async function aviApplySession(session) {
- aviSession = session;
+  const previousUserId = aviSession?.user?.id || null;
+  const nextUserId = session?.user?.id || null;
+  // Do not carry one account's cached data into another account.
+  if (previousUserId && previousUserId !== nextUserId) {
+    conversationHistory = [];
+    personalMemory = [];
+    aviConversationSyncReady = false;
+    aviMemorySyncReady = false;
+    try {
+      localStorage.removeItem(MEMORY_KEY);
+      localStorage.removeItem(PROFILE_MEMORY_KEY);
+    } catch (error) { console.warn("Avi could not clear the previous account cache.", error); }
+    messages.innerHTML = '<div class="message avi">Hey, I\'m Avi. 💠 What\'s on your mind?</div>';
+  }
+  aviSession = session;
  if (!session) {
-  authGate.hidden = false; accountChip.hidden = true; signOutAvi.hidden = true;
+   if (previousUserId) {
+    conversationHistory = [];
+    personalMemory = [];
+    aviConversationSyncReady = false;
+    aviMemorySyncReady = false;
+    try {
+      localStorage.removeItem(MEMORY_KEY);
+      localStorage.removeItem(PROFILE_MEMORY_KEY);
+    } catch (error) { console.warn("Avi could not clear signed-out account cache.", error); }
+    messages.innerHTML = '<div class="message avi">Hey, I\'m Avi. 💠 Sign in to continue your private conversations.</div>';
+   }
+   authGate.hidden = false; accountChip.hidden = true; signOutAvi.hidden = true;
   aviUpdateHomeGreeting(null);
   return;
  }
@@ -1671,16 +1721,14 @@ async function startLiveVoice() {
             if (userText) {
               updateLiveTranscript("user", userText);
               conversationHistory.push({ role: "user", text: userText });
-              // Keep live voice on the same persistent-memory path as typed chat.
-              // Do not block the voice turn while cloud sync is running.
-              savePersonalFactFromMessage(userText).catch(function(error) {
-                console.error("Avi could not save a fact from live voice:", error);
+              // Voice uses the same memory-command and preference path as typed chat.
+              // Keep the audio turn responsive while persistence completes.
+              Promise.resolve().then(async function() {
+                const command = await processMemoryCommand(userText);
+                if (!command.handled) await savePersonalFactFromMessage(userText);
+              }).catch(function(error) {
+                console.error("Avi could not persist a fact from live voice:", error);
               });
-              if (/^\\s*(?:avi[, ]+)?remember(?: that)?\\s+/i.test(userText)) {
-                processMemoryCommand(userText).catch(function(error) {
-                  console.error("Avi could not save a spoken memory command:", error);
-                });
-              }
             }
             if (assistantText) {
               updateLiveTranscript("avi", assistantText);
