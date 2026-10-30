@@ -957,6 +957,10 @@ body {margin:0!important}
   .auth-actions button { min-height:48px!important; }
 }
 
+
+/* Respect auth visibility attributes even where responsive styles set display explicitly. */
+#accountChip[hidden], #signOutAvi[hidden] { display:none!important; }
+
 </style>
 <meta name="avi-ui-version" content="avi-approved-mockup-v1">
 </head>
@@ -1270,6 +1274,9 @@ async function aviApplySession(session) {
     messages.innerHTML = '<div class="message avi">Hey, I\'m Avi. 💠 What\'s on your mind?</div>';
   }
   aviSession = session;
+ if (session && messages.querySelector(".message.avi")?.textContent.includes("Sign in to continue your private conversations")) {
+  messages.innerHTML = '<div class="message avi">Hey, I\'m Avi. 💠 What\'s on your mind?</div>';
+ }
  if (!session) {
    if (previousUserId) {
     conversationHistory = [];
