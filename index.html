@@ -931,6 +931,32 @@ body {margin:0!important}
   #chatForm .mic,#chatForm .send { width:40px!important; height:40px!important; min-width:40px!important; flex-basis:40px!important; }
 }
 
+
+/* Final mobile auth layout fix: remove the overlapping hero from the narrow login view. */
+@media (max-width: 880px) {
+  .auth-gate {
+    position:fixed!important; inset:0!important;
+    display:block!important; width:100%!important; height:100%!important;
+    min-height:100dvh!important; max-height:none!important;
+    padding:calc(12px + env(safe-area-inset-top)) 12px calc(18px + env(safe-area-inset-bottom))!important;
+    overflow-x:hidden!important; overflow-y:auto!important;
+    background:#0b0b0d!important;
+  }
+  .auth-showcase { display:none!important; }
+  .auth-gate .auth-card {
+    display:block!important; width:min(100%,480px)!important; max-width:480px!important;
+    min-height:0!important; margin:12px auto!important;
+    padding:clamp(20px,5vw,28px)!important;
+    border-radius:20px!important;
+  }
+  .auth-card h2 { margin:22px 0 8px!important; font-size:clamp(27px,7vw,34px)!important; line-height:1.2!important; }
+  .auth-card p:not(.auth-status) { margin:0 0 20px!important; font-size:14px!important; line-height:1.65!important; }
+  .auth-card label { margin:14px 0 7px!important; }
+  .auth-card input { min-height:50px!important; }
+  .auth-actions { display:grid!important; grid-template-columns:1fr!important; gap:8px!important; margin-top:22px!important; }
+  .auth-actions button { min-height:48px!important; }
+}
+
 </style>
 <meta name="avi-ui-version" content="avi-approved-mockup-v1">
 </head>
