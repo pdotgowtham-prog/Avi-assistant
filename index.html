@@ -1051,6 +1051,7 @@ const accountChip = document.getElementById("accountChip");
 const signOutAvi = document.getElementById("signOutAvi");
 const homeGreeting = document.getElementById("homeGreeting");
 let aviAuthMode = "signin";
+let aviPasswordRecoveryMode = false;
 let aviSession = null;
 let aviMemorySyncReady = false;
 let aviLoginAnimationRequested = false;
@@ -1103,7 +1104,39 @@ authForgot.addEventListener("click", async () => {
  }
 });
 authForm.addEventListener("submit", async event => {
- event.preventDefault();
+  event.preventDefault();
+  if (aviPasswordRecoveryMode) {
+    const password = authPassword.value;
+    if (password.length < 6) {
+      authStatus.textContent = "Choose a password with at least 6 characters.";
+      return;
+    }
+    authSubmit.disabled = true;
+    authStatus.textContent = "Updating your password…";
+    try {
+      const result = await aviAuthClient.auth.updateUser({ password });
+      if (result.error) throw result.error;
+      aviPasswordRecoveryMode = false;
+      authPassword.value = "";
+      authHeading.textContent = "Password updated.";
+      authDescription.textContent = "Your password has been changed. You can continue using Avi.";
+      authStatus.textContent = "Password updated successfully.";
+      authForgot.hidden = false;
+      authModeToggle.hidden = false;
+      authSubmit.textContent = "Continue";
+      authSubmit.type = "button";
+      authSubmit.onclick = async () => {
+        authSubmit.onclick = null;
+        authSubmit.type = "submit";
+        if (aviAuthClient) await aviAuthClient.auth.getSession().then(({data}) => aviApplySession(data.session));
+      };
+    } catch (error) {
+      authStatus.textContent = error?.message || "Could not update your password. Please request another reset link.";
+    } finally {
+      authSubmit.disabled = false;
+    }
+    return;
+  }
  if (!aviAuthClient) {
   authStatus.textContent = "Avi could not load the Supabase sign-in library. Check your connection and reload the page.";
   return;
@@ -1273,7 +1306,23 @@ document.addEventListener("click", event => {
  }
 });
 if (aviAuthClient) {
- aviAuthClient.auth.onAuthStateChange((_event,session) => { aviApplySession(session); });
+ aviAuthClient.auth.onAuthStateChange((eventType,session) => {
+   if (eventType === "PASSWORD_RECOVERY") {
+    aviPasswordRecoveryMode = true;
+    authGate.hidden = false;
+    authHeading.textContent = "Choose a new password.";
+    authDescription.textContent = "Set a new password for your Avi account.";
+    authPassword.value = "";
+    authPassword.placeholder = "New password (at least 6 characters)";
+    authPassword.autocomplete = "new-password";
+    authSubmit.textContent = "Update password";
+    authSubmit.type = "submit";
+    authForgot.hidden = true;
+    authModeToggle.hidden = true;
+    authStatus.textContent = "";
+   }
+   aviApplySession(session);
+  });
  aviAuthClient.auth.getSession().then(({data,error}) => {
   if (error) authStatus.textContent = error.message;
   aviApplySession(data.session);
