@@ -1116,7 +1116,6 @@ authForm.addEventListener("submit", async event => {
     try {
       const result = await aviAuthClient.auth.updateUser({ password });
       if (result.error) throw result.error;
-      aviPasswordRecoveryMode = false;
       authPassword.value = "";
       authHeading.textContent = "Password updated.";
       authDescription.textContent = "Your password has been changed. You can continue using Avi.";
@@ -1128,6 +1127,7 @@ authForm.addEventListener("submit", async event => {
       authSubmit.onclick = async () => {
         authSubmit.onclick = null;
         authSubmit.type = "submit";
+        aviPasswordRecoveryMode = false;
         if (aviAuthClient) await aviAuthClient.auth.getSession().then(({data}) => aviApplySession(data.session));
       };
     } catch (error) {
@@ -1209,7 +1209,9 @@ async function aviApplySession(session) {
  const playLoginAnimation = aviLoginAnimationRequested;
  aviLoginAnimationRequested = false;
  aviUpdateHomeGreeting(session);
- if (playLoginAnimation) {
+ if (aviPasswordRecoveryMode) {
+  authGate.hidden = false;
+ } else if (playLoginAnimation) {
   authGate.classList.add("login-success");
   window.setTimeout(() => { if (aviSession) { authGate.hidden = true; authGate.classList.remove("login-success"); } }, 560);
  } else {
