@@ -994,6 +994,81 @@ body {margin:0!important}
 #sendButton{color:#ffe1a6!important}
 #mainOrb{border-color:rgba(93,230,255,.55)!important;box-shadow:0 0 0 1px rgba(93,230,255,.12),0 0 35px rgba(30,200,235,.18),inset 0 0 28px rgba(30,200,235,.12)!important}
 
+
+/* AVI DESKTOP WORKSPACE V3 — balanced viewport, separate hero and chat surfaces */
+@media(min-width:881px){
+ html,body{height:100%!important;min-height:100%!important;overflow:hidden!important}
+ body{min-height:100dvh!important}
+ .shell{
+  width:100%!important;max-width:1760px!important;height:100dvh!important;min-height:680px!important;
+  padding:14px 20px!important;gap:12px!important;
+  grid-template-rows:64px minmax(0,1fr)!important;overflow:hidden!important
+ }
+ .topbar{min-height:64px!important;height:64px!important;padding:8px 16px!important}
+ .workspace{
+  height:100%!important;min-height:0!important;overflow:hidden!important;
+  grid-template-columns:220px minmax(0,1fr)!important;gap:14px!important;align-items:stretch!important
+ }
+ .sidebar{height:100%!important;min-height:0!important;padding:18px 13px!important}
+ .main{
+  height:100%!important;min-height:0!important;overflow:hidden!important;
+  display:grid!important;grid-template-columns:minmax(250px,.78fr) minmax(420px,1.42fr)!important;
+  grid-template-rows:minmax(0,1fr)!important;gap:14px!important;align-items:stretch!important
+ }
+ .welcome{
+  grid-column:1!important;grid-row:1!important;position:relative!important;
+  display:block!important;width:100%!important;height:100%!important;min-height:0!important;
+  overflow:hidden!important;border-radius:22px!important
+ }
+ .home-portrait{
+  position:absolute!important;display:block!important;left:50%!important;bottom:0!important;
+  transform:translateX(-50%)!important;width:118%!important;max-width:none!important;height:68%!important;
+  object-fit:contain!important;object-position:center bottom!important;opacity:.92!important;z-index:1!important
+ }
+ .welcome:after{
+  content:""!important;position:absolute!important;inset:0!important;z-index:2!important;pointer-events:none!important;
+  background:linear-gradient(180deg,rgba(9,10,12,.02) 0%,rgba(9,10,12,.05) 36%,rgba(9,10,12,.76) 70%,rgba(9,10,12,.98) 100%)!important
+ }
+ .welcome-copy{
+  position:absolute!important;z-index:3!important;top:7%!important;left:7%!important;right:7%!important;
+  width:auto!important;max-width:none!important
+ }
+ .welcome-copy .overline{font-size:9px!important;letter-spacing:.17em!important;color:#79eaff!important}
+ .welcome-copy h1{font-size:clamp(27px,2.1vw,38px)!important;line-height:1.12!important}
+ .welcome-copy .intro{font-size:13px!important;line-height:1.55!important;max-width:34ch!important}
+ .welcome-copy .hero-actions{display:flex!important;flex-wrap:wrap!important;gap:8px!important}
+ .hero-shortcuts{display:none!important}
+ .core-wrap{display:none!important}
+ .chat{
+  grid-column:2!important;grid-row:1!important;position:relative!important;inset:auto!important;
+  display:flex!important;flex-direction:column!important;width:100%!important;height:100%!important;
+  min-height:0!important;max-height:none!important;margin:0!important;overflow:hidden!important;
+  border-radius:22px!important;background:linear-gradient(145deg,rgba(20,18,17,.98),rgba(9,10,12,.99))!important
+ }
+ .chat-head{min-height:66px!important;padding:13px 18px!important}
+ .chat-identity strong{font-size:12px!important}
+ .chat-identity small{font-size:11px!important}
+ .messages{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;padding:22px!important;gap:14px!important}
+ .message{max-width:min(82%,780px)!important;font-size:14px!important;line-height:1.6!important}
+ #chatForm{flex:0 0 auto!important;width:auto!important;margin:0 14px 8px!important;padding:9px!important;gap:9px!important}
+ #chatForm input{min-height:52px!important;font-size:14px!important}
+ #chatForm .mic,#chatForm .send{width:50px!important;height:50px!important;flex-basis:50px!important}
+ .chat .hint{display:block!important;padding:0 18px 12px!important;font-size:10px!important;opacity:.65!important}
+ .rightbar{display:none!important}
+}
+@media(min-width:881px) and (max-width:1180px){
+ .workspace{grid-template-columns:190px minmax(0,1fr)!important}
+ .main{grid-template-columns:minmax(220px,.7fr) minmax(360px,1.3fr)!important}
+ .welcome-copy .intro{font-size:12px!important}
+}
+@media(min-width:881px) and (max-height:760px){
+ .shell{padding:9px 16px!important;grid-template-rows:56px minmax(0,1fr)!important}
+ .topbar{height:56px!important;min-height:56px!important}
+ .welcome-copy{top:5%!important}
+ .welcome-copy .intro{margin:8px 0!important}
+ .welcome-copy .hero-actions{margin-top:9px!important}
+}
+
 </style>
 <meta name="avi-ui-version" content="avi-approved-mockup-v1">
 </head>
