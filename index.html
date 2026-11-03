@@ -1069,6 +1069,118 @@ body {margin:0!important}
  .welcome-copy .hero-actions{margin-top:9px!important}
 }
 
+
+/* AVI DESKTOP COMPLETE REDESIGN V4 — compact dashboard, visible brand header, no dead space */
+@media(min-width:881px){
+ html,body{height:100%!important;min-height:100%!important;overflow:hidden!important}
+ body{min-height:100dvh!important}
+ .shell{
+  width:100%!important;max-width:1800px!important;height:100dvh!important;min-height:620px!important;
+  margin:0 auto!important;padding:14px 18px!important;display:grid!important;
+  grid-template-rows:62px minmax(0,1fr)!important;gap:12px!important;overflow:hidden!important
+ }
+ .topbar{
+  display:flex!important;position:relative!important;inset:auto!important;
+  width:100%!important;height:62px!important;min-height:62px!important;max-height:62px!important;
+  margin:0!important;padding:8px 16px!important;overflow:visible!important;
+  border:1px solid rgba(197,139,78,.25)!important;border-radius:17px!important;
+  background:linear-gradient(110deg,rgba(22,19,18,.97),rgba(10,11,13,.96))!important;
+  box-shadow:0 8px 28px rgba(0,0,0,.22)!important;backdrop-filter:blur(16px)!important
+ }
+ .topbar .brand,.topbar .home-button,.topbar .connection,.topbar .voice-settings-button,#installAvi,#signOutAvi,.top-actions>.new-chat-button{
+  display:flex!important;visibility:visible!important
+ }
+ .topbar .brand{align-items:center!important;gap:11px!important}
+ .brandmark{width:40px!important;height:40px!important}
+ .brandname{font-size:23px!important;letter-spacing:-.8px!important}
+ .brandtag{font-size:9px!important;letter-spacing:.14em!important}
+ .top-actions{
+  position:relative!important;inset:auto!important;z-index:40!important;
+  display:flex!important;align-items:center!important;gap:9px!important;margin-left:auto!important;padding:0!important
+ }
+ .top-actions .home-button,.top-actions .voice-settings-button,.top-actions #installAvi,.top-actions #signOutAvi{
+  width:38px!important;height:38px!important;min-width:38px!important
+ }
+ #accountChip{
+  display:flex!important;position:relative!important;width:auto!important;min-width:42px!important;height:40px!important;
+  padding:4px 10px!important;gap:8px!important;border-radius:13px!important;
+  border:1px solid rgba(197,139,78,.3)!important;background:rgba(197,139,78,.08)!important
+ }
+ #accountChip .profile-email,#accountChip .profile-caret{display:inline!important}
+ .workspace{
+  display:grid!important;grid-template-columns:228px minmax(0,1fr)!important;gap:13px!important;
+  width:100%!important;height:100%!important;min-height:0!important;overflow:hidden!important;align-items:stretch!important
+ }
+ .sidebar{
+  display:flex!important;position:relative!important;inset:auto!important;width:auto!important;height:100%!important;
+  min-height:0!important;padding:15px 12px!important;overflow:hidden!important;
+  border:1px solid rgba(197,139,78,.22)!important;border-radius:18px!important;
+  background:linear-gradient(160deg,rgba(23,20,19,.96),rgba(10,11,13,.97))!important
+ }
+ .sidebar .section-label{display:block!important;padding:3px 9px 12px!important}
+ .sidebar .side-new-chat,.sidebar .history-caption,.sidebar-bottom{display:flex!important}
+ .sidebar .nav{display:grid!important;gap:5px!important}
+ .sidebar .navbutton{display:flex!important;min-height:42px!important;font-size:12px!important}
+ .sidebar .navbutton:not([data-view="home"]){display:flex!important}
+ .main{
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:clamp(185px,25vh,225px) minmax(0,1fr)!important;
+  gap:12px!important;width:100%!important;height:100%!important;min-height:0!important;overflow:hidden!important
+ }
+ .welcome{
+  grid-column:1!important;grid-row:1!important;position:relative!important;display:block!important;
+  width:100%!important;height:100%!important;min-height:0!important;padding:0!important;overflow:hidden!important;
+  border:1px solid rgba(197,139,78,.28)!important;border-radius:19px!important;
+  background:radial-gradient(ellipse at 78% 18%,rgba(197,139,78,.16),transparent 42%),linear-gradient(110deg,#1b1512 0%,#111113 54%,#0c0e11 100%)!important
+ }
+ .welcome:before{content:""!important;position:absolute!important;inset:0!important;pointer-events:none!important;z-index:1!important;
+  background:linear-gradient(90deg,rgba(8,9,11,.02) 0%,rgba(8,9,11,.08) 55%,rgba(8,9,11,.28) 100%)!important}
+ .welcome:after{content:""!important;position:absolute!important;inset:0!important;pointer-events:none!important;z-index:2!important;
+  background:linear-gradient(90deg,transparent 0%,rgba(9,10,12,.12) 48%,rgba(9,10,12,.18) 100%)!important}
+ .home-portrait{
+  display:block!important;position:absolute!important;z-index:1!important;right:3%!important;left:auto!important;bottom:-3%!important;
+  transform:none!important;width:auto!important;max-width:37%!important;height:112%!important;
+  object-fit:contain!important;object-position:center bottom!important;opacity:.96!important;
+  filter:drop-shadow(0 12px 22px rgba(0,0,0,.35))!important
+ }
+ .welcome-copy{
+  display:block!important;position:absolute!important;z-index:3!important;top:50%!important;left:4%!important;right:38%!important;
+  width:auto!important;max-width:650px!important;transform:translateY(-50%)!important;padding:0!important
+ }
+ .welcome-copy .overline{font-size:9px!important;letter-spacing:.18em!important;margin:0 0 7px!important;color:#77eaff!important}
+ .welcome-copy h1{font-size:clamp(25px,2.5vw,36px)!important;line-height:1.1!important;margin:0 0 7px!important}
+ .welcome-copy .intro{font-size:12px!important;line-height:1.5!important;margin:0!important;max-width:46ch!important}
+ .welcome-copy .hero-actions{display:flex!important;gap:7px!important;margin-top:10px!important;flex-wrap:wrap!important}
+ .welcome-copy .hero-prompt{font-size:10px!important;padding:6px 10px!important}
+ .hero-shortcuts{display:none!important}
+ .core-wrap{display:block!important;position:absolute!important;z-index:4!important;right:12px!important;top:10px!important;transform:scale(.34)!important;transform-origin:top right!important}
+ .chat{
+  display:flex!important;position:relative!important;inset:auto!important;grid-column:1!important;grid-row:2!important;
+  flex-direction:column!important;width:100%!important;height:100%!important;min-height:0!important;max-height:none!important;
+  margin:0!important;overflow:hidden!important;border:1px solid rgba(197,139,78,.25)!important;border-radius:19px!important;
+  background:linear-gradient(145deg,rgba(20,18,17,.97),rgba(9,10,12,.99))!important;
+  box-shadow:0 16px 42px rgba(0,0,0,.22)!important
+ }
+ .chat-head{display:flex!important;flex:0 0 58px!important;min-height:58px!important;padding:9px 16px!important}
+ .chat-identity strong{font-size:12px!important}
+ .chat-identity small{font-size:10px!important}
+ .messages{display:flex!important;flex:1 1 auto!important;min-height:0!important;max-height:none!important;overflow-y:auto!important;padding:18px 20px!important;gap:11px!important}
+ .message{max-width:min(76%,820px)!important;padding:12px 15px!important;font-size:13px!important;line-height:1.55!important}
+ #chatForm{display:flex!important;position:relative!important;inset:auto!important;flex:0 0 auto!important;width:auto!important;margin:0 12px 7px!important;padding:7px!important;gap:8px!important;border-radius:15px!important}
+ #chatForm input{min-height:46px!important;font-size:13px!important}
+ #chatForm .mic,#chatForm .send{width:44px!important;height:44px!important;flex-basis:44px!important;border-radius:12px!important}
+ .chat .hint{display:block!important;padding:0 17px 8px!important;font-size:9px!important;opacity:.58!important}
+ .rightbar{display:none!important}
+}
+@media(min-width:881px) and (max-height:760px){
+ .shell{padding:9px 14px!important;grid-template-rows:54px minmax(0,1fr)!important;gap:9px!important}
+ .topbar{height:54px!important;min-height:54px!important}
+ .main{grid-template-rows:170px minmax(0,1fr)!important;gap:9px!important}
+ .welcome-copy .intro{display:none!important}
+ .welcome-copy .hero-actions{margin-top:7px!important}
+ .chat-head{flex-basis:50px!important;min-height:50px!important}
+}
+
 </style>
 <meta name="avi-ui-version" content="avi-approved-mockup-v1">
 </head>
