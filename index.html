@@ -1181,6 +1181,24 @@ body {margin:0!important}
  .chat-head{flex-basis:50px!important;min-height:50px!important}
 }
 
+
+/* AVI SIGNATURE ICON FAMILY — matching the supplied dog, mic, chat and AI artwork */
+.brandmark{display:grid!important;place-items:center!important;border:1px solid rgba(206,157,91,.68)!important;background:radial-gradient(circle at 50% 45%,rgba(0,220,255,.13),rgba(9,12,16,.96) 72%)!important;box-shadow:0 0 0 3px rgba(198,145,82,.08),inset 0 0 20px rgba(0,216,255,.08)!important}
+.brandmark .avi-logo-art{width:88%!important;height:88%!important;color:#d7a15c!important;filter:drop-shadow(0 0 5px rgba(0,220,255,.22))!important}
+.tiny-mark.avi-chat-mark{display:grid!important;place-items:center!important;color:#67e9fa!important;border:1px solid rgba(75,221,244,.35)!important;background:rgba(18,51,59,.3)!important;border-radius:11px!important}
+.avi-chat-art{width:24px!important;height:24px!important;display:block!important}
+#micButton{position:relative!important;color:#ffd18a!important}
+#micButton:before{content:""!important;display:block!important;width:27px!important;height:27px!important;background:currentColor!important;mask:none!important;-webkit-mask:none!important}
+#micButton:after{content:""!important;position:absolute!important;inset:0!important;margin:auto!important;width:29px!important;height:29px!important;background:currentColor!important;mask:none!important;-webkit-mask:none!important}
+#micButton .avi-mic-art{display:block!important;width:29px!important;height:29px!important}
+#sendButton{position:relative!important;color:#ffd18a!important}
+#sendButton:before{content:""!important;display:block!important;width:26px!important;height:26px!important;background:currentColor!important;mask:none!important;-webkit-mask:none!important}
+#sendButton:after{content:""!important;position:absolute!important;inset:0!important;margin:auto!important;width:27px!important;height:27px!important;background:currentColor!important;mask:none!important;-webkit-mask:none!important}
+#sendButton .avi-send-art{display:block!important;width:25px!important;height:25px!important}
+#mainOrb{display:grid!important;place-items:center!important;color:#5eeaff!important;background:radial-gradient(circle,rgba(0,220,255,.18),rgba(9,14,20,.95) 68%)!important}
+#mainOrb .avi-ai-art{width:76%!important;height:76%!important;color:#68eaff!important;filter:drop-shadow(0 0 9px rgba(0,225,255,.5))!important}
+.navbutton .navicon{display:grid!important;place-items:center!important;width:30px!important;height:30px!important;border:1px solid rgba(205,151,87,.28)!important;border-radius:10px!important;color:#e4ad67!important;background:rgba(201,146,79,.07)!important;font-size:17px!important}
+
 </style>
 <meta name="avi-ui-version" content="avi-approved-mockup-v1">
 </head>
@@ -1192,7 +1210,7 @@ body {margin:0!important}
  </div>
  <form class="auth-card" id="authForm">
   <div class="auth-brand">
-   <span class="auth-brand-symbol" aria-hidden="true"><svg class="avi-mark" viewBox="0 0 64 64" aria-hidden="true"><path class="avi-ear" d="M17 27 10 9l18 10 4 5-4 5Z"/><path class="avi-ear" d="m47 27 7-18-18 10-4 5 4 5Z"/><path class="avi-head" d="M16 25 32 18l16 7v14c0 10-7 17-16 21-9-4-16-11-16-21Z"/><path class="avi-mask" d="M18 38 25 34l7 3 7-3 7 4-4 10-10 5-10-5Z"/><circle class="avi-brow" cx="25" cy="32" r="2.7"/><circle class="avi-brow" cx="39" cy="32" r="2.7"/><path class="avi-muzzle" d="m27 42 5-2 5 2-2 5h-6Z"/><path class="avi-nose" d="m30 42 2-1 2 1-2 2Z"/></svg></span>
+   <span class="auth-brand-symbol" aria-hidden="true"><svg class="avi-mark avi-logo-art" viewBox="0 0 100 100" aria-hidden="true"><path d="M23 37 10 12l29 12 11 9 11-9 29-12-13 27v26c0 17-12 28-27 34C35 93 23 82 23 65Z" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round"/><path d="m23 52 13-8 14 6 14-6 13 8-8 20-19 11-19-11Z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><circle cx="38" cy="48" r="4" fill="currentColor"/><circle cx="62" cy="48" r="4" fill="currentColor"/><path d="m42 68 8-5 8 5-3 8H45Z" fill="currentColor"/><path d="m48 69 2-2 2 2-2 3Z" fill="#111318"/></svg></span>
    <span><strong>Avi AI</strong><small>LOYAL. ALERT. YOURS.</small></span>
   </div>
   <h2 id="authHeading">Welcome back.</h2>
@@ -1270,7 +1288,7 @@ body {margin:0!important}
      <div class="orb-stage">
       <div class="orb-rings" aria-hidden="true"></div>
       <div class="core orb" id="mainOrb" role="img" aria-label="Avi AI core">
-       <svg class="avi-mark" viewBox="0 0 64 64" aria-hidden="true"><path class="avi-ear" d="M19 28 10 9l19 13Z"/><path class="avi-ear" d="m45 28 9-19-19 13Z"/><path class="avi-head" d="M17 25 32 15l15 10v16c0 9-6.7 15-15 18-8.3-3-15-9-15-18Z"/><circle class="avi-brow" cx="25" cy="31" r="3"/><circle class="avi-brow" cx="39" cy="31" r="3"/><circle class="avi-eye" cx="25" cy="38" r="1.8"/><circle class="avi-eye" cx="39" cy="38" r="1.8"/><path class="avi-muzzle" d="m25 44 7-3 7 3-2 7h-10Z"/><path class="avi-nose" d="m29 45 3-1.5 3 1.5-3 2.5Z"/></svg>
+       <svg class="avi-ai-art" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="43" fill="none" stroke="currentColor" stroke-opacity=".28" stroke-width="2"/><g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"><path d="M25 39v22M36 27v46M47 17v66M58 27v46M69 39v22M80 45v10"/></g><path d="M20 50h60" stroke="currentColor" stroke-opacity=".35" stroke-width="2"/></svg>
       </div>
       <div class="core-caption">AVI CORE · READY</div>
      </div>
@@ -1280,7 +1298,7 @@ body {margin:0!important}
    <section class="chat glass-panel">
     <div class="chat-head">
      <div class="chat-identity">
-      <div class="tiny-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 10V5l5 4h8a5 5 0 0 1 5 5v6a5 5 0 0 1-5 5h-5l-5 4v-4H9a5 5 0 0 1-5-5v-5a5 5 0 0 1 4-5Z"/><path d="M11 17h.01M16 17h.01M21 17h.01"/></svg></div>
+      <div class="tiny-mark avi-chat-mark" aria-hidden="true"><svg class="avi-chat-art" viewBox="0 0 100 100" aria-hidden="true"><path d="M18 24Q18 12 31 12H69Q82 12 82 25V62Q82 75 69 75H49L28 91V75Q18 72 18 61Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><circle cx="38" cy="44" r="5" fill="currentColor"/><circle cx="62" cy="44" r="5" fill="currentColor"/><path d="M36 58Q50 70 64 58" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg></div>
       <div><strong>TALK TO AVI</strong><small id="chatStatus">Ready when you are</small></div>
      </div>
      <div class="chat-tools"><span class="private-label">CONVERSATION</span><button type="button" class="clear-chat" id="clearChat" title="Clear conversation" aria-label="Clear conversation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/></svg></button></div>
@@ -1288,8 +1306,8 @@ body {margin:0!important}
     <div class="messages" id="messages" aria-live="polite" aria-relevant="additions text"><div class="message avi">Hey, I'm Avi. 💠 What's on your mind?</div></div>
     <form id="chatForm">
      <input id="chatInput" type="text" placeholder="Ask Avi anything..." autocomplete="off" aria-label="Message Avi" required>
-     <button class="mic" id="micButton" type="button" aria-label="Talk to Avi" title="Start live voice"></button>
-     <button class="send" id="sendButton" type="submit" aria-label="Send message" title="Send message"></button>
+     <button class="mic" id="micButton" type="button" aria-label="Talk to Avi" title="Start live voice"><svg class="avi-mic-art" viewBox="0 0 100 100" aria-hidden="true"><path d="M30 31 18 14l27 10M70 31 82 14 55 24" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><rect x="35" y="17" width="30" height="48" rx="15" fill="none" stroke="currentColor" stroke-width="5"/><path d="M23 48v5a27 27 0 0 0 54 0v-5M50 80v10M37 91h26" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg></button>
+     <button class="send" id="sendButton" type="submit" aria-label="Send message" title="Send message"><svg class="avi-send-art" viewBox="0 0 100 100" aria-hidden="true"><path d="m12 47 75-32-27 72-13-30Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/><path d="M47 57 87 15" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/></svg></button>
     </form>
     <div class="hint" id="micHint">You can type or use your microphone.</div>
    </section>
