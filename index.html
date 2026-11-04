@@ -1808,6 +1808,9 @@ body:before{
  .avi-menu-trigger{width:36px!important;height:36px!important;flex-basis:36px!important}
 }
 
+
+.voice-settings-close{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:36px!important;margin-top:10px!important;padding:0 14px!important;border:1px solid rgba(197,139,78,.35)!important;border-radius:11px!important;background:rgba(197,139,78,.12)!important;color:#edc28d!important;font-size:11px!important;cursor:pointer!important}
+.voice-settings-close:hover{background:rgba(197,139,78,.2)!important}
 </style>
 <meta name="avi-ui-version" content="avi-approved-mockup-v1">
 </head>
@@ -1877,6 +1880,7 @@ body:before{
   </select>
   <p class="voice-settings-note" id="voiceSettingsNote">Changes apply when you next start live voice.</p>
   <div class="about-avi"><strong>ABOUT AVI</strong><p>Named in tribute to Avi, a late Rottweiler remembered for a steady presence and loyal watch. This is a brand note only; personal tribute settings are not connected yet.</p><span class="placeholder">More personal settings coming soon</span></div>
+ <button type="button" class="voice-settings-close" id="closeVoiceSettings">Done</button>
  </section>
 
  <div class="workspace">
@@ -2278,8 +2282,9 @@ aviMainMenu.addEventListener("click",async event=>{
  if(action==="home") document.querySelector('[data-view="home"]')?.click();
  if(action==="memories") document.querySelector('[data-view="memories"]')?.click();
  if(action==="settings"){
-  if(voiceSettingsPanel.hidden) voiceSettingsPanel.hidden=false;
-  document.getElementById("voiceSettings")?.scrollIntoView({behavior:"smooth",block:"nearest"});
+  voiceSettingsPanel.hidden = !voiceSettingsPanel.hidden;
+  voiceSettingsToggle.setAttribute("aria-expanded",String(!voiceSettingsPanel.hidden));
+  if(!voiceSettingsPanel.hidden) document.getElementById("voiceSettings")?.scrollIntoView({behavior:"smooth",block:"nearest"});
  }
  if(action==="install") installAviButton.click();
  if(action==="logout" && aviAuthClient) await aviAuthClient.auth.signOut();
@@ -2341,6 +2346,7 @@ voiceSettingsToggle.addEventListener("click", function() {
   voiceSettingsPanel.hidden = !opening;
   voiceSettingsToggle.setAttribute("aria-expanded", String(opening));
 });
+document.getElementById("closeVoiceSettings").addEventListener("click",function(){voiceSettingsPanel.hidden=true;voiceSettingsToggle.setAttribute("aria-expanded","false");});
 voicePreference.addEventListener("change", function() {
   if (AVAILABLE_AVI_VOICES.includes(voicePreference.value)) selectedAviVoice = voicePreference.value;
   try { localStorage.setItem(VOICE_PREFERENCE_KEY, selectedAviVoice); }
