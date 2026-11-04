@@ -2235,6 +2235,7 @@ async function aviApplySessionInternal(session) {
   if(aviMemoryRealtimeChannel){void aviAuthClient.removeChannel(aviMemoryRealtimeChannel);aviMemoryRealtimeChannel=null;}
   if(aviCloudSyncPollTimer){clearInterval(aviCloudSyncPollTimer);aviCloudSyncPollTimer=null;}
   if(aviMemorySyncPollTimer){clearInterval(aviMemorySyncPollTimer);aviMemorySyncPollTimer=null;}
+  aviLoadGuestMemoryState();
   authGate.hidden=false;accountChip.hidden=true;signOutAvi.hidden=true;aviUpdateHomeGreeting(null);
   messages.innerHTML='<div class="message avi">Hey, I\'m Avi. 💠 Sign in to continue your private conversations.</div>';
   return;
@@ -2279,6 +2280,15 @@ function savePersonalMemoryLocalOnly(){
  const key=aviSession?aviAccountStorageKey(PROFILE_MEMORY_KEY,aviSession.user.id):PROFILE_MEMORY_KEY;
  const items=personalMemory.slice(-50).map(memory=>({memory,...(aviMemoryRecords.get(memory)||{})}));
  try{localStorage.setItem(key,JSON.stringify({version:2,items}));}catch(error){console.warn("Avi could not cache memory display state.",error);}
+}
+function aviLoadGuestMemoryState(){
+ try{
+  const raw=JSON.parse(localStorage.getItem(PROFILE_MEMORY_KEY)||"null");
+  const items=Array.isArray(raw)?raw.map(memory=>({memory})):raw?.version===2&&Array.isArray(raw.items)?raw.items:[];
+  aviMemoryRecords=new Map();personalMemory=[];
+  for(const item of items){if(typeof item?.memory!=="string"||!item.memory.trim())continue;personalMemory.push(item.memory);aviMemoryRecords.set(item.memory,{created_at:item.created_at,updated_at:item.updated_at});}
+  personalMemory=personalMemory.slice(-50);
+ }catch(error){console.warn("AVI could not restore guest-only memories:",error);}
 }
 function aviLoadCachedMemoryState(userId){
  try{
