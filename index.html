@@ -2254,7 +2254,15 @@ async function aviApplySessionInternal(session) {
   aviStartMemorySyncPolling(nextUserId);
   await aviLoadCloudConversation();
   aviStartCloudSyncPolling();
- }catch(error){console.error("Could not load Avi cloud memory:",error);authStatus.textContent="Signed in, but memory sync could not load: "+error.message;}
+ }catch(error){
+  console.error("Could not load Avi cloud memory:",error);
+  aviLoadCachedMemoryState(nextUserId);
+  aviMemorySyncReady=true;
+  aviStartMemoryRealtime(nextUserId);
+  aviStartMemorySyncPolling(nextUserId);
+  authStatus.textContent=navigator.onLine?"Signed in, but cloud memory refresh failed. Showing this account's cached state; pending changes remain revision-checked.":"Offline. Showing this account's cached memories and queued changes.";
+  if(aviMemoryManager?.classList.contains("open"))aviRenderMemoryManager();
+ }
 }
 let aviSessionApplyPromise=null;
 let aviSessionApplyUserId=null;
@@ -2268,7 +2276,28 @@ async function aviApplySession(session){
 }
 function savePersonalMemoryLocalOnly(){
  const key=aviSession?aviAccountStorageKey(PROFILE_MEMORY_KEY,aviSession.user.id):PROFILE_MEMORY_KEY;
- try{localStorage.setItem(key,JSON.stringify(personalMemory.slice(-50)));}catch(error){console.warn("Avi could not cache memory display state.",error);}
+ const items=personalMemory.slice(-50).map(memory=>({memory,...(aviMemoryRecords.get(memory)||{})}));
+ try{localStorage.setItem(key,JSON.stringify({version:2,items}));}catch(error){console.warn("Avi could not cache memory display state.",error);}
+}
+function aviLoadCachedMemoryState(userId){
+ try{
+  const raw=JSON.parse(localStorage.getItem(aviAccountStorageKey(PROFILE_MEMORY_KEY,userId))||"null");
+  const items=Array.isArray(raw)?raw.map(memory=>({memory})):raw?.version===2&&Array.isArray(raw.items)?raw.items:[];
+  const records=new Map();
+  const values=[];
+  for(const item of items){if(typeof item?.memory!=="string"||!item.memory.trim())continue;values.push(item.memory);records.set(item.memory,{id:item.id,revision:Number(item.revision)||0,created_at:item.created_at,updated_at:item.updated_at,pending:!!item.pending});}
+  aviMemoryRecords=records;personalMemory=values.slice(-50);
+  // Replay only durable operations for this exact account. Cache rows never
+  // become writes; only the queued RPC operations can mutate cloud state.
+  const queue=aviReadMemoryQueue(userId);
+  for(const op of queue){
+   if(op.base_memory){const i=personalMemory.indexOf(op.base_memory);if(i>=0)personalMemory.splice(i,1);records.delete(op.base_memory);}
+   if((op.action==="create"||op.action==="update")&&op.memory&&!personalMemory.includes(op.memory)){
+    personalMemory.push(op.memory);records.set(op.memory,{id:op.memory_id,revision:op.base_revision,created_at:op.created_at,updated_at:op.created_at,pending:true});
+   }
+  }
+  personalMemory=personalMemory.slice(-50);savePersonalMemoryLocalOnly();return true;
+ }catch(error){console.warn("AVI could not restore the account memory cache:",error);return false;}
 }
 const AVI_MEMORY_QUEUE_PREFIX="avi_memory_ops_v1_";
 function aviMemoryQueueKey(userId){return AVI_MEMORY_QUEUE_PREFIX+userId;}
