@@ -1,19 +1,21 @@
-name: AVI Phase 4A checks
+name: AVI memory consistency and retrieval checks
 
 on:
   push:
     branches:
       - phase-4a-memory-consistency
+      - phase-4b-backend-memory-retrieval
   pull_request:
     branches:
       - main
       - phase-4a-memory-consistency
+      - phase-4b-backend-memory-retrieval
 
 permissions:
   contents: read
 
 jobs:
-  memory-consistency:
+  memory-regression:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -22,5 +24,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Parse frontend scripts and verify memory invariants
+      - name: Verify Phase 4A memory consistency invariants
         run: node scripts/check-avi-memory.mjs
+      - name: Verify Phase 4B backend retrieval
+        run: node scripts/check-avi-memory-retrieval.mjs
