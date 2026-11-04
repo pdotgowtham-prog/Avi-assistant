@@ -2291,6 +2291,15 @@ function aviLoadCachedMemoryState(userId){
   // become writes; only the queued RPC operations can mutate cloud state.
   const queue=aviReadMemoryQueue(userId);
   for(const op of queue){
+   if(op.sync_status==="conflict"){
+    if(op.server_record&&!op.server_record.deleted_at&&!personalMemory.includes(op.server_record.memory)){
+     personalMemory.push(op.server_record.memory);records.set(op.server_record.memory,{id:op.server_record.id,revision:Number(op.server_record.revision)||1,created_at:op.server_record.created_at,updated_at:op.server_record.updated_at});
+    }
+    if((op.action==="create"||op.action==="update")&&op.memory&&!personalMemory.includes(op.memory)){
+     personalMemory.push(op.memory);records.set(op.memory,{id:op.memory_id,revision:op.base_revision,created_at:op.created_at,updated_at:op.created_at,pending:true,conflict:true,conflictOpId:op.operation_id,serverRecord:op.server_record||null,conflictStatus:op.conflict_status});
+    }
+    continue;
+   }
    if(op.base_memory){const i=personalMemory.indexOf(op.base_memory);if(i>=0)personalMemory.splice(i,1);records.delete(op.base_memory);}
    if((op.action==="create"||op.action==="update")&&op.memory&&!personalMemory.includes(op.memory)){
     personalMemory.push(op.memory);records.set(op.memory,{id:op.memory_id,revision:op.base_revision,created_at:op.created_at,updated_at:op.created_at,pending:true});
