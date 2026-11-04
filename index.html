@@ -2412,7 +2412,7 @@ function aviStartMemorySyncPolling(userId){
  if(aviMemorySyncPollTimer)clearInterval(aviMemorySyncPollTimer);
  aviMemorySyncPollTimer=setInterval(()=>{if(aviSession?.user?.id===userId&&document.visibilityState==="visible")void aviRefreshCloudMemoriesRealtime(userId).catch(error=>console.warn("AVI memory polling failed:",error));},15000);
 }
-window.addEventListener("online",()=>{const userId=aviSession?.user?.id;if(userId)void aviFlushMemoryQueue(userId);});
+
 async function aviCreateMemory(memory){
  const clean=String(memory||"").trim();if(!clean)return false;
  if(personalMemory.some(value=>value.toLowerCase()===clean.toLowerCase()))return true;
@@ -2722,7 +2722,8 @@ window.addEventListener("online",()=>{void aviFlushConversationQueue();void aviR
 document.addEventListener("visibilitychange",()=>{
  if(document.visibilityState==="visible"&&aviSession){
   void aviRefreshCloudConversations();
-  void aviRefreshCloudMemories(aviSession.user.id).catch(error=>console.warn("AVI foreground memory refresh failed:",error));
+  const userId=aviSession.user.id;
+  void aviRefreshCloudMemoriesRealtime(userId).catch(error=>console.warn("AVI foreground memory reconciliation failed:",error));
  }
 });
 
