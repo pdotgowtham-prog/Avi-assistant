@@ -36,3 +36,5 @@ jobs:
         run: node scripts/check-avi-memory-extraction.mjs
       - name: Verify Phase 4D near-duplicate detection
         run: node scripts/check-avi-memory-deduplication.mjs
+      - name: Verify Phase 4D conflict candidate detection
+        run: node scripts/check-avi-memory-conflicts.mjs
