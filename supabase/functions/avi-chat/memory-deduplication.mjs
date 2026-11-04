@@ -1,7 +1,7 @@
 const STOP_WORDS = new Set(["a","an","and","are","as","at","be","been","being","by","for","from","have","i","in","is","it","me","my","of","on","or","our","the","to","was","we","with"]);
 
 function tokens(value) {
-  return String(value || "").toLowerCase().normalize("NFKD").replace(/[\\u0300-\\u036f]/g, "").match(/[a-z0-9]+/g)?.filter(token => token.length > 1 && !STOP_WORDS.has(token)) || [];
+  return String(value || "").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").match(/[a-z0-9]+/g)?.filter(token => token.length > 1 && !STOP_WORDS.has(token)) || [];
 }
 
 /** Conservative detector: returns review candidates only; it never mutates memories. */
