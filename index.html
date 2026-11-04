@@ -1811,6 +1811,11 @@ body:before{
 
 .voice-settings-close{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:36px!important;margin-top:10px!important;padding:0 14px!important;border:1px solid rgba(197,139,78,.35)!important;border-radius:11px!important;background:rgba(197,139,78,.12)!important;color:#edc28d!important;font-size:11px!important;cursor:pointer!important}
 .voice-settings-close:hover{background:rgba(197,139,78,.2)!important}
+
+/* Menu placement is calculated from the actual clicked trigger in JS. */
+.avi-main-menu{position:fixed!important;left:12px;right:auto;top:80px;width:min(320px,calc(100vw - 24px));z-index:9999!important}
+@media(max-width:880px){.avi-main-menu{position:fixed!important;left:12px;right:auto;top:80px;width:min(320px,calc(100vw - 24px));max-width:calc(100vw - 24px);z-index:9999!important}}
+
 </style>
 <meta name="avi-ui-version" content="avi-approved-mockup-v1">
 </head>
@@ -2264,17 +2269,47 @@ function aviRefreshMenuDetails() {
  aviMainMenu.querySelector(".avi-status-dot").className = "avi-status-dot " + (label === "Connected" ? "is-connected" : label === "Connecting..." ? "is-connecting" : "");
  aviInstallHint.textContent = aviInstallPrompt ? "Ready to install" : "Use browser install menu";
 }
-function aviSetMenuOpen(open) {
+let aviMenuAnchor = null;
+let aviMenuAlignment = "left";
+function aviPositionMenu(anchor, alignment) {
+ if (!anchor || aviMainMenu.hidden) return;
+ const rect = anchor.getBoundingClientRect();
+ const margin = 12;
+ const width = Math.min(320, window.innerWidth - margin * 2);
+ const leftEdge = alignment === "right" ? rect.right - width : rect.left;
+ const left = Math.max(margin, Math.min(leftEdge, window.innerWidth - width - margin));
+ const top = Math.min(rect.bottom + 10, window.innerHeight - 100);
+ aviMainMenu.style.setProperty("position","fixed","important");
+ aviMainMenu.style.setProperty("left",left+"px","important");
+ aviMainMenu.style.setProperty("right","auto","important");
+ aviMainMenu.style.setProperty("top",Math.max(margin,top)+"px","important");
+ aviMainMenu.style.setProperty("width",width+"px","important");
+ aviMainMenu.style.setProperty("max-height",Math.max(180,window.innerHeight-Math.max(margin,top)-margin)+"px","important");
+ aviMainMenu.style.setProperty("overflow-y","auto","important");
+}
+function aviSetMenuOpen(open, anchor = aviMenuAnchor, alignment = aviMenuAlignment) {
  aviRefreshMenuDetails();
  aviMainMenu.hidden = !open;
- brandProfileButton.setAttribute("aria-expanded",String(open));
- aviMenuButton.setAttribute("aria-expanded",String(open));
+ brandProfileButton.setAttribute("aria-expanded",String(open && anchor===brandProfileButton));
+ aviMenuButton.setAttribute("aria-expanded",String(open && anchor===aviMenuButton));
+ if(open) {
+  aviMenuAnchor=anchor;
+  aviMenuAlignment=alignment;
+  requestAnimationFrame(()=>aviPositionMenu(aviMenuAnchor,aviMenuAlignment));
+ }
 }
-function aviToggleMenu() { aviSetMenuOpen(aviMainMenu.hidden); }
+function aviToggleMenuFrom(anchor,alignment) {
+ const sameTriggerOpen=!aviMainMenu.hidden && aviMenuAnchor===anchor;
+ if(sameTriggerOpen) aviSetMenuOpen(false);
+ else aviSetMenuOpen(true,anchor,alignment);
+}
 brandProfileButton.setAttribute("aria-haspopup","menu");
 brandProfileButton.setAttribute("aria-expanded","false");
-brandProfileButton.addEventListener("click",aviToggleMenu);
-aviMenuButton.addEventListener("click",aviToggleMenu);
+aviMenuButton.setAttribute("aria-haspopup","menu");
+brandProfileButton.addEventListener("click",()=>aviToggleMenuFrom(brandProfileButton,"left"));
+aviMenuButton.addEventListener("click",()=>aviToggleMenuFrom(aviMenuButton,"right"));
+window.addEventListener("resize",()=>{if(!aviMainMenu.hidden)aviPositionMenu(aviMenuAnchor,aviMenuAlignment);});
+window.addEventListener("scroll",()=>{if(!aviMainMenu.hidden)aviPositionMenu(aviMenuAnchor,aviMenuAlignment);},true);
 aviMainMenu.addEventListener("click",async event=>{
  const action=event.target.closest("[data-avi-menu]")?.dataset.aviMenu;
  if(!action)return;
