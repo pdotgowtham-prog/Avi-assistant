@@ -2221,6 +2221,12 @@ async function aviApplySessionInternal(session) {
   if (previousUserId && previousUserId !== nextUserId) {
     conversationHistory = [];
     personalMemory = [];
+    aviConversations = [];
+    activeConversationId = null;
+    if(aviRealtimeChannel){void aviAuthClient.removeChannel(aviRealtimeChannel);aviRealtimeChannel=null;}
+    if(typeof aviMemoryRealtimeChannel!=="undefined"&&aviMemoryRealtimeChannel){void aviAuthClient.removeChannel(aviMemoryRealtimeChannel);aviMemoryRealtimeChannel=null;}
+    if(aviCloudSyncPollTimer){clearInterval(aviCloudSyncPollTimer);aviCloudSyncPollTimer=null;}
+    if(typeof aviMemorySyncPollTimer!=="undefined"&&aviMemorySyncPollTimer){clearInterval(aviMemorySyncPollTimer);aviMemorySyncPollTimer=null;}
     aviConversationSyncReady = false;
     aviMemorySyncReady = false;
     try {
@@ -2237,6 +2243,12 @@ async function aviApplySessionInternal(session) {
    if (previousUserId) {
     conversationHistory = [];
     personalMemory = [];
+    aviConversations = [];
+    activeConversationId = null;
+    if(aviRealtimeChannel){void aviAuthClient.removeChannel(aviRealtimeChannel);aviRealtimeChannel=null;}
+    if(typeof aviMemoryRealtimeChannel!=="undefined"&&aviMemoryRealtimeChannel){void aviAuthClient.removeChannel(aviMemoryRealtimeChannel);aviMemoryRealtimeChannel=null;}
+    if(aviCloudSyncPollTimer){clearInterval(aviCloudSyncPollTimer);aviCloudSyncPollTimer=null;}
+    if(typeof aviMemorySyncPollTimer!=="undefined"&&aviMemorySyncPollTimer){clearInterval(aviMemorySyncPollTimer);aviMemorySyncPollTimer=null;}
     aviConversationSyncReady = false;
     aviMemorySyncReady = false;
     try {
@@ -2565,6 +2577,7 @@ let aviRealtimeChannel = null;
 let aviCloudRefreshBusy = false;
 const AVI_ACTIVE_CONVERSATION_KEY = "avi_active_conversation_v2";
 const AVI_PENDING_CONVERSATIONS_KEY = "avi_pending_conversations_v1";
+function aviAccountStorageKey(base,userId=aviSession?.user?.id){return base+"_"+(userId||"guest");}
 
 function aviMakeId() {
   return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : "avi-" + Date.now() + "-" + Math.random().toString(36).slice(2);
@@ -2578,16 +2591,32 @@ function aviConversationPreview(items, role) {
   return item ? item.text.replace(/\s+/g," ").slice(0,140) : "";
 }
 function aviCacheConversations() {
-  try { localStorage.setItem("avi_conversations_cache_v2", JSON.stringify(aviConversations)); } catch(error) {}
-  try { if(activeConversationId) localStorage.setItem(AVI_ACTIVE_CONVERSATION_KEY,activeConversationId); } catch(error) {}
+  const userId=aviSession?.user?.id||"guest";
+  try { localStorage.setItem(aviAccountStorageKey("avi_conversations_cache_v2",userId),JSON.stringify(aviConversations)); } catch(error) {}
+  try { if(activeConversationId)localStorage.setItem(aviAccountStorageKey(AVI_ACTIVE_CONVERSATION_KEY,userId),activeConversationId); } catch(error) {}
 }
-function aviGetPendingConversationWrites() {
-  try { const value=JSON.parse(localStorage.getItem(AVI_PENDING_CONVERSATIONS_KEY)||"[]"); return Array.isArray(value)?value:[]; } catch(error){return [];}
+function aviGetPendingConversationWrites(userId=aviSession?.user?.id||"guest") {
+  const key=aviAccountStorageKey(AVI_PENDING_CONVERSATIONS_KEY,userId);
+  try {
+   let value=JSON.parse(localStorage.getItem(key)||"null");
+   if(!Array.isArray(value)){
+    const legacy=JSON.parse(localStorage.getItem(AVI_PENDING_CONVERSATIONS_KEY)||"[]");
+    value=Array.isArray(legacy)?legacy.filter(item=>item.user_id===userId):[];
+    if(value.length)localStorage.setItem(key,JSON.stringify(value));
+    if(Array.isArray(legacy)){
+     const remaining=legacy.filter(item=>item.user_id!==userId);
+     localStorage.setItem(AVI_PENDING_CONVERSATIONS_KEY,JSON.stringify(remaining));
+    }
+   }
+   return Array.isArray(value)?value:[];
+  } catch(error){return [];}
 }
 function aviQueueConversationWrite(conversation) {
-  const queue=aviGetPendingConversationWrites().filter(item=>item.id!==conversation.id);
-  queue.push(conversation);
-  try { localStorage.setItem(AVI_PENDING_CONVERSATIONS_KEY,JSON.stringify(queue.slice(-100))); } catch(error){}
+  const userId=conversation.user_id||aviSession?.user?.id||"guest";
+  const key=aviAccountStorageKey(AVI_PENDING_CONVERSATIONS_KEY,userId);
+  const queue=aviGetPendingConversationWrites(userId).filter(item=>item.id!==conversation.id);
+  queue.push({...conversation,user_id:userId});
+  try { localStorage.setItem(key,JSON.stringify(queue.slice(-100))); } catch(error){}
 }
 async function aviWriteCloudConversation(conversation) {
   if(!aviAuthClient||!aviSession) throw new Error("Sign in to sync this conversation.");
@@ -2668,7 +2697,7 @@ async function aviLoadCloudConversation() {
     if(!aviSession||aviSession.user.id!==userId)return false;
     aviConversations=await aviHydrateCloudConversations(result.data||[],userId);
     let selectedId=null;
-    try{selectedId=localStorage.getItem(AVI_ACTIVE_CONVERSATION_KEY);}catch(error){}
+    try{selectedId=localStorage.getItem(aviAccountStorageKey(AVI_ACTIVE_CONVERSATION_KEY,userId));}catch(error){}
     let selected=aviConversations.find(item=>item.id===selectedId)||aviConversations[0];
     // Import browser-only messages as a separate conversation if they are not already represented in cloud.
     const localSnapshot=[...conversationHistory];
