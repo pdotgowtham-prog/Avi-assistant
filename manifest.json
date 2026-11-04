@@ -9,7 +9,7 @@
   "theme_color": "#07090f",
   "icons": [
     {
-      "src": "avi-icon.svg",
+      "src": "avi-icon-v2.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
