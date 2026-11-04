@@ -1,15 +1,17 @@
-name: AVI memory consistency and retrieval checks
+name: AVI memory consistency, retrieval and extraction checks
 
 on:
   push:
     branches:
       - phase-4a-memory-consistency
       - phase-4b-backend-memory-retrieval
+      - phase-4c-automatic-memory-intelligence
   pull_request:
     branches:
       - main
       - phase-4a-memory-consistency
       - phase-4b-backend-memory-retrieval
+      - phase-4c-automatic-memory-intelligence
 
 permissions:
   contents: read
@@ -28,3 +30,5 @@ jobs:
         run: node scripts/check-avi-memory.mjs
       - name: Verify Phase 4B backend retrieval
         run: node scripts/check-avi-memory-retrieval.mjs
+      - name: Verify Phase 4C automatic extraction
+        run: node scripts/check-avi-memory-extraction.mjs
