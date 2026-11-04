@@ -2998,12 +2998,6 @@ document.getElementById("aviMemoryAdd").addEventListener("submit",async event=>{
  else{if(aviSession)aviMemoryRecords.set(value,{created_at:new Date().toISOString(),updated_at:new Date().toISOString()});aviRenderMemoryManager();aviSetMemoryStatus(aviSession?"Memory added and synced to your account.":"Memory added on this device. Sign in to sync across devices.");}
 });
 
-";aviRenderMemoryManager();aviSetMemoryStatus("Saving…");
- const saved=await savePersonalMemory();
- if(aviSession&&saved===false)aviSetMemoryStatus("Saved on this device, but cloud sync failed. Please retry.");
- else aviSetMemoryStatus(aviSession?"Memory added and synced to your account.":"Memory added on this device. Sign in to sync across devices.");
-});
-
 </script>
 <script>
 /* Small UI behaviors; these do not change the AI request logic. */
