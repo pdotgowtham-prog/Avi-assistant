@@ -2139,8 +2139,7 @@ authForm.addEventListener("submit", async event => {
    authPassword.autocomplete = "current-password";
    aviLoginAnimationRequested = false;
   } else {
-   aviSession = result.data.session;
-   await aviApplySession(aviSession);
+   // SIGNED_IN is handled once by onAuthStateChange below.
   }
  } catch (error) {
   aviLoginAnimationRequested = false;
@@ -2355,12 +2354,12 @@ if (aviAuthClient) {
     authModeToggle.hidden = true;
     authStatus.textContent = "";
    }
-   aviApplySession(session);
+   // Defer work until Supabase releases its internal auth lock.
+   // Database calls made directly in this callback can deadlock auth.
+   window.setTimeout(() => { void aviApplySession(session); }, 0);
   });
- aviAuthClient.auth.getSession().then(({data,error}) => {
-  if (error) authStatus.textContent = error.message;
-  aviApplySession(data.session);
- }).catch(error => { authStatus.textContent = error.message || "Could not check your sign-in status."; });
+ // Supabase emits INITIAL_SESSION here; avoid a competing getSession()
+ // call that can race with SIGNED_IN and apply an obsolete null session.
 } else {
  authStatus.textContent = "Avi could not load the Supabase sign-in library. Check your connection and reload the page.";
 }
