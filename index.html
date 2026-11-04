@@ -2620,6 +2620,12 @@ async function aviFlushConversationQueue() {
   if(remaining.length===0 && typeof status!=="undefined")status.textContent="Conversation synced.";
 }
 window.addEventListener("online",()=>{void aviFlushConversationQueue();void aviRefreshCloudConversations();if(aviSession&&aviMemorySyncReady){const pendingKey="avi_pending_memory_sync_"+aviSession.user.id;try{const pending=JSON.parse(localStorage.getItem(pendingKey)||"null");if(Array.isArray(pending)){personalMemory=pending.slice(-50);void syncAviMemories().then(ok=>{if(ok) localStorage.removeItem(pendingKey);});}}catch(error){console.warn("Avi memory retry failed:",error);}}});
+document.addEventListener("visibilitychange",()=>{
+ if(document.visibilityState==="visible"&&aviSession){
+  void aviRefreshCloudConversations();
+  void aviRefreshCloudMemories(aviSession.user.id).catch(error=>console.warn("AVI foreground memory refresh failed:",error));
+ }
+});
 
 function aviMergeConversationHistory(localItems, cloudItems) {
   const merged = [];
@@ -2703,7 +2709,7 @@ async function aviRefreshCloudConversations() {
   try{
     const result=await aviAuthClient.from("avi_chat_conversations").select("id,user_id,title,messages,last_message_preview,created_at,updated_at").eq("user_id",userId).order("updated_at",{ascending:false});
     if(result.error)throw result.error;
-    if(!aviSession||aviSession.user.id!==userId)return;
+    if(!aviSession||aviSession.user.id!==userId)return false;
     aviConversations=await aviHydrateCloudConversations(result.data||[],userId);
     aviCacheConversations();
     if(activeConversationId&&!aviConversations.some(item=>item.id===activeConversationId)){
@@ -2713,8 +2719,6 @@ async function aviRefreshCloudConversations() {
     }
     const active=aviConversations.find(item=>item.id===activeConversationId);
     if(active && document.visibilityState==="visible"){
-      const localLatest=conversationHistory[conversationHistory.length-1];
-      const remoteLatest=(active.messages||[])[(active.messages||[]).length-1];
       if(JSON.stringify(active.messages||[])!==JSON.stringify(conversationHistory||[])){
         conversationHistory=active.messages||[];
         try{localStorage.setItem(MEMORY_KEY,JSON.stringify(conversationHistory));}catch(error){}
