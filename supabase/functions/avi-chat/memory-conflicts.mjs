@@ -1,5 +1,5 @@
 const NEGATION = new Set(["not","no","never","dont","doesnt","didnt","cannot","cant","wont","isnt","arent"]); 
-const STOP = new Set(["a","an","and","are","as","at","be","been","being","by","for","from","have","i","in","is","it","me","my","of","on","or","our","the","to","was","we","with"]);
+const STOP = new Set(["a","an","and","are","as","at","be","been","being","by","do","does","did","for","from","have","i","in","is","it","me","my","of","on","or","our","the","to","was","we","with"]);
 function words(value) {
   return String(value || "").toLowerCase().replace(/\b(don\x27t)\b/g,"dont").replace(/\b(doesn\x27t)\b/g,"doesnt").replace(/\b(didn\x27t)\b/g,"didnt").replace(/\b(can\x27t)\b/g,"cant").replace(/\b(won\x27t)\b/g,"wont").replace(/\b(isn\x27t)\b/g,"isnt").replace(/\b(aren\x27t)\b/g,"arent").match(/[a-z0-9]+/g) || [];
 }
