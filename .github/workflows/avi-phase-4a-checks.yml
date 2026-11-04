@@ -6,12 +6,14 @@ on:
       - phase-4a-memory-consistency
       - phase-4b-backend-memory-retrieval
       - phase-4c-automatic-memory-intelligence
+      - phase-4d-memory-quality-controls
   pull_request:
     branches:
       - main
       - phase-4a-memory-consistency
       - phase-4b-backend-memory-retrieval
       - phase-4c-automatic-memory-intelligence
+      - phase-4d-memory-quality-controls
 
 permissions:
   contents: read
@@ -32,3 +34,7 @@ jobs:
         run: node scripts/check-avi-memory-retrieval.mjs
       - name: Verify Phase 4C automatic extraction
         run: node scripts/check-avi-memory-extraction.mjs
+      - name: Verify Phase 4D near-duplicate detection
+        run: node scripts/check-avi-memory-deduplication.mjs
+      - name: Verify Phase 4D conflict candidate detection
+        run: node scripts/check-avi-memory-conflicts.mjs
