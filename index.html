@@ -1673,10 +1673,13 @@ async function syncAviMemories() {
  return synced;
 }
 async function deleteCloudMemories(memories) {
- if (!aviSession || !aviMemorySyncReady || !aviAuthClient || !memories.length) return;
+ if (!aviSession) return null;
+ if (!aviMemorySyncReady || !aviAuthClient) return false;
+ if (!memories.length) return true;
  const result = await aviAuthClient.from("avi_personal_memories")
   .delete().eq("user_id", aviSession.user.id).in("memory", memories);
  if (result.error) throw result.error;
+ return true;
 }
 signOutAvi.addEventListener("click", async () => { if (aviAuthClient) await aviAuthClient.auth.signOut(); });
 document.getElementById("homeAvi").addEventListener("click", () => {
@@ -1864,9 +1867,9 @@ async function processMemoryCommand(text) {
     if (fact && !personalMemory.some(x => x.toLowerCase() === fact.toLowerCase())) {
       personalMemory.push(fact);
       personalMemory = personalMemory.slice(-50);
-      const synced = await savePersonalMemory();
-      if (aviSession && synced === false) return { handled: true, reply: "I've saved that on this device, but couldn't sync it to your Avi account. Please check your connection and try again. 💙" };
     }
+    const synced = fact ? await savePersonalMemory() : null;
+    if (aviSession && synced === false) return { handled: true, reply: "I've saved that on this device, but couldn't sync it to your Avi account. Please check your connection and try again. 💙" };
     return { handled: true, reply: fact ? (aviSession ? "Saved to your Avi account memory. I'll use it in future chats on your signed-in devices. 💙" : "Saved on this browser. Sign in to sync it across devices. 💙") : "Tell me what you'd like me to remember." };
   }
   if (/^\s*(?:avi[, ]+)?forget (?:everything|all(?: my)? memories|all memories)\s*[.!]?\s*$/i.test(text)) {
@@ -1874,7 +1877,8 @@ async function processMemoryCommand(text) {
     personalMemory = [];
     await savePersonalMemory();
     try {
-      await deleteCloudMemories(previous);
+      const deleted = await deleteCloudMemories(previous);
+      if (aviSession && deleted === false) throw new Error("Cloud memory sync is not ready.");
       return { handled: true, reply: "I've cleared the personal memories saved for this account and browser. 💙" };
     } catch(error) {
       console.error("Avi could not delete cloud memories:", error);
@@ -1888,7 +1892,8 @@ async function processMemoryCommand(text) {
     personalMemory = personalMemory.filter(x => !x.toLowerCase().includes(target));
     await savePersonalMemory();
     try {
-      await deleteCloudMemories(removed);
+      const deleted = await deleteCloudMemories(removed);
+      if (aviSession && deleted === false) throw new Error("Cloud memory sync is not ready.");
       return { handled: true, reply: removed.length === 0 ? "I couldn't find a matching saved memory. You can ask me to forget all memories if you'd like." : "I've removed the matching saved memory from your account and browser. 💙" };
     } catch(error) {
       console.error("Avi could not delete cloud memories:", error);
