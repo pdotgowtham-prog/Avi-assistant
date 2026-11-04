@@ -2509,11 +2509,11 @@ function aviMakeId() {
 }
 function aviConversationTitle(items) {
   const first = (items || []).find(item => item.role === "user" && item.text && item.text.trim());
-  return first ? first.text.trim().replace(/\\s+/g," ").slice(0,72) : "New conversation";
+  return first ? first.text.trim().replace(/\s+/g," ").slice(0,72) : "New conversation";
 }
 function aviConversationPreview(items, role) {
   const item = [...(items || [])].reverse().find(entry => entry.role === role && entry.text);
-  return item ? item.text.replace(/\\s+/g," ").slice(0,140) : "";
+  return item ? item.text.replace(/\s+/g," ").slice(0,140) : "";
 }
 function aviCacheConversations() {
   try { localStorage.setItem("avi_conversations_cache_v2", JSON.stringify(aviConversations)); } catch(error) {}
