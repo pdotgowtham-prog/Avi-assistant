@@ -1648,12 +1648,14 @@ function savePersonalMemoryLocalOnly() {
 }
 let aviMemorySyncChain = Promise.resolve();
 async function syncAviMemories() {
- if (!aviSession || !aviMemorySyncReady || !aviAuthClient) return;
+ if (!aviSession) return null;
+ if (!aviMemorySyncReady || !aviAuthClient) return false;
  const userId = aviSession.user.id;
  const desired = [...new Set(personalMemory.slice(-50).filter(item => typeof item === "string" && item.trim()))];
- // Additive sync only: never delete cloud memories just because this device has a stale local list.
+ let synced = true;
+ // Additive sync protects cloud memories when a device has an older local cache.
  aviMemorySyncChain = aviMemorySyncChain.then(async () => {
-  if (!aviSession || aviSession.user.id !== userId) return;
+  if (!aviSession || aviSession.user.id !== userId) throw new Error("Avi account changed during memory sync.");
   if (desired.length) {
    const saved = await aviAuthClient.from("avi_personal_memories").upsert(
     desired.map(memory => ({ user_id: userId, memory })),
@@ -1662,11 +1664,13 @@ async function syncAviMemories() {
    if (saved.error) throw saved.error;
   }
  }).catch(error => {
+  synced = false;
   console.error("Avi memory sync failed:", error);
-  if (typeof status !== "undefined") status.textContent = "Memory is on this device, but account sync failed. Please check your connection.";
+  if (typeof status !== "undefined") status.textContent = "Memory is saved on this device, but cloud sync failed. Please retry when connected.";
   if (typeof authStatus !== "undefined") authStatus.textContent = "Memory sync failed: " + (error.message || "check connection and permissions.");
  });
  await aviMemorySyncChain;
+ return synced;
 }
 async function deleteCloudMemories(memories) {
  if (!aviSession || !aviMemorySyncReady || !aviAuthClient || !memories.length) return;
@@ -1851,7 +1855,7 @@ function saveConversationHistory() {
 async function savePersonalMemory() {
   try { localStorage.setItem(PROFILE_MEMORY_KEY, JSON.stringify(personalMemory.slice(-50))); }
   catch (error) { console.warn("Avi could not save personal memory locally.", error); }
-  await syncAviMemories();
+  return await syncAviMemories();
 }
 async function processMemoryCommand(text) {
   const rememberMatch = text.match(/^\s*(?:avi[, ]+)?remember(?: that)?\s+(.+?)\s*[.!]?\s*$/i);
@@ -1860,7 +1864,8 @@ async function processMemoryCommand(text) {
     if (fact && !personalMemory.some(x => x.toLowerCase() === fact.toLowerCase())) {
       personalMemory.push(fact);
       personalMemory = personalMemory.slice(-50);
-      await savePersonalMemory();
+      const synced = await savePersonalMemory();
+      if (aviSession && synced === false) return { handled: true, reply: "I've saved that on this device, but couldn't sync it to your Avi account. Please check your connection and try again. 💙" };
     }
     return { handled: true, reply: fact ? (aviSession ? "Saved to your Avi account memory. I'll use it in future chats on your signed-in devices. 💙" : "Saved on this browser. Sign in to sync it across devices. 💙") : "Tell me what you'd like me to remember." };
   }
@@ -1868,8 +1873,13 @@ async function processMemoryCommand(text) {
     const previous = [...personalMemory];
     personalMemory = [];
     await savePersonalMemory();
-    try { await deleteCloudMemories(previous); } catch(error) { console.error("Avi could not delete cloud memories:", error); }
-    return { handled: true, reply: "I've cleared the personal memories saved for this account and browser. 💙" };
+    try {
+      await deleteCloudMemories(previous);
+      return { handled: true, reply: "I've cleared the personal memories saved for this account and browser. 💙" };
+    } catch(error) {
+      console.error("Avi could not delete cloud memories:", error);
+      return { handled: true, reply: "I've cleared the memories on this device, but couldn't confirm deletion from your cloud account. Please try again when connected. 💙" };
+    }
   }
   const forgetMatch = text.match(/^\s*(?:avi[, ]+)?forget(?: that)?\s+(.+?)\s*[.!]?\s*$/i);
   if (forgetMatch) {
@@ -1877,8 +1887,13 @@ async function processMemoryCommand(text) {
     const removed = personalMemory.filter(x => x.toLowerCase().includes(target));
     personalMemory = personalMemory.filter(x => !x.toLowerCase().includes(target));
     await savePersonalMemory();
-    try { await deleteCloudMemories(removed); } catch(error) { console.error("Avi could not delete cloud memories:", error); }
-    return { handled: true, reply: removed.length === 0 ? "I couldn't find a matching saved memory. You can ask me to forget all memories if you'd like." : "I've removed the matching saved memory from your account and browser. 💙" };
+    try {
+      await deleteCloudMemories(removed);
+      return { handled: true, reply: removed.length === 0 ? "I couldn't find a matching saved memory. You can ask me to forget all memories if you'd like." : "I've removed the matching saved memory from your account and browser. 💙" };
+    } catch(error) {
+      console.error("Avi could not delete cloud memories:", error);
+      return { handled: true, reply: "I've removed that memory on this device, but couldn't confirm cloud deletion. Please try again when connected. 💙" };
+    }
   }
   return { handled: false };
 }
