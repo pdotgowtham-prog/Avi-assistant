@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#061c43"/><stop offset=".48" stop-color="#08091e"/><stop offset="1" stop-color="#21004a"/></linearGradient>
+ <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#00eaff"/><stop offset=".48" stop-color="#4c5bff"/><stop offset="1" stop-color="#e000ff"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2=".85" y2="1"><stop stop-color="#fff9ce"/><stop offset=".42" stop-color="#ffd36a"/><stop offset="1" stop-color="#ff8a28"/></linearGradient>
+ <linearGradient id="script" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".6" stop-color="#e8e6ff"/><stop offset="1" stop-color="#b28cff"/></linearGradient>
+ <filter id="glow"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect x="8" y="8" width="496" height="496" rx="76" fill="url(#bg)" stroke="url(#edge)" stroke-width="8"/>
+<rect x="18" y="18" width="476" height="476" rx="68" fill="none" stroke="#5269ff" stroke-opacity=".24" stroke-width="2"/>
+<g fill="none" stroke="url(#gold)" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)">
+ <path stroke-width="12" d="M105 282 C130 259 139 225 170 198 C195 176 219 153 251 153 C278 153 292 173 316 178 C340 183 360 164 377 174 C392 183 382 210 368 230 C350 256 325 264 307 286 C289 310 288 338 303 369 C278 352 261 328 263 302 C244 329 220 346 190 344 C154 342 129 320 121 294 C114 278 111 266 105 282Z"/>
+ <path stroke-width="9" d="M168 199 C146 218 132 244 129 267 C147 257 158 244 169 226"/>
+ <path stroke-width="9" d="M202 184 C182 203 175 225 183 247"/>
+ <path stroke-width="8" d="M260 158 C279 140 297 142 311 160"/>
+ <path stroke-width="10" d="M365 177 C377 166 390 174 387 191"/>
+ <path stroke-width="8" d="M370 229 C353 246 329 251 306 246"/>
+ <path stroke-width="7" d="M152 333 C136 356 128 376 129 398"/>
+</g>
+<path d="M387 91 L397 119 L426 129 L397 139 L387 168 L377 139 L348 129 L377 119Z" fill="#ffe98b" filter="url(#glow)"/>
+<path d="M404 187 C410 232 391 274 359 298" fill="none" stroke="#b64cff" stroke-width="8" stroke-linecap="round" filter="url(#glow)"/>
+<text x="256" y="416" text-anchor="middle" font-family="cursive" font-size="118" font-style="italic" font-weight="600" fill="url(#script)" letter-spacing="-8">Avi</text>
+<g fill="#e75bff" transform="translate(351 326)"><ellipse cx="0" cy="0" rx="9" ry="13" transform="rotate(-28)"/><ellipse cx="22" cy="-12" rx="9" ry="13" transform="rotate(12 22 -12)"/><ellipse cx="41" cy="3" rx="9" ry="13" transform="rotate(35 41 3)"/><path d="M8 12 C18 2 33 9 35 22 C36 35 23 41 13 33 C4 41 -9 35 -8 22 C-7 10 1 6 8 12Z"/></g>
+<path d="M110 447 H178 M334 447 H402" stroke="url(#edge)" stroke-width="3" stroke-linecap="round"/>
+<text x="256" y="455" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" letter-spacing="8" fill="#f4f5ff">AI ASSISTANT</text>
+<path d="M160 477 Q256 501 352 477" fill="none" stroke="url(#edge)" stroke-width="5" stroke-linecap="round" filter="url(#glow)"/>
+</svg>
