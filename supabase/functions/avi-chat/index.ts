@@ -54,7 +54,7 @@ async function retrieveAccountMemories(req: Request, message: string) {
   const memoriesUrl = new URL("/rest/v1/avi_personal_memories", supabaseUrl);
   memoriesUrl.searchParams.set("select", "memory,created_at,updated_at,deleted_at,expires_at");
   memoriesUrl.searchParams.set("deleted_at", "is.null");
-  memoriesUrl.searchParams.set("or", "(expires_at.is.null,expires_at.gt." + encodeURIComponent(new Date().toISOString()) + ")");
+  memoriesUrl.searchParams.set("or", "(expires_at.is.null,expires_at.gt." + new Date().toISOString() + ")");
   memoriesUrl.searchParams.set("order", "updated_at.desc");
   memoriesUrl.searchParams.set("limit", "50");
   const memoryResponse = await fetch(memoriesUrl, {
