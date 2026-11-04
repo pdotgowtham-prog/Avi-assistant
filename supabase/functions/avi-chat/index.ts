@@ -1,5 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { rankMemories } from "./memory-retrieval.mjs";
+import { buildExtractionPrompt, parseMemoryCandidates } from "./memory-extraction.mjs";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -66,6 +67,67 @@ async function retrieveAccountMemories(req: Request, message: string) {
     status: "available",
     memories: rankMemories(Array.isArray(rows) ? rows : [], message, { limit: 8, maxChars: 6000 }),
   };
+}
+
+async function extractAndSaveMemories(req: Request, userMessages: string[], apiKey: string) {
+  const supabaseUrl = Deno.env.get("SUPABASE_URL");
+  let publishableKey = Deno.env.get("SUPABASE_ANON_KEY") || Deno.env.get("SUPABASE_PUBLISHABLE_KEY");
+  if (!publishableKey) {
+    try {
+      const namedKeys = JSON.parse(Deno.env.get("SUPABASE_PUBLISHABLE_KEYS") || "{}");
+      publishableKey = namedKeys.default || Object.values(namedKeys).find((value) => typeof value === "string") || "";
+    } catch { publishableKey = ""; }
+  }
+  const accessToken = bearerToken(req);
+  if (!supabaseUrl || !publishableKey || !accessToken) return 0;
+
+  const authResponse = await fetch(new URL("/auth/v1/user", supabaseUrl), {
+    headers: { apikey: publishableKey, Authorization: "Bearer " + accessToken },
+  });
+  if (!authResponse.ok) return 0;
+  const user = await authResponse.json();
+  if (!user || typeof user.id !== "string") return 0;
+
+  const extractionResponse = await fetch(
+    "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
+      body: JSON.stringify({
+        contents: [{ role: "user", parts: [{ text: buildExtractionPrompt(userMessages) }] }],
+        generationConfig: { responseMimeType: "application/json", temperature: 0.1 },
+      }),
+    },
+  );
+  if (!extractionResponse.ok) throw new Error("Memory extraction model request failed");
+  const extractionData = await extractionResponse.json();
+  const raw = extractionData.candidates?.[0]?.content?.parts?.map((part: { text?: string }) => part.text ?? "").join("") || "";
+  const candidates = parseMemoryCandidates(raw);
+  let saved = 0;
+  for (const candidate of candidates) {
+    const saveResponse = await fetch(new URL("/rest/v1/rpc/avi_upsert_extracted_memory", supabaseUrl), {
+      method: "POST",
+      headers: {
+        apikey: publishableKey,
+        Authorization: "Bearer " + accessToken,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        p_memory: candidate.memory,
+        p_category: candidate.category,
+        p_confidence: candidate.confidence,
+        p_importance: candidate.importance,
+        p_memory_type: candidate.memory_type,
+      }),
+    });
+    if (!saveResponse.ok) {
+      console.error("AVI automatic memory save failed:", saveResponse.status);
+      continue;
+    }
+    const result = await saveResponse.json();
+    if (result?.status === "created" || result?.status === "refreshed") saved += 1;
+  }
+  return saved;
 }
 
 Deno.serve(async (req: Request) => {
@@ -139,7 +201,21 @@ Deno.serve(async (req: Request) => {
       .join("");
     if (!reply) return jsonResponse({ error: "Avi received an empty AI response. Please try again." }, 502);
 
-    return jsonResponse({ reply, memoryRetrieval: memoryResult.status });
+    let memorySavedCount = 0;
+    try {
+      const userMessages = [
+        ...history.slice(-7).filter((item: { role?: string; text?: string }) =>
+          item.role === "user" && typeof item.text === "string"
+        ).map((item: { text: string }) => item.text),
+        message.trim(),
+      ];
+      memorySavedCount = await extractAndSaveMemories(req, userMessages, apiKey);
+    } catch (error) {
+      // Memory extraction is best-effort; it must never prevent a successful chat reply.
+      console.error("AVI automatic memory extraction failed:", error);
+    }
+
+    return jsonResponse({ reply, memoryRetrieval: memoryResult.status, memorySavedCount });
   } catch (error) {
     console.error("Avi function error:", error);
     return jsonResponse({ error: "Something went wrong while Avi was responding. Please try again." }, 500);
