@@ -2139,7 +2139,9 @@ authForm.addEventListener("submit", async event => {
    authPassword.autocomplete = "current-password";
    aviLoginAnimationRequested = false;
   } else {
-   // SIGNED_IN is handled once by onAuthStateChange below.
+   // Apply the returned session explicitly after the auth request has released its lock.
+   // The auth event remains as a fallback for restored sessions and token refreshes.
+   if (result.data?.session) await aviApplySession(result.data.session);
   }
  } catch (error) {
   aviLoginAnimationRequested = false;
@@ -2359,8 +2361,9 @@ if (aviAuthClient) {
    // Database calls made directly in this callback can deadlock auth.
    window.setTimeout(() => { void aviApplySession(session); }, 0);
   });
- // Supabase emits INITIAL_SESSION here; avoid a competing getSession()
- // call that can race with SIGNED_IN and apply an obsolete null session.
+ // Supabase emits INITIAL_SESSION here. Successful interactive sign-ins also
+ // apply their returned session explicitly after the auth request completes, so
+ // cloud history loading does not depend solely on the event callback.
 } else {
  authStatus.textContent = "Avi could not load the Supabase sign-in library. Check your connection and reload the page.";
 }
