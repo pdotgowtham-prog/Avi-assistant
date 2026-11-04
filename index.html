@@ -2190,6 +2190,7 @@ authForm.addEventListener("submit", async event => {
 async function aviApplySession(session) {
   const previousUserId = aviSession?.user?.id || null;
   const nextUserId = session?.user?.id || null;
+  if(previousUserId===nextUserId && nextUserId && aviConversationSyncReady && aviMemorySyncReady) return;
   // Do not carry one account's cached data into another account.
   if (previousUserId && previousUserId !== nextUserId) {
     conversationHistory = [];
@@ -2520,7 +2521,7 @@ function aviQueueConversationWrite(conversation) {
 }
 async function aviWriteCloudConversation(conversation) {
   if(!aviAuthClient||!aviSession) throw new Error("Sign in to sync this conversation.");
-  const payload={id:conversation.id,user_id:aviSession.user.id,title:conversation.title||aviConversationTitle(conversation.messages),messages:(conversation.messages||[]).slice(-500),created_at:conversation.created_at||new Date().toISOString(),updated_at:new Date().toISOString()};
+  const payload={id:conversation.id,user_id:aviSession.user.id,title:conversation.title||aviConversationTitle(conversation.messages),messages:(conversation.messages||[]),created_at:conversation.created_at||new Date().toISOString(),updated_at:new Date().toISOString()};
   const result=await aviAuthClient.from("avi_chat_conversations").upsert(payload,{onConflict:"id"}).select("id,user_id,title,messages,created_at,updated_at").single();
   if(result.error) throw result.error;
   return result.data;
@@ -2650,7 +2651,7 @@ function aviStartCloudSyncPolling() {
   aviCloudSyncPollTimer=window.setInterval(()=>{if(aviSession?.user?.id===userId){void aviRefreshCloudConversations();}},12000);
 }
 async function saveConversationHistory() {
-  conversationHistory=conversationHistory.slice(-500);
+  conversationHistory=conversationHistory;
   try{localStorage.setItem(MEMORY_KEY,JSON.stringify(conversationHistory));}catch(error){}
   if(!aviSession||!aviAuthClient||!activeConversationId)return false;
   const userId=aviSession.user.id;
