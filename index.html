@@ -1838,6 +1838,22 @@ body:before{
 .avi-main-menu{position:fixed!important;left:12px;right:auto;top:80px;width:min(320px,calc(100vw - 24px));z-index:9999!important}
 @media(max-width:880px){.avi-main-menu{position:fixed!important;left:12px;right:auto;top:80px;width:min(320px,calc(100vw - 24px));max-width:calc(100vw - 24px);z-index:9999!important}}
 
+
+/* Phase 3: three-item mobile dock includes Recent Conversations. */
+@media(max-width:880px){
+ .sidebar .navbutton:not([data-view="home"]):not([data-view="conversations"]):not([data-view="memories"]){display:none!important}
+ .sidebar .navbutton[data-view="home"],.sidebar .navbutton[data-view="conversations"],.sidebar .navbutton[data-view="memories"]{
+  display:flex!important;flex:1 1 33.333%!important;width:33.333%!important;min-width:0!important;
+  justify-content:center!important;align-items:center!important;flex-direction:row!important;gap:5px!important;
+  padding:4px 3px!important;font-size:10px!important;
+ }
+ .sidebar .nav{display:flex!important;flex-direction:row!important;width:100%!important;gap:3px!important}
+ .recent-toolbar{flex-direction:column}
+ .recent-toolbar button{min-height:42px}
+ .recent-conversation{flex-direction:column}
+ .recent-conversation-actions{width:100%}
+ .recent-conversation-actions button{flex:1}
+}
 </style>
 <meta name="avi-ui-version" content="avi-approved-mockup-v1">
 </head>
@@ -2229,11 +2245,16 @@ async function aviApplySession(session) {
       return Array.isArray(saved) ? saved.filter(item => typeof item === "string") : [];
     } catch (error) { return []; }
   })();
-  personalMemory = [...new Set([...cloudMemories, ...localMemories])].slice(-50);
+  const importKey="avi_memory_local_imported_"+session.user.id;
+  let importLocal=false;
+  try{importLocal=localStorage.getItem(importKey)!=="yes";}catch(error){importLocal=true;}
+  personalMemory = [...new Set([...cloudMemories, ...(importLocal?localMemories:[])])].slice(-50);
   savePersonalMemoryLocalOnly();
   aviMemorySyncReady = true;
-  // Migrate any memories that existed only on this browser into the signed-in account.
+  // Import this browser's legacy cache once; thereafter cloud rows are authoritative.
   await syncAviMemories();
+  try{localStorage.setItem(importKey,"yes");}catch(error){}
+  aviStartMemoryRealtime(session.user.id);
   await aviLoadCloudConversation();
   aviStartCloudSyncPolling();
  } catch(error) {
@@ -2269,6 +2290,23 @@ async function syncAviMemories() {
  });
  await aviMemorySyncChain;
  return synced;
+}
+let aviMemoryRealtimeChannel=null;
+async function aviRefreshCloudMemories(userId){
+ if(!aviSession||aviSession.user.id!==userId||!aviAuthClient)return;
+ const result=await aviAuthClient.from("avi_personal_memories").select("memory").eq("user_id",userId).order("created_at",{ascending:true});
+ if(result.error)throw result.error;
+ if(!aviSession||aviSession.user.id!==userId)return;
+ personalMemory=[...new Set((result.data||[]).map(row=>row.memory).filter(value=>typeof value==="string"&&value.trim()))].slice(-50);
+ savePersonalMemoryLocalOnly();
+ if(typeof aviRenderMemoryManager==="function"&&aviMemoryManager?.classList.contains("open"))aviRenderMemoryManager();
+}
+function aviStartMemoryRealtime(userId){
+ if(!aviAuthClient)return;
+ if(aviMemoryRealtimeChannel)aviAuthClient.removeChannel(aviMemoryRealtimeChannel);
+ aviMemoryRealtimeChannel=aviAuthClient.channel("avi-personal-memories-"+userId)
+  .on("postgres_changes",{event:"*",schema:"public",table:"avi_personal_memories",filter:"user_id=eq."+userId},()=>{void aviRefreshCloudMemories(userId).catch(error=>console.warn("Avi memory realtime refresh failed:",error));})
+  .subscribe();
 }
 async function deleteCloudMemories(memories) {
  if (!aviSession) return null;
@@ -2503,7 +2541,7 @@ async function aviFlushConversationQueue() {
   aviCacheConversations();
   if(remaining.length===0 && typeof status!=="undefined")status.textContent="Conversation synced.";
 }
-window.addEventListener("online",()=>{void aviFlushConversationQueue();void aviRefreshCloudConversations();});
+window.addEventListener("online",()=>{void aviFlushConversationQueue();void aviRefreshCloudConversations();if(aviSession&&aviMemorySyncReady){const pendingKey="avi_pending_memory_sync_"+aviSession.user.id;try{const pending=JSON.parse(localStorage.getItem(pendingKey)||"null");if(Array.isArray(pending)){personalMemory=pending.slice(-50);void syncAviMemories().then(ok=>{if(ok) localStorage.removeItem(pendingKey);});}}catch(error){console.warn("Avi memory retry failed:",error);}}});
 
 function aviMergeConversationHistory(localItems, cloudItems) {
   const merged = [];
@@ -2725,7 +2763,13 @@ document.getElementById("aviRecentNew").addEventListener("click",async()=>{await
 async function savePersonalMemory() {
   try { localStorage.setItem(PROFILE_MEMORY_KEY, JSON.stringify(personalMemory.slice(-50))); }
   catch (error) { console.warn("Avi could not save personal memory locally.", error); }
-  return await syncAviMemories();
+  const synced=await syncAviMemories();
+  if(synced===false){
+    try{localStorage.setItem("avi_pending_memory_sync_"+(aviSession?.user?.id||"local"),JSON.stringify(personalMemory.slice(-50)));}catch(error){}
+  }else if(synced===true){
+    try{localStorage.removeItem("avi_pending_memory_sync_"+aviSession.user.id);}catch(error){}
+  }
+  return synced;
 }
 async function processMemoryCommand(text) {
   const rememberMatch = text.match(/^\s*(?:avi[, ]+)?remember(?: that)?\s+(.+?)\s*[.!]?\s*$/i);
