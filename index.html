@@ -2279,8 +2279,12 @@ async function aviApplySessionInternal(session) {
   savePersonalMemoryLocalOnly();
   aviMemorySyncReady = true;
   // Import this browser's legacy cache once; thereafter cloud rows are authoritative.
-  await syncAviMemories();
-  try{localStorage.setItem(importKey,"yes");}catch(error){}
+  const initialMemorySync=await syncAviMemories();
+  if(initialMemorySync===true){
+   try{localStorage.setItem(importKey,"yes");localStorage.removeItem("avi_pending_memory_sync_"+session.user.id);}catch(error){}
+  }else{
+   try{localStorage.setItem("avi_pending_memory_sync_"+session.user.id,JSON.stringify(personalMemory));}catch(error){}
+  }
   aviStartMemoryRealtime(session.user.id);
   aviStartMemorySyncPolling(session.user.id);
   await aviLoadCloudConversation();
@@ -2344,7 +2348,10 @@ async function aviRefreshCloudMemories(userId){
  const result=await aviAuthClient.from("avi_personal_memories").select("memory").eq("user_id",userId).order("created_at",{ascending:true});
  if(result.error)throw result.error;
  if(!aviSession||aviSession.user.id!==userId)return;
- personalMemory=[...new Set((result.data||[]).map(row=>row.memory).filter(value=>typeof value==="string"&&value.trim()))].slice(-50);
+ const cloudValues=(result.data||[]).map(row=>row.memory).filter(value=>typeof value==="string"&&value.trim());
+ let pendingValues=[];
+ try{const pending=JSON.parse(localStorage.getItem("avi_pending_memory_sync_"+userId)||"null");if(Array.isArray(pending))pendingValues=pending;}catch(error){}
+ personalMemory=[...new Set([...cloudValues,...pendingValues])].slice(-50);
  savePersonalMemoryLocalOnly();
  if(typeof aviRenderMemoryManager==="function"&&aviMemoryManager?.classList.contains("open"))aviRenderMemoryManager();
 }
@@ -2692,6 +2699,11 @@ async function aviRefreshCloudConversations() {
     if(!aviSession||aviSession.user.id!==userId)return;
     aviConversations=await aviHydrateCloudConversations(result.data||[],userId);
     aviCacheConversations();
+    if(activeConversationId&&!aviConversations.some(item=>item.id===activeConversationId)){
+      activeConversationId=null;conversationHistory=[];
+      try{localStorage.setItem(MEMORY_KEY,"[]");}catch(error){}
+      await aviStartNewConversation();
+    }
     const active=aviConversations.find(item=>item.id===activeConversationId);
     if(active && document.visibilityState==="visible"){
       const localLatest=conversationHistory[conversationHistory.length-1];
@@ -3288,7 +3300,15 @@ installAviButton.addEventListener("click", async () => {
 });
 window.addEventListener("appinstalled", () => { installAviButton.hidden = true; });
 if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
- navigator.serviceWorker.register("./sw.js").catch(error => console.warn("Avi service worker registration failed:", error));
+ navigator.serviceWorker.addEventListener("controllerchange",()=>{
+  if(!sessionStorage.getItem("avi_sw_controller_reloaded_v1")){
+   sessionStorage.setItem("avi_sw_controller_reloaded_v1","yes");
+   window.location.reload();
+  }
+ });
+ navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"})
+  .then(registration=>registration.update())
+  .catch(error=>console.warn("Avi service worker update failed:",error));
 }
 
 /* Memory Manager — account-scoped cloud records with local fallback. */
