@@ -2272,7 +2272,10 @@ async function aviApplySessionInternal(session) {
  } else {
   authGate.hidden = true;
  }
- accountChip.hidden = false; accountChip.querySelector(".profile-email").textContent = session.user.email || "Signed in";
+ // The old account chip is a hidden legacy placeholder with no .profile-email child.
+ // Update the current account label in the navigation menu instead.
+ const accountLabel = document.getElementById("aviMenuEmail");
+ if (accountLabel) accountLabel.textContent = session.user.email || "Signed in";
  signOutAvi.hidden = false;
  try {
   const result = await aviAuthClient.from("avi_personal_memories").select("memory").eq("user_id",session.user.id).order("created_at",{ascending:true});
