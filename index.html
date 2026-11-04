@@ -2255,6 +2255,7 @@ async function aviApplySessionInternal(session) {
   await aviLoadCloudConversation();
   aviStartCloudSyncPolling();
  }catch(error){
+  if(aviSession?.user?.id!==nextUserId)return;
   console.error("Could not load Avi cloud memory:",error);
   aviLoadCachedMemoryState(nextUserId);
   aviMemorySyncReady=true;
@@ -2357,6 +2358,7 @@ async function aviFlushMemoryQueue(userId){
    const op=queue[0];if(op.sync_status==="conflict")return false;
    op.sync_status="syncing";aviWriteMemoryQueue(userId,queue);
    const {data,error}=await aviAuthClient.rpc("avi_apply_memory_operation",{p_operation_id:op.operation_id,p_action:op.action,p_memory_id:op.memory_id,p_memory:op.memory,p_base_revision:op.base_revision});
+   if(aviSession?.user?.id!==userId)return false;
    if(error){op.sync_status="pending";op.last_error=error.message;aviWriteMemoryQueue(userId,queue);throw error;}
    const status=data?.status;
    if(status==="conflict"||status==="duplicate_conflict"){
