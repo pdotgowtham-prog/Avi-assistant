@@ -2364,9 +2364,9 @@ async function aviRefreshCloudMemories(userId){
  if(typeof aviRenderMemoryManager==="function"&&aviMemoryManager?.classList.contains("open"))aviRenderMemoryManager();
 }
 let aviMemoryFlushPromise=Promise.resolve();
-async function aviFlushMemoryQueue(userId){
- if(!navigator.onLine||!aviSession||aviSession.user.id!==userId||!aviAuthClient)return false;
+async function aviRunMemoryQueueFlush(userId){
  aviMemoryFlushPromise=aviMemoryFlushPromise.catch(()=>{}).then(async()=>{
+
   let queue=aviReadMemoryQueue(userId);
   while(queue.length&&navigator.onLine&&aviSession?.user?.id===userId){
    const op=queue[0];if(op.sync_status==="conflict")return false;
@@ -2402,6 +2402,22 @@ async function aviFlushMemoryQueue(userId){
  });
  try{return await aviMemoryFlushPromise;}catch(error){console.warn("AVI memory operation retry deferred:",error);return false;}
 }
+async function aviFlushMemoryQueue(userId){
+ if(!navigator.onLine||!aviSession||aviSession.user.id!==userId||!aviAuthClient)return false;
+ // Web Locks prevents two open AVI tabs on the same browser from reading and
+ // overwriting the same account queue concurrently. The RPC remains idempotent
+ // across devices; this lock is only a same-origin coordination layer.
+ if(navigator.locks&&typeof navigator.locks.request==="function"){
+  return navigator.locks.request("avi-memory-queue-"+userId,{mode:"exclusive"},()=>aviRunMemoryQueueFlush(userId));
+ }
+ return aviRunMemoryQueueFlush(userId);
+}
+window.addEventListener("storage",event=>{
+ const userId=aviSession?.user?.id;
+ if(!userId||event.key!==aviMemoryQueueKey(userId))return;
+ if(navigator.onLine)void aviFlushMemoryQueue(userId);
+});
+
 function syncAviMemories(){return aviSession?aviFlushMemoryQueue(aviSession.user.id):null;}
 async function aviRefreshCloudMemoriesRealtime(userId){await aviRefreshCloudMemories(userId);await aviFlushMemoryQueue(userId);}
 let aviMemoryRealtimeChannel=null;
