@@ -1547,18 +1547,85 @@ body {margin:0!important}
  }
 }
 
+
+/* AVI EXPERIENCE REFRESH — unified workspace, shared Rottweiler identity, usable profile actions */
+.auth-showcase-brand{display:flex!important;align-items:center!important;gap:14px!important;flex-direction:row!important}
+.auth-showcase-brand img{width:58px!important;height:58px!important;object-fit:cover!important;border-radius:17px!important;border:1px solid rgba(197,139,78,.5)!important;box-shadow:0 8px 26px rgba(0,0,0,.35)!important}
+.auth-showcase-brand span{font-size:clamp(30px,3vw,48px)!important}
+.auth-showcase-brand small{position:absolute!important;left:72px!important;top:calc(100% + 8px)!important;margin:0!important;font-size:11px!important;letter-spacing:.16em!important;color:#d4a36d!important}
+.auth-brand-symbol{overflow:hidden!important;padding:0!important}
+.auth-logo-image{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;border-radius:inherit!important}
+.brandmark{display:grid!important;place-items:center!important;padding:0!important;overflow:hidden!important;cursor:pointer!important;appearance:none!important;-webkit-appearance:none!important}
+.brandmark:focus-visible{outline:2px solid var(--tan)!important;outline-offset:3px!important}
+.brandmark:hover{transform:translateY(-1px)!important;box-shadow:0 0 0 3px rgba(197,139,78,.13),0 8px 24px rgba(0,0,0,.3)!important}
+.profile-menu{width:270px!important;padding:14px!important}
+.profile-menu-heading{display:flex!important;align-items:center!important;gap:10px!important;padding:5px 5px 13px!important;margin-bottom:8px!important;border-bottom:1px solid rgba(197,139,78,.2)!important}
+.profile-menu-heading>span:last-child{display:flex!important;flex-direction:column!important;min-width:0!important;gap:4px!important}
+.profile-menu-avatar{display:grid!important;place-items:center!important;width:38px!important;height:38px!important;flex:0 0 auto!important;border-radius:50%!important;background:linear-gradient(145deg,#9b5b2d,#e6b36d)!important;color:#1b110b!important;font-weight:800!important}
+.profile-menu-name{font-size:13px!important;color:#fff!important}
+.profile-menu-email{padding:0!important;margin:0!important;border:0!important;font-size:11px!important;color:#b9a99a!important}
+.profile-menu button{min-height:40px!important}
+.profile-menu .profile-signout{border-top:1px solid rgba(197,139,78,.16)!important;margin-top:6px!important;padding-top:13px!important}
+@media(min-width:881px){
+ .auth-gate{
+  position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;
+  min-height:0!important;max-height:100dvh!important;overflow:hidden!important;
+  display:grid!important;grid-template-columns:minmax(0,1.1fr) minmax(390px,.9fr)!important;
+  align-items:stretch!important;justify-items:stretch!important;gap:18px!important;padding:18px!important;
+ }
+ .auth-gate[hidden]{display:none!important}
+ .auth-showcase{min-height:0!important;height:100%!important;padding:clamp(24px,4vw,58px)!important}
+ .auth-card{align-self:center!important;justify-self:center!important;width:min(100%,520px)!important;max-height:calc(100dvh - 36px)!important;overflow-y:auto!important;padding:clamp(24px,3vw,42px)!important}
+ .auth-card h2{margin-top:18px!important}
+ .auth-card p:not(.auth-status){margin-bottom:16px!important}
+ .auth-card label{margin-top:12px!important}
+ .auth-actions{margin-top:18px!important}
+ .shell{grid-template-rows:62px minmax(0,1fr)!important}
+ .workspace{grid-row:2!important;grid-template-columns:250px minmax(0,1fr)!important}
+ .main{display:block!important;position:relative!important;height:100%!important;min-height:0!important;overflow:hidden!important}
+ .welcome{display:none!important}
+ .chat{position:relative!important;inset:auto!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;
+  width:100%!important;height:100%!important;min-height:0!important;max-height:none!important;
+  border:1px solid rgba(197,139,78,.24)!important;border-radius:22px!important;
+  background:linear-gradient(155deg,rgba(24,21,20,.98),rgba(10,11,13,.99))!important;
+  box-shadow:0 18px 48px rgba(0,0,0,.22)!important}
+ .chat-head{min-height:68px!important;padding:16px 20px!important;background:rgba(28,24,22,.56)!important}
+ .messages{padding:26px clamp(20px,3vw,42px)!important}
+ .message{max-width:min(78%,760px)!important;font-size:14px!important;padding:14px 17px!important}
+ #chatForm{margin:0 18px 10px!important;padding:9px!important}
+ #chatForm input{min-height:54px!important;font-size:14px!important}
+}
+@media(max-width:880px){
+ .auth-gate{min-height:100dvh!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;gap:0!important;padding:10px!important}
+ .auth-showcase{min-height:180px!important;height:28dvh!important;max-height:260px!important;padding:20px!important;background-position:35% 34%!important}
+ .auth-showcase-brand img{width:42px!important;height:42px!important}
+ .auth-showcase-brand span{font-size:29px!important}
+ .auth-showcase-brand small{left:56px!important;font-size:9px!important}
+ .auth-card{width:min(100%,520px)!important;max-width:520px!important;margin:10px auto!important;padding:22px!important}
+}
+@media(max-height:720px) and (min-width:881px){
+ .auth-gate{padding:10px!important;gap:10px!important}
+ .auth-showcase{padding:24px!important}
+ .auth-card{max-height:calc(100dvh - 20px)!important;padding:22px!important}
+ .auth-card h2{margin-top:10px!important;font-size:27px!important}
+ .auth-card p:not(.auth-status){margin-bottom:10px!important}
+ .auth-card label{margin-top:8px!important}
+ .auth-card input{min-height:42px!important}
+ .auth-actions{margin-top:12px!important}
+}
+
 </style>
 <meta name="avi-ui-version" content="avi-approved-mockup-v1">
 </head>
 <body>
 <section class="auth-gate" id="authGate" aria-label="Sign in to Avi">
  <div class="auth-showcase" aria-hidden="true">
-  <div class="auth-showcase-brand">AVI AI<span>+</span><small>Loyal. Alert. Yours.</small></div>
+  <div class="auth-showcase-brand"><img src="./avi-app-icon.jpg?v=2" alt=""><span>AVI AI</span><small>Loyal. Alert. Yours.</small></div>
   <div class="auth-showcase-copy"><strong>Meet <em>Avi.</em></strong><span>Your personal AI companion.</span><small>For work, life, and everything in between.</small></div>
  </div>
  <form class="auth-card" id="authForm">
   <div class="auth-brand">
-   <span class="auth-brand-symbol" aria-hidden="true"><svg class="avi-mark avi-logo-art" viewBox="0 0 100 100" aria-hidden="true"><path d="M23 37 10 12l29 12 11 9 11-9 29-12-13 27v26c0 17-12 28-27 34C35 93 23 82 23 65Z" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round"/><path d="m23 52 13-8 14 6 14-6 13 8-8 20-19 11-19-11Z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><circle cx="38" cy="48" r="4" fill="currentColor"/><circle cx="62" cy="48" r="4" fill="currentColor"/><path d="m42 68 8-5 8 5-3 8H45Z" fill="currentColor"/><path d="m48 69 2-2 2 2-2 3Z" fill="#111318"/></svg></span>
+   <span class="auth-brand-symbol" aria-hidden="true"><img class="auth-logo-image" src="./avi-app-icon.jpg?v=2" alt="Avi Rottweiler logo"></span>
    <span><strong>Avi AI</strong><small>LOYAL. ALERT. YOURS.</small></span>
   </div>
   <h2 id="authHeading">Welcome back.</h2>
@@ -1575,7 +1642,7 @@ body {margin:0!important}
 <main class="shell">
  <header class="topbar">
   <div class="brand">
-   <div class="brandmark" aria-hidden="true"><img class="avi-brand-image" src="./avi-app-icon.jpg?v=1" alt=""></div>
+   <button class="brandmark" id="brandProfileButton" type="button" title="Open Avi profile menu" aria-label="Open Avi profile menu"><img class="avi-brand-image" src="./avi-app-icon.jpg?v=2" alt=""></button>
    <div><div class="brandname">AVI<span>.</span></div><div class="brandtag">LOYAL. ALERT. YOURS.</div></div>
   </div>
   <div class="top-actions">
@@ -1964,6 +2031,8 @@ document.getElementById("homeAvi").addEventListener("click", () => {
  if (overview) overview.click();
  window.scrollTo({top:0,behavior:"smooth"});
 });
+const brandProfileButton = document.getElementById("brandProfileButton");
+if (brandProfileButton) brandProfileButton.addEventListener("click", () => accountChip.click());
 accountChip.addEventListener("click", () => {
  if (!aviSession) {
   document.getElementById("authGate").hidden = false;
@@ -1974,14 +2043,27 @@ accountChip.addEventListener("click", () => {
  menu = document.createElement("div");
  menu.id = "aviProfileMenu";
  menu.className = "profile-menu";
- menu.innerHTML = '<span class="profile-menu-email"></span><button type="button" class="profile-account">Voice settings</button><button type="button" class="profile-signout">Sign out</button>';
+ menu.innerHTML = '<div class="profile-menu-heading"><span class="profile-menu-avatar">A</span><span><strong class="profile-menu-name">Avi account</strong><small class="profile-menu-email"></small></span></div><button type="button" class="profile-account">Account details</button><button type="button" class="profile-settings">Settings & voice</button><button type="button" class="profile-signout">Sign out</button>';
  menu.querySelector(".profile-menu-email").textContent = aviSession.user.email || "Signed in";
+ menu.querySelector(".profile-menu-name").textContent = aviSession.user.user_metadata?.full_name || aviSession.user.user_metadata?.name || "Avi account";
+ menu.querySelector(".profile-menu-avatar").textContent = (aviSession.user.email || "A").charAt(0).toUpperCase();
  accountChip.parentElement.appendChild(menu);
  accountChip.setAttribute("aria-expanded","true");
  menu.querySelector(".profile-account").addEventListener("click", () => {
    menu.remove(); accountChip.setAttribute("aria-expanded","false");
-   document.getElementById("voiceSettingsToggle").click();
-   document.getElementById("voiceSettings").scrollIntoView({behavior:"smooth",block:"nearest"});
+   authGate.hidden = false;
+   authHeading.textContent = "Your Avi account.";
+   authDescription.textContent = aviSession?.user?.email || "Signed in";
+   authEmail.value = aviSession?.user?.email || "";
+   authPassword.value = "";
+   authPassword.placeholder = "Enter your password to sign in again";
+   authStatus.textContent = "Your account is securely managed by Avi sign-in.";
+   authEmail.focus();
+ });
+ menu.querySelector(".profile-settings").addEventListener("click", () => {
+   menu.remove(); accountChip.setAttribute("aria-expanded","false");
+   if (voiceSettingsPanel.hidden) voiceSettingsToggle.click();
+   voiceSettingsPanel.scrollIntoView({behavior:"smooth",block:"nearest"});
  });
  menu.querySelector(".profile-signout").addEventListener("click", async () => {
    menu.remove(); accountChip.setAttribute("aria-expanded","false");
