@@ -2911,7 +2911,10 @@ installAviButton.addEventListener("click", async () => {
 });
 window.addEventListener("appinstalled", () => { installAviButton.hidden = true; });
 if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
- win/* Memory Manager — account-scoped cloud records with local fallback. */
+ navigator.serviceWorker.register("./sw.js").catch(error => console.warn("Avi service worker registration failed:", error));
+}
+
+/* Memory Manager — account-scoped cloud records with local fallback. */
 const aviMemoryManager=document.getElementById("aviMemoryManager");
 const aviMemoryList=document.getElementById("aviMemoryList");
 const aviMemoryStatus=document.getElementById("aviMemoryStatus");
