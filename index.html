@@ -2515,7 +2515,7 @@ function aviSetConnectionState(state) {
  if(dot) dot.className = "avi-status-dot " + (normalized==="connected"?"is-connected":normalized==="connecting"?"is-connecting":"");
 }
 window.addEventListener("offline",()=>aviSetConnectionState("disconnected"));
-window.addEventListener("online",()=>aviSetConnectionState("connecting"));
+window.addEventListener("online",()=>aviSetConnectionState("disconnected"));
 async function respondToText(text) {
   aviSetConnectionState("connecting");
   const response = await fetch(
@@ -2865,7 +2865,7 @@ if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
 
 // The indicator starts in Connecting only when configuration and browser network are available.
 // It becomes Connected only after a successful AI API response.
-aviSetConnectionState(navigator.onLine ? "connecting" : "disconnected");
+aviSetConnectionState("disconnected");
 
 /* Memory Manager — uses the existing personalMemory store and Supabase table. */
 const aviMemoryManager = document.getElementById("aviMemoryManager");
