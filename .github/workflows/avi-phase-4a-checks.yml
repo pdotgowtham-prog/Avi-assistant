@@ -13,6 +13,7 @@ on:
       - phase-4a-memory-consistency
       - phase-4b-backend-memory-retrieval
       - phase-4c-automatic-memory-intelligence
+      - phase-4d-memory-quality-controls
 
 permissions:
   contents: read
