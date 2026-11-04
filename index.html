@@ -2189,8 +2189,8 @@ function aviRefreshMenuDetails() {
  aviMenuEmail.textContent = email;
  aviMenuAvatar.textContent = email === "Not signed in" ? "A" : email.charAt(0).toUpperCase();
  const connectionText = document.querySelector("#connectionStatus .connection-text")?.textContent?.trim() || "Status unavailable";
- aviMenuConnection.textContent = connectionText;
- const connected = /connected|ready/i.test(connectionText) && !/disconnected|not connected/i.test(connectionText);
+ const connected = /connected|online/i.test(connectionText) && !/disconnected|not connected/i.test(connectionText);
+ aviMenuConnection.textContent = connected ? "Connected" : "Disconnected";
  aviMainMenu.querySelector(".avi-status-dot").classList.toggle("is-connected", connected);
  aviInstallHint.textContent = aviInstallPrompt ? "Ready" : "Browser menu";
 }
