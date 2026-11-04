@@ -17,6 +17,9 @@ create table if not exists public.avi_memory_operations (
   created_at timestamptz not null default now()
 );
 
+create index if not exists avi_memory_operations_user_id_idx
+  on public.avi_memory_operations (user_id);
+
 alter table public.avi_memory_operations enable row level security;
 revoke all on public.avi_memory_operations from public, anon, authenticated;
 
@@ -82,25 +85,11 @@ begin
     if found then
       v_response := jsonb_build_object('status','duplicate','record',to_jsonb(v_record));
     else
-      select * into v_record
-      from public.avi_personal_memories
-      where user_id = v_user_id and memory = btrim(p_memory) and deleted_at is not null
-      order by updated_at desc limit 1
-      for update;
-      if found then
-        if exists (
-          select 1 from public.avi_personal_memories active
-          where active.user_id = v_user_id and active.memory = btrim(p_memory)
-            and active.deleted_at is null
-        ) then
-          v_response := jsonb_build_object('status','duplicate');
-        else
-          update public.avi_personal_memories
-          set deleted_at = null, revision = revision + 1, updated_at = now()
-          where id = v_record.id
-          returning * into v_record;
-          v_response := jsonb_build_object('status','applied','record',to_jsonb(v_record));
-        end if;
+      if exists (
+        select 1 from public.avi_personal_memories
+        where user_id = v_user_id and memory = btrim(p_memory) and deleted_at is not null
+      ) then
+        v_response := jsonb_build_object('status','deleted');
       else
         insert into public.avi_personal_memories(id,user_id,memory,revision,created_at,updated_at)
         values(p_memory_id,v_user_id,btrim(p_memory),1,now(),now())
@@ -112,7 +101,11 @@ begin
           select * into v_record from public.avi_personal_memories
           where user_id = v_user_id and memory = btrim(p_memory) and deleted_at is null
           order by created_at asc limit 1;
-          v_response := jsonb_build_object('status','duplicate','record',to_jsonb(v_record));
+          if found then
+            v_response := jsonb_build_object('status','duplicate','record',to_jsonb(v_record));
+          else
+            v_response := jsonb_build_object('status','deleted');
+          end if;
         end if;
       end if;
     end if;
