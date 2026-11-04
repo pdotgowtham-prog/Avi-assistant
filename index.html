@@ -2339,14 +2339,14 @@ function aviQueueMemoryOperation(action,meta,memory,baseRevision=0,baseMemory=nu
  return op;
 }
 async function aviFetchActiveMemories(userId){
- const result=await aviAuthClient.from("avi_personal_memories").select("id,memory,revision,created_at,updated_at").eq("user_id",userId).is("deleted_at",null).order("created_at",{ascending:true});
+ const result=await aviAuthClient.from("avi_personal_memories").select("id,memory,revision,created_at,updated_at,category,memory_type,confidence,importance,source,last_confirmed_at,expires_at").eq("user_id",userId).is("deleted_at",null).or("expires_at.is.null,expires_at.gt."+new Date().toISOString()).order("created_at",{ascending:true});
  if(result.error)throw result.error;return result.data||[];
 }
 async function aviRefreshCloudMemories(userId){
  if(!aviSession||aviSession.user.id!==userId||!aviAuthClient)return;
  const rows=await aviFetchActiveMemories(userId);if(!aviSession||aviSession.user.id!==userId)return;
  const queue=aviReadMemoryQueue(userId),records=new Map(),visible=rows.map(row=>row.memory);
- rows.forEach(row=>records.set(row.memory,{id:row.id,revision:Number(row.revision)||1,created_at:row.created_at,updated_at:row.updated_at}));
+ rows.forEach(row=>records.set(row.memory,{id:row.id,revision:Number(row.revision)||1,created_at:row.created_at,updated_at:row.updated_at,category:row.category,memory_type:row.memory_type,confidence:Number(row.confidence)||0,importance:Number(row.importance)||3,source:row.source,expires_at:row.expires_at,last_confirmed_at:row.last_confirmed_at}));
  for(const op of queue){
   if(op.sync_status==="conflict"){
    if((op.action==="create"||op.action==="update")&&op.memory&&!visible.includes(op.memory)){
@@ -3435,7 +3435,35 @@ function aviRenderMemoryManager(){
   const item=document.createElement("article");item.className="memory-item";const body=document.createElement("div");body.className="memory-item-body";
   const value=document.createElement("div");value.className="memory-item-text";value.textContent=memory;
   const dates=document.createElement("div");dates.className="memory-item-dates";dates.textContent=(meta.pending?"Pending sync · ":"")+(meta.created_at?"Added "+aviMemoryDate(meta.created_at)+(meta.updated_at&&meta.updated_at!==meta.created_at?" · Updated "+aviMemoryDate(meta.updated_at):""):"Saved on this device");
-  body.append(value,dates);const actions=document.createElement("div");actions.className="memory-item-actions";
+  body.append(value,dates);
+  if(meta.category){
+   const tags=document.createElement("div");tags.className="memory-item-dates";
+   tags.textContent=meta.category+" · "+(meta.memory_type==="temporary"?"Temporary":"Long-term")+" · importance "+(meta.importance||3)+"/5"+(meta.expires_at?" · expires "+aviMemoryDate(meta.expires_at):"");
+   body.append(tags);
+  }
+  const actions=document.createElement("div");actions.className="memory-item-actions";
+  if(meta.id&&aviSession){
+   const historyButton=document.createElement("button");historyButton.type="button";historyButton.className="memory-action";historyButton.textContent="History";
+   historyButton.addEventListener("click",async()=>{
+    let panel=item.querySelector(".memory-history-panel");
+    if(panel){panel.remove();historyButton.textContent="History";return;}
+    historyButton.disabled=true;historyButton.textContent="Loading…";
+    try{
+     const result=await aviAuthClient.from("avi_memory_history").select("revision,action,memory,category,recorded_at").eq("memory_id",meta.id).order("recorded_at",{ascending:false}).limit(20);
+     if(result.error)throw result.error;
+     panel=document.createElement("div");panel.className="memory-history-panel";
+     if(!result.data?.length){panel.textContent="No revision history recorded yet.";}
+     else result.data.forEach(entry=>{
+      const row=document.createElement("div");row.className="memory-item-dates";
+      row.textContent="v"+entry.revision+" · "+entry.action+" · "+entry.category+" · "+aviMemoryDate(entry.recorded_at)+" — "+entry.memory;
+      panel.append(row);
+     });
+     body.append(panel);historyButton.textContent="Hide history";
+    }catch(error){aviSetMemoryStatus("Could not load memory history: "+(error.message||""));historyButton.textContent="History";}
+    finally{historyButton.disabled=false;}
+   });
+   actions.append(historyButton);
+  }
   const edit=document.createElement("button");edit.type="button";edit.className="memory-action";edit.textContent="Edit";edit.disabled=false;
   edit.addEventListener("click",()=>{aviMemoryEditIndex=aviMemoryEditIndex===index?-1:index;aviRenderMemoryManager();const editor=aviMemoryList.querySelector('[data-memory-editor="'+index+'"]');if(editor){editor.focus();editor.setSelectionRange(editor.value.length,editor.value.length);}});
   const remove=document.createElement("button");remove.type="button";remove.className="memory-action delete";remove.textContent="Delete";
