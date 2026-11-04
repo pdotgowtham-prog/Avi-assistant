@@ -2214,6 +2214,7 @@ async function aviApplySession(session) {
   // Migrate any memories that existed only on this browser into the signed-in account.
   await syncAviMemories();
   await aviLoadCloudConversation();
+  aviStartCloudSyncPolling();
  } catch(error) {
   console.error("Could not load Avi cloud memory:",error);
   authStatus.textContent = "Signed in, but memory sync could not load: " + error.message;
@@ -2458,6 +2459,45 @@ async function aviLoadCloudConversation() {
     console.error("Could not load Avi cloud conversation:", error);
     authStatus.textContent = "Signed in, but conversation sync could not load: " + error.message;
   }
+}
+
+let aviCloudSyncPollTimer = null;
+let aviCloudSyncPollBusy = false;
+function aviStartCloudSyncPolling() {
+ if (aviCloudSyncPollTimer) window.clearInterval(aviCloudSyncPollTimer);
+ const pollingUserId = aviSession?.user?.id;
+ if (!aviAuthClient || !pollingUserId) return;
+ aviCloudSyncPollTimer = window.setInterval(async () => {
+  if (aviCloudSyncPollBusy || !aviSession || aviSession.user.id !== pollingUserId ||
+      !aviConversationSyncReady || !aviMemorySyncReady) return;
+  aviCloudSyncPollBusy = true;
+  try {
+   const [conversationResult, memoryResult] = await Promise.all([
+    aviAuthClient.from("avi_conversations").select("messages").eq("user_id", pollingUserId).maybeSingle(),
+    aviAuthClient.from("avi_personal_memories").select("memory").eq("user_id", pollingUserId).order("created_at", { ascending: true })
+   ]);
+   if (conversationResult.error) throw conversationResult.error;
+   if (memoryResult.error) throw memoryResult.error;
+   if (!aviSession || aviSession.user.id !== pollingUserId) return;
+   const cloudMessages = Array.isArray(conversationResult.data?.messages) ? conversationResult.data.messages : [];
+   const mergedMessages = aviMergeConversationHistory(conversationHistory, cloudMessages);
+   if (JSON.stringify(mergedMessages) !== JSON.stringify(conversationHistory)) {
+    conversationHistory = mergedMessages;
+    try { localStorage.setItem(MEMORY_KEY, JSON.stringify(conversationHistory)); } catch (error) {}
+    restoreConversationHistory();
+   }
+   const cloudMemories = (memoryResult.data || []).map(row => row.memory).filter(value => typeof value === "string" && value.trim());
+   const mergedMemories = [...new Set([...personalMemory, ...cloudMemories])].slice(-50);
+   if (JSON.stringify(mergedMemories) !== JSON.stringify(personalMemory)) {
+    personalMemory = mergedMemories;
+    savePersonalMemoryLocalOnly();
+   }
+  } catch (error) {
+   console.warn("Avi background cloud sync check failed:", error);
+  } finally {
+   aviCloudSyncPollBusy = false;
+  }
+ }, 7000);
 }
 
 async function aviWriteCloudConversation(messagesToSave) {
