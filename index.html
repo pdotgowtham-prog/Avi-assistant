@@ -1306,6 +1306,18 @@ body {margin:0!important}
 .memory-action{padding:7px 10px;font-size:11px}
 .memory-action.delete{color:#f2a4a4;border-color:rgba(235,110,110,.25);background:rgba(235,80,80,.08)}
 .memory-manager-status{min-height:20px;padding-top:9px;color:#c9b49b;font-size:12px}
+.recent-toolbar{display:flex;gap:10px;margin:18px 0 12px}
+.recent-toolbar input{flex:1;min-width:0;padding:12px 14px;border:1px solid rgba(214,169,112,.2);border-radius:11px;background:#111419;color:#f4eee7;font:inherit}
+.recent-list{overflow:auto;display:grid;align-content:start;gap:12px;padding:2px 3px 10px}
+.recent-group-title{margin:12px 2px 2px;color:#d2a875;font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase}
+.recent-conversation{display:flex;align-items:flex-start;gap:12px;padding:14px;border:1px solid rgba(255,255,255,.1);border-radius:14px;background:rgba(255,255,255,.035)}
+.recent-conversation-main{flex:1;min-width:0;cursor:pointer}
+.recent-conversation-title{font-weight:700;color:#f6eee5;overflow-wrap:anywhere}
+.recent-conversation-preview{margin-top:5px;color:#b8afa6;font-size:12px;line-height:1.5;overflow-wrap:anywhere}
+.recent-conversation-meta{margin-top:8px;color:#8f877f;font-size:10px}
+.recent-conversation-actions{display:flex;gap:6px;flex-shrink:0}
+.recent-conversation-actions button{padding:7px 9px}
+.recent-manager{max-width:1080px}
 .memory-empty{padding:30px 14px;text-align:center;color:#aaa19a;border:1px dashed rgba(214,169,112,.22);border-radius:14px}
 @media(max-width:880px){
  .memory-manager{inset:8px 8px calc(76px + env(safe-area-inset-bottom));padding:17px;border-radius:20px}
@@ -1905,6 +1917,7 @@ body:before{
    <div class="history-caption"><span>RECENT CHAT</span><small>Saved on this device</small></div>
    <nav class="nav" aria-label="Avi navigation">
     <button class="navbutton active" type="button" data-view="home"><span class="navicon" aria-hidden="true">⌂</span><span>Home</span></button>
+    <button class="navbutton" type="button" data-view="conversations"><span class="navicon" aria-hidden="true">▤</span><span>Recent Conversations</span></button>
     <button class="navbutton" type="button" data-view="ideas"><span class="navicon" aria-hidden="true">✳</span><span>Ideas</span></button>
     <button class="navbutton" type="button" data-view="focus"><span class="navicon" aria-hidden="true">◷</span><span>Focus</span></button>
     <button class="navbutton" type="button" data-view="learn"><span class="navicon" aria-hidden="true">⌘</span><span>Learn</span></button>
@@ -1988,6 +2001,12 @@ body:before{
  <div class="memory-manager-tools"><input id="aviMemorySearch" type="search" placeholder="Search saved memories…" aria-label="Search memories"><select id="aviMemoryFilter" aria-label="Filter memories"><option value="all">All memories</option><option value="recent">Added in last 30 days</option><option value="updated">Recently updated</option></select></div>
  <div class="memory-manager-list" id="aviMemoryList" aria-live="polite"></div>
  <div class="memory-manager-status" id="aviMemoryStatus" role="status" aria-live="polite"></div>
+</section>
+<section class="memory-manager recent-manager" id="aviRecentManager" role="dialog" aria-modal="true" aria-labelledby="aviRecentTitle">
+ <div class="memory-manager-head"><div><div class="memory-manager-kicker">YOUR CLOUD CHAT HISTORY</div><h2 id="aviRecentTitle">Recent Conversations</h2><div class="memory-manager-sub">Your conversations, available on every signed-in device.</div></div><button class="memory-manager-close" id="aviRecentClose" type="button" aria-label="Close conversations">×</button></div>
+ <div class="recent-toolbar"><input id="aviConversationSearch" type="search" placeholder="Search titles and messages…" aria-label="Search conversations"><button class="memory-action" id="aviRecentNew" type="button">＋ New chat</button></div>
+ <div class="recent-list" id="aviRecentList" aria-live="polite"></div>
+ <div class="memory-manager-status" id="aviRecentStatus" role="status" aria-live="polite"></div>
 </section>
 <script>
 /*
@@ -2430,113 +2449,278 @@ try {
 
 let aviConversationSyncReady = false;
 let aviConversationSaveChain = Promise.resolve();
+let aviConversations = [];
+let activeConversationId = null;
+let aviRealtimeChannel = null;
+let aviCloudRefreshBusy = false;
+const AVI_ACTIVE_CONVERSATION_KEY = "avi_active_conversation_v2";
+const AVI_PENDING_CONVERSATIONS_KEY = "avi_pending_conversations_v1";
+
+function aviMakeId() {
+  return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : "avi-" + Date.now() + "-" + Math.random().toString(36).slice(2);
+}
+function aviConversationTitle(items) {
+  const first = (items || []).find(item => item.role === "user" && item.text && item.text.trim());
+  return first ? first.text.trim().replace(/\\s+/g," ").slice(0,72) : "New conversation";
+}
+function aviConversationPreview(items, role) {
+  const item = [...(items || [])].reverse().find(entry => entry.role === role && entry.text);
+  return item ? item.text.replace(/\\s+/g," ").slice(0,140) : "";
+}
+function aviCacheConversations() {
+  try { localStorage.setItem("avi_conversations_cache_v2", JSON.stringify(aviConversations)); } catch(error) {}
+  try { if(activeConversationId) localStorage.setItem(AVI_ACTIVE_CONVERSATION_KEY,activeConversationId); } catch(error) {}
+}
+function aviGetPendingConversationWrites() {
+  try { const value=JSON.parse(localStorage.getItem(AVI_PENDING_CONVERSATIONS_KEY)||"[]"); return Array.isArray(value)?value:[]; } catch(error){return [];}
+}
+function aviQueueConversationWrite(conversation) {
+  const queue=aviGetPendingConversationWrites().filter(item=>item.id!==conversation.id);
+  queue.push(conversation);
+  try { localStorage.setItem(AVI_PENDING_CONVERSATIONS_KEY,JSON.stringify(queue.slice(-100))); } catch(error){}
+}
+async function aviWriteCloudConversation(conversation) {
+  if(!aviAuthClient||!aviSession) throw new Error("Sign in to sync this conversation.");
+  const payload={id:conversation.id,user_id:aviSession.user.id,title:conversation.title||aviConversationTitle(conversation.messages),messages:(conversation.messages||[]).slice(-500),created_at:conversation.created_at||new Date().toISOString(),updated_at:new Date().toISOString()};
+  const result=await aviAuthClient.from("avi_chat_conversations").upsert(payload,{onConflict:"id"}).select("id,user_id,title,messages,created_at,updated_at").single();
+  if(result.error) throw result.error;
+  return result.data;
+}
+async function aviFlushConversationQueue() {
+  if(!aviSession||!aviConversationSyncReady||!navigator.onLine)return;
+  const queue=aviGetPendingConversationWrites();
+  if(!queue.length)return;
+  const remaining=[];
+  for(const item of queue){
+    try{
+      const saved=await aviWriteCloudConversation(item);
+      const index=aviConversations.findIndex(row=>row.id===saved.id);
+      if(index>=0)aviConversations[index]=saved;else aviConversations.push(saved);
+    }catch(error){remaining.push(item);console.warn("Avi queued conversation sync failed:",error);}
+  }
+  try{localStorage.setItem(AVI_PENDING_CONVERSATIONS_KEY,JSON.stringify(remaining));}catch(error){}
+  aviCacheConversations();
+  if(remaining.length===0 && typeof status!=="undefined")status.textContent="Conversation synced.";
+}
+window.addEventListener("online",()=>{void aviFlushConversationQueue();void aviRefreshCloudConversations();});
 
 function aviMergeConversationHistory(localItems, cloudItems) {
   const merged = [];
   const seen = new Set();
-  [...(Array.isArray(localItems) ? localItems : []), ...(Array.isArray(cloudItems) ? cloudItems : [])].forEach(item => {
-    if (!item || (item.role !== "user" && item.role !== "model") || typeof item.text !== "string") return;
-    const key = item.role + "\\u0000" + item.text.trim();
-    if (!item.text.trim() || seen.has(key)) return;
+  [...(Array.isArray(localItems)?localItems:[]),...(Array.isArray(cloudItems)?cloudItems:[])].forEach(item=>{
+    if(!item||(item.role!=="user"&&item.role!=="model")||typeof item.text!=="string")return;
+    const key=item.role+"\\u0000"+item.text.trim();
+    if(!item.text.trim()||seen.has(key))return;
     seen.add(key);
-    merged.push({ role: item.role, text: item.text });
+    merged.push({role:item.role,text:item.text,timestamp:item.timestamp||null});
   });
-  return merged.slice(-100);
+  return merged.slice(-500);
 }
-
+function aviRenderCurrentConversation() {
+  messages.innerHTML="";
+  if(conversationHistory.length)restoreConversationHistory();
+  else addMessage("Hey, I'm Avi. 💠 What's on your mind?","avi");
+}
 async function aviLoadCloudConversation() {
-  if (!aviAuthClient || !aviSession) return;
-  const loadingUserId = aviSession.user.id;
-  try {
-    const result = await aviAuthClient.from("avi_conversations")
-      .select("messages").eq("user_id", loadingUserId).maybeSingle();
-    if (result.error) throw result.error;
-    if (!aviSession || aviSession.user.id !== loadingUserId) return;
-    const cloudMessages = result.data && Array.isArray(result.data.messages) ? result.data.messages : [];
-    conversationHistory = aviMergeConversationHistory(conversationHistory, cloudMessages);
-    try { localStorage.setItem(MEMORY_KEY, JSON.stringify(conversationHistory)); } catch (error) {}
-    restoreConversationHistory();
-    aviConversationSyncReady = true;
-    if (conversationHistory.length) await aviWriteCloudConversation(conversationHistory);
-  } catch (error) {
-    console.error("Could not load Avi cloud conversation:", error);
-    authStatus.textContent = "Signed in, but conversation sync could not load: " + error.message;
+  if(!aviAuthClient||!aviSession)return;
+  const userId=aviSession.user.id;
+  try{
+    const result=await aviAuthClient.from("avi_chat_conversations").select("id,user_id,title,messages,created_at,updated_at").eq("user_id",userId).order("updated_at",{ascending:false});
+    if(result.error)throw result.error;
+    if(!aviSession||aviSession.user.id!==userId)return;
+    aviConversations=result.data||[];
+    let selectedId=null;
+    try{selectedId=localStorage.getItem(AVI_ACTIVE_CONVERSATION_KEY);}catch(error){}
+    let selected=aviConversations.find(item=>item.id===selectedId)||aviConversations[0];
+    // Preserve browser-only history by importing it as a distinct conversation, never merging it into another chat.
+    if(!selected && conversationHistory.length){
+      const imported={id:aviMakeId(),user_id:userId,title:aviConversationTitle(conversationHistory),messages:[...conversationHistory],created_at:new Date().toISOString(),updated_at:new Date().toISOString()};
+      try{const saved=await aviWriteCloudConversation(imported);aviConversations.unshift(saved);selected=saved;}
+      catch(error){aviConversations.unshift(imported);aviQueueConversationWrite(imported);selected=imported;}
+    }
+    if(!selected){
+      const fresh={id:aviMakeId(),user_id:userId,title:"New conversation",messages:[],created_at:new Date().toISOString(),updated_at:new Date().toISOString()};
+      try{const saved=await aviWriteCloudConversation(fresh);aviConversations.unshift(saved);selected=saved;}
+      catch(error){aviConversations.unshift(fresh);aviQueueConversationWrite(fresh);selected=fresh;}
+    }
+    activeConversationId=selected.id;
+    conversationHistory=Array.isArray(selected.messages)?selected.messages:[];
+    try{localStorage.setItem(MEMORY_KEY,JSON.stringify(conversationHistory));}catch(error){}
+    aviCacheConversations();
+    aviConversationSyncReady=true;
+    aviRenderCurrentConversation();
+    await aviFlushConversationQueue();
+    aviStartConversationRealtime(userId);
+  }catch(error){
+    console.error("Could not load AVI cloud conversations:",error);
+    aviConversationSyncReady=false;
+    authStatus.textContent="Signed in, but conversation history could not load: "+(error.message||"unknown error");
   }
 }
-
-let aviCloudSyncPollTimer = null;
-let aviCloudSyncPollBusy = false;
+async function aviRefreshCloudConversations() {
+  if(!aviSession||!aviAuthClient||aviCloudRefreshBusy)return;
+  aviCloudRefreshBusy=true;
+  const userId=aviSession.user.id;
+  try{
+    const result=await aviAuthClient.from("avi_chat_conversations").select("id,user_id,title,messages,created_at,updated_at").eq("user_id",userId).order("updated_at",{ascending:false});
+    if(result.error)throw result.error;
+    if(!aviSession||aviSession.user.id!==userId)return;
+    aviConversations=result.data||[];
+    aviCacheConversations();
+    const active=aviConversations.find(item=>item.id===activeConversationId);
+    if(active && document.visibilityState==="visible"){
+      const localLatest=conversationHistory[conversationHistory.length-1];
+      const remoteLatest=(active.messages||[])[(active.messages||[]).length-1];
+      if((active.messages||[]).length>conversationHistory.length || (remoteLatest?.timestamp||"")>(localLatest?.timestamp||"")){
+        conversationHistory=active.messages||[];
+        try{localStorage.setItem(MEMORY_KEY,JSON.stringify(conversationHistory));}catch(error){}
+        aviRenderCurrentConversation();
+      }
+    }
+    if(aviRecentManager?.classList.contains("open"))aviRenderRecentConversations();
+  }catch(error){console.warn("AVI conversation refresh failed:",error);}
+  finally{aviCloudRefreshBusy=false;}
+}
+function aviStartConversationRealtime(userId) {
+  if(!aviAuthClient)return;
+  if(aviRealtimeChannel){aviAuthClient.removeChannel(aviRealtimeChannel);aviRealtimeChannel=null;}
+  aviRealtimeChannel=aviAuthClient.channel("avi-chat-conversations-"+userId)
+    .on("postgres_changes",{event:"*",schema:"public",table:"avi_chat_conversations",filter:"user_id=eq."+userId},payload=>{
+      if(payload.eventType==="DELETE"){
+        aviConversations=aviConversations.filter(item=>item.id!==payload.old.id);
+        if(activeConversationId===payload.old.id){activeConversationId=null;conversationHistory=[];void aviStartNewConversation();}
+      }else if(payload.new){
+        const row=payload.new;
+        const index=aviConversations.findIndex(item=>item.id===row.id);
+        if(index>=0)aviConversations[index]={...aviConversations[index],...row};else aviConversations.push(row);
+        aviConversations.sort((a,b)=>new Date(b.updated_at)-new Date(a.updated_at));
+        if(row.id===activeConversationId && (row.messages||[]).length>conversationHistory.length){
+          conversationHistory=row.messages||[];
+          try{localStorage.setItem(MEMORY_KEY,JSON.stringify(conversationHistory));}catch(error){}
+          aviRenderCurrentConversation();
+        }
+      }
+      aviCacheConversations();
+      if(aviRecentManager?.classList.contains("open"))aviRenderRecentConversations();
+    }).subscribe();
+}
 function aviStartCloudSyncPolling() {
- if (aviCloudSyncPollTimer) window.clearInterval(aviCloudSyncPollTimer);
- const pollingUserId = aviSession?.user?.id;
- if (!aviAuthClient || !pollingUserId) return;
- aviCloudSyncPollTimer = window.setInterval(async () => {
-  if (aviCloudSyncPollBusy || !aviSession || aviSession.user.id !== pollingUserId ||
-      !aviConversationSyncReady || !aviMemorySyncReady) return;
-  aviCloudSyncPollBusy = true;
-  try {
-   const [conversationResult, memoryResult] = await Promise.all([
-    aviAuthClient.from("avi_conversations").select("messages").eq("user_id", pollingUserId).maybeSingle(),
-    aviAuthClient.from("avi_personal_memories").select("memory").eq("user_id", pollingUserId).order("created_at", { ascending: true })
-   ]);
-   if (conversationResult.error) throw conversationResult.error;
-   if (memoryResult.error) throw memoryResult.error;
-   if (!aviSession || aviSession.user.id !== pollingUserId) return;
-   const cloudMessages = Array.isArray(conversationResult.data?.messages) ? conversationResult.data.messages : [];
-   const mergedMessages = aviMergeConversationHistory(conversationHistory, cloudMessages);
-   if (JSON.stringify(mergedMessages) !== JSON.stringify(conversationHistory)) {
-    conversationHistory = mergedMessages;
-    try { localStorage.setItem(MEMORY_KEY, JSON.stringify(conversationHistory)); } catch (error) {}
-    restoreConversationHistory();
-   }
-   const cloudMemories = (memoryResult.data || []).map(row => row.memory).filter(value => typeof value === "string" && value.trim());
-   const mergedMemories = [...new Set([...personalMemory, ...cloudMemories])].slice(-50);
-   if (JSON.stringify(mergedMemories) !== JSON.stringify(personalMemory)) {
-    personalMemory = mergedMemories;
-    savePersonalMemoryLocalOnly();
-   }
-  } catch (error) {
-   console.warn("Avi background cloud sync check failed:", error);
-  } finally {
-   aviCloudSyncPollBusy = false;
-  }
- }, 7000);
+  if(aviCloudSyncPollTimer)window.clearInterval(aviCloudSyncPollTimer);
+  const userId=aviSession?.user?.id;
+  if(!userId)return;
+  aviCloudSyncPollTimer=window.setInterval(()=>{if(aviSession?.user?.id===userId){void aviRefreshCloudConversations();}},12000);
 }
-
-async function aviWriteCloudConversation(messagesToSave) {
-  if (!aviAuthClient || !aviSession) return;
-  const userId = aviSession.user.id;
-  const result = await aviAuthClient.from("avi_conversations").upsert({
-    user_id: userId,
-    messages: messagesToSave.slice(-100),
-    updated_at: new Date().toISOString()
-  }, { onConflict: "user_id" });
-  if (result.error) throw result.error;
-}
-
-function saveConversationHistory() {
-  conversationHistory = conversationHistory.slice(-100);
-  try { localStorage.setItem(MEMORY_KEY, JSON.stringify(conversationHistory)); }
-  catch (error) { console.warn("Avi could not save conversation history.", error); }
-  if (!aviSession || !aviAuthClient) return Promise.resolve(false);
-  if (!aviConversationSyncReady) {
-    console.warn("Avi conversation is waiting for cloud session initialisation.");
-    return Promise.resolve(false);
-  }
-  const userId = aviSession.user.id;
-  const snapshot = conversationHistory.slice(-100);
-  aviConversationSaveChain = aviConversationSaveChain.then(async () => {
-    if (!aviSession || aviSession.user.id !== userId) throw new Error("Avi account changed before conversation save.");
-    await aviWriteCloudConversation(snapshot);
+async function saveConversationHistory() {
+  conversationHistory=conversationHistory.slice(-500);
+  try{localStorage.setItem(MEMORY_KEY,JSON.stringify(conversationHistory));}catch(error){}
+  if(!aviSession||!aviAuthClient||!activeConversationId)return false;
+  const userId=aviSession.user.id;
+  const current=aviConversations.find(item=>item.id===activeConversationId)||{id:activeConversationId,user_id:userId,created_at:new Date().toISOString()};
+  const snapshot={...current,id:activeConversationId,user_id:userId,title:aviConversationTitle(conversationHistory),messages:[...conversationHistory],created_at:current.created_at||new Date().toISOString(),updated_at:new Date().toISOString()};
+  aviConversations=[snapshot,...aviConversations.filter(item=>item.id!==snapshot.id)];
+  aviCacheConversations();
+  if(!aviConversationSyncReady||!navigator.onLine){aviQueueConversationWrite(snapshot);if(typeof status!=="undefined")status.textContent="Saved locally – waiting for connection.";return false;}
+  aviConversationSaveChain=aviConversationSaveChain.then(async()=>{
+    if(!aviSession||aviSession.user.id!==userId)throw new Error("Account changed before sync.");
+    const saved=await aviWriteCloudConversation(snapshot);
+    const index=aviConversations.findIndex(item=>item.id===saved.id);
+    if(index>=0)aviConversations[index]=saved;else aviConversations.unshift(saved);
+    aviCacheConversations();
     return true;
   });
-  return aviConversationSaveChain.catch(error => {
-    console.error("Avi conversation sync failed:", error);
-    status.textContent = "Conversation saved on this device, but cloud sync failed: " + (error?.message || "unknown error");
-    return false;
-  });
+  try{await aviConversationSaveChain;return true;}
+  catch(error){aviQueueConversationWrite(snapshot);console.error("Avi conversation sync failed:",error);if(typeof status!=="undefined")status.textContent="Memory sync failed – retry available.";return false;}
 }
-
+async function aviStartNewConversation() {
+  if(!aviSession){authGate.hidden=false;return;}
+  const row={id:aviMakeId(),user_id:aviSession.user.id,title:"New conversation",messages:[],created_at:new Date().toISOString(),updated_at:new Date().toISOString()};
+  activeConversationId=row.id;conversationHistory=[];
+  aviConversations=[row,...aviConversations.filter(item=>item.id!==row.id)];
+  try{localStorage.setItem(MEMORY_KEY,"[]");}catch(error){}
+  aviCacheConversations();aviRenderCurrentConversation();
+  if(aviConversationSyncReady&&navigator.onLine){
+    try{const saved=await aviWriteCloudConversation(row);aviConversations[0]=saved;aviCacheConversations();}
+    catch(error){aviQueueConversationWrite(row);status.textContent="New chat saved locally – waiting for connection.";}
+  }else aviQueueConversationWrite(row);
+  if(aviRecentManager?.classList.contains("open"))aviRenderRecentConversations();
+}
+const aviRecentManager=document.getElementById("aviRecentManager");
+const aviRecentList=document.getElementById("aviRecentList");
+const aviRecentStatus=document.getElementById("aviRecentStatus");
+function aviDateGroup(dateValue){
+ const date=new Date(dateValue||Date.now()),now=new Date();
+ const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+ const day=new Date(date.getFullYear(),date.getMonth(),date.getDate());
+ const diff=Math.floor((today-day)/86400000);
+ return diff===0?"Today":diff===1?"Yesterday":diff<=7?"Previous 7 Days":"Older";
+}
+function aviRenderRecentConversations(){
+ if(!aviRecentList)return;
+ aviRecentList.replaceChildren();
+ const query=(document.getElementById("aviConversationSearch")?.value||"").trim().toLowerCase();
+ const groups=["Today","Yesterday","Previous 7 Days","Older"];
+ const filtered=aviConversations.filter(item=>{
+  const haystack=[item.title,...(item.messages||[]).map(message=>message.text||"")].join(" ").toLowerCase();
+  return !query||haystack.includes(query);
+ });
+ groups.forEach(group=>{
+  const rows=filtered.filter(item=>aviDateGroup(item.updated_at)===group);
+  if(!rows.length)return;
+  const heading=document.createElement("div");heading.className="recent-group-title";heading.textContent=group;aviRecentList.appendChild(heading);
+  rows.forEach(item=>{
+   const card=document.createElement("article");card.className="recent-conversation";
+   const main=document.createElement("div");main.className="recent-conversation-main";main.tabIndex=0;main.setAttribute("role","button");
+   const title=document.createElement("div");title.className="recent-conversation-title";title.textContent=item.title||"New conversation";
+   const first=document.createElement("div");first.className="recent-conversation-preview";first.textContent="First: "+(aviConversationPreview(item.messages,"user")||"No messages yet");
+   const last=document.createElement("div");last.className="recent-conversation-preview";last.textContent="Last: "+(aviConversationPreview(item.messages,(item.messages||[]).slice(-1)[0]?.role)||"No messages yet");
+   const meta=document.createElement("div");meta.className="recent-conversation-meta";meta.textContent="Created "+new Date(item.created_at).toLocaleString()+" · Updated "+new Date(item.updated_at).toLocaleString();
+   main.append(title,first,last,meta);
+   const open=()=>{void aviOpenConversation(item.id);};
+   main.addEventListener("click",open);main.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();open();}});
+   const actions=document.createElement("div");actions.className="recent-conversation-actions";
+   const rename=document.createElement("button");rename.type="button";rename.className="memory-action";rename.textContent="Rename";rename.addEventListener("click",()=>void aviRenameConversation(item.id));
+   const remove=document.createElement("button");remove.type="button";remove.className="memory-action delete";remove.textContent="Delete";remove.addEventListener("click",()=>void aviDeleteConversation(item.id));
+   actions.append(rename,remove);card.append(main,actions);aviRecentList.appendChild(card);
+  });
+ });
+ if(!filtered.length){const empty=document.createElement("div");empty.className="memory-empty";empty.textContent=query?"No conversations match your search.":"No saved conversations yet.";aviRecentList.appendChild(empty);}
+}
+async function aviOpenRecentConversations(){
+ aviRecentManager.classList.add("open");document.body.style.overflow="hidden";
+ aviRecentStatus.textContent="Loading conversations from your account…";
+ await aviRefreshCloudConversations();aviRenderRecentConversations();
+ aviRecentStatus.textContent=aviSession?"Synced conversation history.":"Sign in to access cloud conversations.";
+}
+async function aviOpenConversation(id){
+ const row=aviConversations.find(item=>item.id===id);if(!row)return;
+ activeConversationId=id;conversationHistory=Array.isArray(row.messages)?row.messages:[];
+ try{localStorage.setItem(MEMORY_KEY,JSON.stringify(conversationHistory));}catch(error){}
+ aviCacheConversations();aviRenderCurrentConversation();aviRecentManager.classList.remove("open");document.body.style.overflow="";
+}
+async function aviRenameConversation(id){
+ const row=aviConversations.find(item=>item.id===id);if(!row)return;
+ const title=window.prompt("Rename conversation:",row.title||"New conversation");
+ if(title===null)return;
+ const clean=title.trim().slice(0,100);if(!clean)return;
+ row.title=clean;row.updated_at=new Date().toISOString();aviCacheConversations();aviRenderRecentConversations();
+ if(aviSession&&navigator.onLine){const result=await aviAuthClient.from("avi_chat_conversations").update({title:clean}).eq("id",id).eq("user_id",aviSession.user.id);if(result.error){aviRecentStatus.textContent="Rename failed: "+result.error.message;return;}}
+ else aviQueueConversationWrite(row);
+}
+async function aviDeleteConversation(id){
+ const row=aviConversations.find(item=>item.id===id);if(!row)return;
+ if(!window.confirm("Delete this conversation permanently from your Avi account?"))return;
+ if(aviSession&&navigator.onLine){
+  const result=await aviAuthClient.from("avi_chat_conversations").delete().eq("id",id).eq("user_id",aviSession.user.id);
+  if(result.error){aviRecentStatus.textContent="Delete failed: "+result.error.message;return;}
+ }else{aviRecentStatus.textContent="Connect to the internet to delete cloud conversations.";return;}
+ aviConversations=aviConversations.filter(item=>item.id!==id);
+ if(activeConversationId===id){const next=aviConversations[0];if(next)await aviOpenConversation(next.id);else await aviStartNewConversation();}
+ aviCacheConversations();aviRenderRecentConversations();
+}
+document.getElementById("aviRecentClose").addEventListener("click",()=>{aviRecentManager.classList.remove("open");document.body.style.overflow="";});
+aviRecentManager.addEventListener("click",event=>{if(event.target===aviRecentManager){aviRecentManager.classList.remove("open");document.body.style.overflow="";}});
+document.getElementById("aviConversationSearch").addEventListener("input",aviRenderRecentConversations);
+document.getElementById("aviRecentNew").addEventListener("click",async()=>{await aviStartNewConversation();aviRecentManager.classList.remove("open");document.body.style.overflow="";});
 async function savePersonalMemory() {
   try { localStorage.setItem(PROFILE_MEMORY_KEY, JSON.stringify(personalMemory.slice(-50))); }
   catch (error) { console.warn("Avi could not save personal memory locally.", error); }
@@ -2715,8 +2899,8 @@ clearChatButton.addEventListener("click", function() {
   try { localStorage.removeItem(MEMORY_KEY); } catch (error) {
     console.warn("Avi could not clear saved conversation memory.", error);
   }
-  // Clearing chat should sync the empty history to this account on all devices.
-  saveConversationHistory();
+  // Start a separate conversation; previous cloud conversations remain intact.
+  void aviStartNewConversation();
   addMessage("Fresh start! 🐾 I'm here whenever you're ready. What's on your mind?", "avi");
   mainOrb.classList.remove("thinking", "listening", "speaking");
   status.textContent = "Ready to chat";
@@ -3074,8 +3258,10 @@ document.querySelectorAll(".navbutton").forEach(button => {
   document.querySelectorAll(".navbutton").forEach(item => item.classList.remove("active"));
   button.classList.add("active");
   if (button.dataset.view === "memories") { aviOpenMemoryManager(); return; }
+  if (button.dataset.view === "conversations") { aviOpenRecentConversations(); return; }
   const prompts = {
    home: null,
+   conversations: null,
    ideas: "Help me brainstorm ideas and plan a project.",
    focus: "Help me plan my day and choose my top priorities.",
    learn: "Help me learn a topic step by step."
