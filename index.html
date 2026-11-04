@@ -1854,6 +1854,28 @@ body:before{
  .recent-conversation-actions{width:100%}
  .recent-conversation-actions button{flex:1}
 }
+
+/* PHASE 3 SYNC HOTFIX — authoritative mobile dock and navigation menu. */
+@media(max-width:880px){
+ .sidebar{display:flex!important;position:fixed!important;z-index:55!important;left:12px!important;right:12px!important;bottom:calc(7px + env(safe-area-inset-bottom))!important;top:auto!important;width:auto!important;height:64px!important;min-height:64px!important;max-height:64px!important;padding:5px!important}
+ .sidebar .section-label,.sidebar .history-caption,.sidebar .sidebar-bottom,.sidebar .side-new-chat{display:none!important}
+ .sidebar .nav{display:flex!important;visibility:visible!important;opacity:1!important;flex-direction:row!important;align-items:stretch!important;justify-content:space-between!important;width:100%!important;height:100%!important;gap:3px!important}
+ .sidebar .navbutton:not([data-view="home"]):not([data-view="conversations"]):not([data-view="memories"]){display:none!important}
+ .sidebar .navbutton[data-view="home"],.sidebar .navbutton[data-view="conversations"],.sidebar .navbutton[data-view="memories"]{
+  display:flex!important;visibility:visible!important;opacity:1!important;flex:1 1 33.333%!important;width:33.333%!important;min-width:0!important;height:100%!important;min-height:0!important;
+  justify-content:center!important;align-items:center!important;flex-direction:row!important;gap:5px!important;padding:3px!important;font-size:10px!important;white-space:nowrap!important
+ }
+ .sidebar .navbutton .navicon{width:22px!important;height:22px!important;flex:0 0 22px!important;font-size:15px!important}
+ .recent-toolbar{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:8px!important}
+ .recent-toolbar input{grid-column:1/-1!important;width:100%!important}
+ .recent-toolbar button{min-width:0!important;min-height:42px!important}
+ .recent-manager{inset:8px 8px calc(76px + env(safe-area-inset-bottom))!important;max-height:none!important}
+ .recent-conversation{display:flex!important;flex-direction:column!important;min-width:0!important}
+ .recent-conversation-main{width:100%!important;min-width:0!important}
+ .recent-conversation-actions{display:flex!important;width:100%!important}
+ .recent-conversation-actions button{flex:1!important;min-width:0!important}
+ .recent-conversation-meta{overflow-wrap:anywhere!important}
+}
 </style>
 <meta name="avi-ui-version" content="avi-approved-mockup-v1">
 </head>
@@ -1893,6 +1915,10 @@ body:before{
   </div>
   <div class="avi-menu-section-label">NAVIGATION</div>
   <button type="button" class="avi-menu-item" data-avi-menu="home"><span class="avi-menu-icon">⌂</span><span>Home</span></button>
+  <button type="button" class="avi-menu-item" data-avi-menu="conversations"><span class="avi-menu-icon">▤</span><span>Recent Conversations</span></button>
+  <button type="button" class="avi-menu-item" data-avi-menu="ideas"><span class="avi-menu-icon">✳</span><span>Ideas</span></button>
+  <button type="button" class="avi-menu-item" data-avi-menu="focus"><span class="avi-menu-icon">◷</span><span>Focus</span></button>
+  <button type="button" class="avi-menu-item" data-avi-menu="learn"><span class="avi-menu-icon">⌘</span><span>Learn</span></button>
   <button type="button" class="avi-menu-item" data-avi-menu="memories"><span class="avi-menu-icon">◇</span><span>Memories</span></button>
   <button type="button" class="avi-menu-item" data-avi-menu="settings"><span class="avi-menu-icon">⚙</span><span>Settings</span></button>
   <div class="avi-menu-section-label">APP & ACCOUNT</div>
@@ -2020,7 +2046,7 @@ body:before{
 </section>
 <section class="memory-manager recent-manager" id="aviRecentManager" role="dialog" aria-modal="true" aria-labelledby="aviRecentTitle">
  <div class="memory-manager-head"><div><div class="memory-manager-kicker">YOUR CLOUD CHAT HISTORY</div><h2 id="aviRecentTitle">Recent Conversations</h2><div class="memory-manager-sub">Your conversations, available on every signed-in device.</div></div><button class="memory-manager-close" id="aviRecentClose" type="button" aria-label="Close conversations">×</button></div>
- <div class="recent-toolbar"><input id="aviConversationSearch" type="search" placeholder="Search titles and messages…" aria-label="Search conversations"><button class="memory-action" id="aviRecentNew" type="button">＋ New chat</button></div>
+ <div class="recent-toolbar"><input id="aviConversationSearch" type="search" placeholder="Search titles and messages…" aria-label="Search conversations"><button class="memory-action" id="aviRecentNew" type="button">＋ New chat</button><button class="memory-action" id="aviRecentBack" type="button">← Back to Chat</button></div>
  <div class="recent-list" id="aviRecentList" aria-live="polite"></div>
  <div class="memory-manager-status" id="aviRecentStatus" role="status" aria-live="polite"></div>
 </section>
@@ -2393,8 +2419,7 @@ aviMainMenu.addEventListener("click",async event=>{
  const action=event.target.closest("[data-avi-menu]")?.dataset.aviMenu;
  if(!action)return;
  aviSetMenuOpen(false);
- if(action==="home") document.querySelector('[data-view="home"]')?.click();
- if(action==="memories") document.querySelector('[data-view="memories"]')?.click();
+ if(["home","conversations","ideas","focus","learn","memories"].includes(action)) document.querySelector('[data-view="'+action+'"]')?.click();
  if(action==="settings"){
   voiceSettingsPanel.hidden = !voiceSettingsPanel.hidden;
   voiceSettingsToggle.setAttribute("aria-expanded",String(!voiceSettingsPanel.hidden));
@@ -2776,6 +2801,7 @@ document.getElementById("aviRecentClose").addEventListener("click",()=>{aviRecen
 aviRecentManager.addEventListener("click",event=>{if(event.target===aviRecentManager){aviRecentManager.classList.remove("open");document.body.style.overflow="";}});
 document.getElementById("aviConversationSearch").addEventListener("input",aviRenderRecentConversations);
 document.getElementById("aviRecentNew").addEventListener("click",async()=>{await aviStartNewConversation();aviRecentManager.classList.remove("open");document.body.style.overflow="";});
+document.getElementById("aviRecentBack").addEventListener("click",()=>{aviRecentManager.classList.remove("open");document.body.style.overflow="";document.getElementById("chatInput")?.focus();});
 async function savePersonalMemory() {
   try { localStorage.setItem(PROFILE_MEMORY_KEY, JSON.stringify(personalMemory.slice(-50))); }
   catch (error) { console.warn("Avi could not save personal memory locally.", error); }
