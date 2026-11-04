@@ -2258,7 +2258,7 @@ async function deleteCloudMemories(memories) {
  if (result.error) throw result.error;
  return true;
 }
-signOutAvi.addEventListener("click", async () => { if (aviAuthClient) await aviAuthClient.auth.signOut(); });
+signOutAvi.addEventListener("click", async () => { if (aviAuthClient) await aviAuthClient.auth.signOut({ scope: "local" }); });
 document.getElementById("homeAvi").addEventListener("click", () => {
  const overview = document.querySelector('[data-view="home"]');
  if (overview) overview.click();
@@ -2333,7 +2333,7 @@ aviMainMenu.addEventListener("click",async event=>{
   if(!voiceSettingsPanel.hidden) document.getElementById("voiceSettings")?.scrollIntoView({behavior:"smooth",block:"nearest"});
  }
  if(action==="install") installAviButton.click();
- if(action==="logout" && aviAuthClient) await aviAuthClient.auth.signOut();
+ if(action==="logout" && aviAuthClient) await aviAuthClient.auth.signOut({ scope: "local" });
 });
 document.addEventListener("click",event=>{
  if(!aviMainMenu.hidden&&!aviMainMenu.contains(event.target)&&!brandProfileButton.contains(event.target)&&!aviMenuButton.contains(event.target)) aviSetMenuOpen(false);
