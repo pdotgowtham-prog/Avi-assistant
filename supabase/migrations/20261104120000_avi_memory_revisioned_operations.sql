@@ -88,16 +88,33 @@ begin
       order by updated_at desc limit 1
       for update;
       if found then
-        update public.avi_personal_memories
-        set deleted_at = null, revision = revision + 1, updated_at = now()
-        where id = v_record.id
-        returning * into v_record;
+        if exists (
+          select 1 from public.avi_personal_memories active
+          where active.user_id = v_user_id and active.memory = btrim(p_memory)
+            and active.deleted_at is null
+        ) then
+          v_response := jsonb_build_object('status','duplicate');
+        else
+          update public.avi_personal_memories
+          set deleted_at = null, revision = revision + 1, updated_at = now()
+          where id = v_record.id
+          returning * into v_record;
+          v_response := jsonb_build_object('status','applied','record',to_jsonb(v_record));
+        end if;
       else
         insert into public.avi_personal_memories(id,user_id,memory,revision,created_at,updated_at)
         values(p_memory_id,v_user_id,btrim(p_memory),1,now(),now())
+        on conflict (user_id,memory) do nothing
         returning * into v_record;
+        if found then
+          v_response := jsonb_build_object('status','applied','record',to_jsonb(v_record));
+        else
+          select * into v_record from public.avi_personal_memories
+          where user_id = v_user_id and memory = btrim(p_memory) and deleted_at is null
+          order by created_at asc limit 1;
+          v_response := jsonb_build_object('status','duplicate','record',to_jsonb(v_record));
+        end if;
       end if;
-      v_response := jsonb_build_object('status','applied','record',to_jsonb(v_record));
     end if;
 
   elsif p_action = 'update' then
