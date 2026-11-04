@@ -2043,23 +2043,12 @@ accountChip.addEventListener("click", () => {
  menu = document.createElement("div");
  menu.id = "aviProfileMenu";
  menu.className = "profile-menu";
- menu.innerHTML = '<div class="profile-menu-heading"><span class="profile-menu-avatar">A</span><span><strong class="profile-menu-name">Avi account</strong><small class="profile-menu-email"></small></span></div><button type="button" class="profile-account">Account details</button><button type="button" class="profile-settings">Settings & voice</button><button type="button" class="profile-signout">Sign out</button>';
+ menu.innerHTML = '<div class="profile-menu-heading"><span class="profile-menu-avatar">A</span><span><strong class="profile-menu-name">Avi account</strong><small class="profile-menu-email"></small></span></div><button type="button" class="profile-settings">Settings & voice</button><button type="button" class="profile-signout">Sign out</button>';
  menu.querySelector(".profile-menu-email").textContent = aviSession.user.email || "Signed in";
  menu.querySelector(".profile-menu-name").textContent = aviSession.user.user_metadata?.full_name || aviSession.user.user_metadata?.name || "Avi account";
  menu.querySelector(".profile-menu-avatar").textContent = (aviSession.user.email || "A").charAt(0).toUpperCase();
  accountChip.parentElement.appendChild(menu);
  accountChip.setAttribute("aria-expanded","true");
- menu.querySelector(".profile-account").addEventListener("click", () => {
-   menu.remove(); accountChip.setAttribute("aria-expanded","false");
-   authGate.hidden = false;
-   authHeading.textContent = "Your Avi account.";
-   authDescription.textContent = aviSession?.user?.email || "Signed in";
-   authEmail.value = aviSession?.user?.email || "";
-   authPassword.value = "";
-   authPassword.placeholder = "Enter your password to sign in again";
-   authStatus.textContent = "Your account is securely managed by Avi sign-in.";
-   authEmail.focus();
- });
  menu.querySelector(".profile-settings").addEventListener("click", () => {
    menu.remove(); accountChip.setAttribute("aria-expanded","false");
    if (voiceSettingsPanel.hidden) voiceSettingsToggle.click();
