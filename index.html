@@ -2580,11 +2580,18 @@ async function aviLoadCloudConversation() {
     let selectedId=null;
     try{selectedId=localStorage.getItem(AVI_ACTIVE_CONVERSATION_KEY);}catch(error){}
     let selected=aviConversations.find(item=>item.id===selectedId)||aviConversations[0];
-    // Preserve browser-only history by importing it as a distinct conversation, never merging it into another chat.
-    if(!selected && conversationHistory.length){
-      const imported={id:aviMakeId(),user_id:userId,title:(current.title && current.title!=="New conversation" ? current.title : aviConversationTitle(conversationHistory)),messages:[...conversationHistory],created_at:new Date().toISOString(),updated_at:new Date().toISOString()};
-      try{const saved=await aviWriteCloudConversation(imported);aviConversations.unshift(saved);selected=saved;}
-      catch(error){aviConversations.unshift(imported);aviQueueConversationWrite(imported);selected=imported;}
+    // Import browser-only messages as a separate conversation if they are not already represented in cloud.
+    const localSnapshot=[...conversationHistory];
+    const localCovered=localSnapshot.length>0 && aviConversations.some(row=>{
+      const cloud=Array.isArray(row.messages)?row.messages:[];
+      let cursor=0;
+      for(const item of cloud){if(cursor<localSnapshot.length&&item.role===localSnapshot[cursor].role&&item.text===localSnapshot[cursor].text)cursor++;}
+      return cursor===localSnapshot.length;
+    });
+    if(localSnapshot.length&&!localCovered){
+      const imported={id:aviMakeId(),user_id:userId,title:aviConversationTitle(localSnapshot),messages:localSnapshot,created_at:new Date().toISOString(),updated_at:new Date().toISOString()};
+      try{const saved=await aviWriteCloudConversation(imported);aviConversations.unshift(saved);if(!selected)selected=saved;}
+      catch(error){aviConversations.unshift(imported);aviQueueConversationWrite(imported);if(!selected)selected=imported;}
     }
     if(!selected){
       const fresh={id:aviMakeId(),user_id:userId,title:"New conversation",messages:[],created_at:new Date().toISOString(),updated_at:new Date().toISOString()};
