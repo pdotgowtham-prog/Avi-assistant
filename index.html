@@ -2592,7 +2592,7 @@ function aviQueueConversationWrite(conversation) {
 async function aviWriteCloudConversation(conversation) {
   if(!aviAuthClient||!aviSession) throw new Error("Sign in to sync this conversation.");
   const payload={id:conversation.id,user_id:aviSession.user.id,title:conversation.title||aviConversationTitle(conversation.messages),messages:(conversation.messages||[]),created_at:conversation.created_at||new Date().toISOString(),updated_at:new Date().toISOString()};
-  const result=await aviAuthClient.from("avi_chat_conversations").upsert(payload,{onConflict:"id"}).select("id,user_id,title,messages,created_at,updated_at").single();
+  const result=await aviAuthClient.from("avi_chat_conversations").upsert(payload,{onConflict:"id"}).select("id,user_id,title,messages,last_message_preview,created_at,updated_at").single();
   if(result.error) throw result.error;
   return result.data;
 }
@@ -2650,7 +2650,7 @@ async function aviLoadCloudConversation() {
   if(!aviAuthClient||!aviSession)return;
   const userId=aviSession.user.id;
   try{
-    const result=await aviAuthClient.from("avi_chat_conversations").select("id,user_id,title,messages,created_at,updated_at").eq("user_id",userId).order("updated_at",{ascending:false});
+    const result=await aviAuthClient.from("avi_chat_conversations").select("id,user_id,title,messages,last_message_preview,created_at,updated_at").eq("user_id",userId).order("updated_at",{ascending:false});
     if(result.error)throw result.error;
     if(!aviSession||aviSession.user.id!==userId)return false;
     aviConversations=await aviHydrateCloudConversations(result.data||[],userId);
@@ -2694,7 +2694,7 @@ async function aviRefreshCloudConversations() {
   aviCloudRefreshBusy=true;
   const userId=aviSession.user.id;
   try{
-    const result=await aviAuthClient.from("avi_chat_conversations").select("id,user_id,title,messages,created_at,updated_at").eq("user_id",userId).order("updated_at",{ascending:false});
+    const result=await aviAuthClient.from("avi_chat_conversations").select("id,user_id,title,messages,last_message_preview,created_at,updated_at").eq("user_id",userId).order("updated_at",{ascending:false});
     if(result.error)throw result.error;
     if(!aviSession||aviSession.user.id!==userId)return;
     aviConversations=await aviHydrateCloudConversations(result.data||[],userId);
