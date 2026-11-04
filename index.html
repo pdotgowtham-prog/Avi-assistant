@@ -2515,15 +2515,23 @@ function saveConversationHistory() {
   conversationHistory = conversationHistory.slice(-100);
   try { localStorage.setItem(MEMORY_KEY, JSON.stringify(conversationHistory)); }
   catch (error) { console.warn("Avi could not save conversation history.", error); }
-  if (aviSession && aviConversationSyncReady) {
-    const snapshot = conversationHistory.slice(-100);
-    aviConversationSaveChain = aviConversationSaveChain
-      .then(() => aviWriteCloudConversation(snapshot))
-      .catch(error => {
-        console.error("Avi conversation sync failed:", error);
-        if (typeof status !== "undefined") status.textContent = "Saved here, but cloud conversation sync needs attention.";
-      });
+  if (!aviSession || !aviAuthClient) return Promise.resolve(false);
+  if (!aviConversationSyncReady) {
+    console.warn("Avi conversation is waiting for cloud session initialisation.");
+    return Promise.resolve(false);
   }
+  const userId = aviSession.user.id;
+  const snapshot = conversationHistory.slice(-100);
+  aviConversationSaveChain = aviConversationSaveChain.then(async () => {
+    if (!aviSession || aviSession.user.id !== userId) throw new Error("Avi account changed before conversation save.");
+    await aviWriteCloudConversation(snapshot);
+    return true;
+  });
+  return aviConversationSaveChain.catch(error => {
+    console.error("Avi conversation sync failed:", error);
+    status.textContent = "Conversation saved on this device, but cloud sync failed: " + (error?.message || "unknown error");
+    return false;
+  });
 }
 
 async function savePersonalMemory() {
@@ -2652,6 +2660,8 @@ async function sendMessage(text) {
   if (!text || sendButton.disabled) return;
 
   addMessage(text, "user");
+  conversationHistory.push({ role: "user", text: text, timestamp: new Date().toISOString() });
+  await saveConversationHistory();
   input.value = "";
 
   sendButton.disabled = true;
@@ -2667,9 +2677,8 @@ async function sendMessage(text) {
     const reply = memoryCommand.handled ? memoryCommand.reply : await respondToText(text);
 
     loadingMessage.textContent = reply;
-    conversationHistory.push({ role: "user", text: text });
-    conversationHistory.push({ role: "model", text: reply });
-    saveConversationHistory();
+    conversationHistory.push({ role: "model", text: reply, timestamp: new Date().toISOString() });
+    await saveConversationHistory();
     messages.scrollTop = messages.scrollHeight;
 
     // Typed chat replies stay silent. The selected Avi voice is reserved for live voice,
