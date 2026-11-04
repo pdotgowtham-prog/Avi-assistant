@@ -1277,6 +1277,38 @@ body {margin:0!important}
  .chat{height:64dvh!important;min-height:360px!important}
 }
 
+
+/* Avi Memory Manager */
+.memory-manager{position:fixed;z-index:120;inset:18px;display:none;flex-direction:column;max-width:980px;margin:auto;padding:24px;border:1px solid rgba(197,139,78,.35);border-radius:24px;background:linear-gradient(145deg,rgba(27,23,21,.98),rgba(12,14,18,.99));box-shadow:0 28px 100px rgba(0,0,0,.65);color:#f4eee7;overflow:hidden}
+.memory-manager.open{display:flex}
+.memory-manager:before{content:"";position:fixed;z-index:-1;inset:0;background:rgba(3,5,9,.72);backdrop-filter:blur(8px)}
+.memory-manager-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-bottom:18px;border-bottom:1px solid rgba(214,169,112,.18)}
+.memory-manager-kicker{font-size:10px;letter-spacing:.18em;color:#d2a875;font-weight:700}
+.memory-manager h2{font-size:clamp(24px,4vw,34px);margin:7px 0 5px;letter-spacing:-.04em}
+.memory-manager-sub{color:#a9a19a;font-size:13px;line-height:1.5}
+.memory-manager-close{border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;border-radius:12px;width:40px;height:40px;font-size:22px}
+.memory-manager-add{display:flex;gap:10px;margin:18px 0}
+.memory-manager-add input{flex:1;min-width:0;padding:13px 15px;border-radius:12px;border:1px solid rgba(214,169,112,.25);background:#111419;color:#fff;font:inherit}
+.memory-manager-add button,.memory-action{border:1px solid rgba(214,169,112,.35);border-radius:11px;padding:10px 14px;background:rgba(197,139,78,.13);color:#f2c58f;font-weight:650}
+.memory-manager-list{overflow:auto;display:grid;align-content:start;gap:9px;padding:2px 3px 10px}
+.memory-item{display:flex;align-items:center;gap:12px;padding:14px 15px;border:1px solid rgba(255,255,255,.09);border-radius:14px;background:rgba(255,255,255,.035)}
+.memory-item-text{flex:1;min-width:0;overflow-wrap:anywhere;font-size:14px;line-height:1.5}
+.memory-item-actions{display:flex;gap:7px;flex-shrink:0}
+.memory-action{padding:7px 10px;font-size:11px}
+.memory-action.delete{color:#f2a4a4;border-color:rgba(235,110,110,.25);background:rgba(235,80,80,.08)}
+.memory-manager-status{min-height:20px;padding-top:9px;color:#c9b49b;font-size:12px}
+.memory-empty{padding:30px 14px;text-align:center;color:#aaa19a;border:1px dashed rgba(214,169,112,.22);border-radius:14px}
+@media(max-width:880px){
+ .memory-manager{inset:8px 8px calc(76px + env(safe-area-inset-bottom));padding:17px;border-radius:20px}
+ .memory-manager-add{flex-direction:column}
+ .memory-manager-add button{min-height:44px}
+ .memory-item{align-items:flex-start;flex-direction:column}
+ .memory-item-actions{width:100%}
+ .memory-item-actions button{flex:1}
+ .sidebar .navbutton[data-view="memories"]{display:flex!important;width:50%!important;min-height:0!important;justify-content:center!important;flex-direction:row!important}
+ .sidebar .navbutton[data-view="home"]{width:50%!important}
+ .sidebar .nav{justify-content:space-around!important}
+}
 </style>
 <meta name="avi-ui-version" content="avi-approved-mockup-v1">
 </head>
@@ -1412,6 +1444,13 @@ body {margin:0!important}
   </aside>
  </div>
 </main>
+
+<section class="memory-manager" id="aviMemoryManager" role="dialog" aria-modal="true" aria-labelledby="aviMemoryTitle">
+ <div class="memory-manager-head"><div><div class="memory-manager-kicker">YOUR PERSONAL CONTEXT</div><h2 id="aviMemoryTitle">Avi's memories</h2><div class="memory-manager-sub">Review and manage the details Avi keeps to make future conversations more personal.</div></div><button class="memory-manager-close" id="aviMemoryClose" type="button" aria-label="Close memories">×</button></div>
+ <form class="memory-manager-add" id="aviMemoryAdd"><input id="aviMemoryInput" maxlength="2000" placeholder="Add something you want Avi to remember…" aria-label="New memory" required><button type="submit">＋ Add memory</button></form>
+ <div class="memory-manager-list" id="aviMemoryList" aria-live="polite"></div>
+ <div class="memory-manager-status" id="aviMemoryStatus" role="status" aria-live="polite"></div>
+</section>
 <script>
 /*
   IMPORTANT:
@@ -2290,6 +2329,82 @@ if (
   connectionStatus.style.color = "#ffd28a";
 }
 
+
+/* Memory Manager — uses the existing personalMemory store and Supabase table. */
+const aviMemoryManager = document.getElementById("aviMemoryManager");
+const aviMemoryList = document.getElementById("aviMemoryList");
+const aviMemoryStatus = document.getElementById("aviMemoryStatus");
+const aviMemoryInput = document.getElementById("aviMemoryInput");
+function aviSetMemoryStatus(message){ aviMemoryStatus.textContent = message || ""; }
+function aviRenderMemoryManager(){
+ aviMemoryList.replaceChildren();
+ if(!personalMemory.length){
+  const empty=document.createElement("div"); empty.className="memory-empty";
+  empty.textContent="No saved memories yet. Add a detail above, or tell Avi: “Remember that …”";
+  aviMemoryList.appendChild(empty); return;
+ }
+ personalMemory.forEach((memory,index)=>{
+  const item=document.createElement("article"); item.className="memory-item";
+  const value=document.createElement("div"); value.className="memory-item-text"; value.textContent=memory;
+  const actions=document.createElement("div"); actions.className="memory-item-actions";
+  const edit=document.createElement("button"); edit.type="button"; edit.className="memory-action"; edit.textContent="Edit";
+  edit.addEventListener("click",async()=>{
+   const changed=window.prompt("Edit this memory:",memory);
+   if(changed===null)return;
+   const next=changed.trim();
+   if(!next){aviSetMemoryStatus("A memory cannot be empty.");return;}
+   if(next.length>2000){aviSetMemoryStatus("Keep each memory under 2,000 characters.");return;}
+   if(personalMemory.some((m,i)=>i!==index&&m.toLowerCase()===next.toLowerCase())){aviSetMemoryStatus("That memory already exists.");return;}
+   const old=personalMemory[index]; personalMemory[index]=next;
+   try{
+    if(aviSession){const deleted=await deleteCloudMemories([old]);if(deleted===false)throw new Error("Cloud memory sync is not ready.");}
+    const saved=await savePersonalMemory();
+    if(aviSession&&saved===false)throw new Error("Cloud sync failed.");
+    aviRenderMemoryManager();aviSetMemoryStatus(aviSession?"Memory updated and synced to your account.":"Memory updated on this device.");
+   }catch(error){personalMemory[index]=old;savePersonalMemoryLocalOnly();aviRenderMemoryManager();aviSetMemoryStatus("Could not update in the cloud. Please retry. "+(error.message||""));}
+  });
+  const remove=document.createElement("button"); remove.type="button"; remove.className="memory-action delete"; remove.textContent="Delete";
+  remove.addEventListener("click",async()=>{
+   if(!window.confirm("Delete this saved memory?"))return;
+   const old=personalMemory[index];personalMemory.splice(index,1);savePersonalMemoryLocalOnly();aviRenderMemoryManager();aviSetMemoryStatus("Deleting…");
+   try{
+    if(aviSession){const deleted=await deleteCloudMemories([old]);if(deleted!==true)throw new Error("Cloud memory sync is not ready.");}
+    const saved=await savePersonalMemory();if(aviSession&&saved===false)throw new Error("Cloud sync failed.");
+    aviSetMemoryStatus(aviSession?"Memory deleted from your Avi account.":"Memory deleted from this device.");
+   }catch(error){personalMemory.splice(index,0,old);savePersonalMemoryLocalOnly();aviRenderMemoryManager();aviSetMemoryStatus("Could not confirm cloud deletion. The memory was restored locally; please retry.");}
+  });
+  actions.append(edit,remove);item.append(value,actions);aviMemoryList.appendChild(item);
+ });
+}
+async function aviOpenMemoryManager(){
+ aviMemoryManager.classList.add("open");document.body.style.overflow="hidden";aviSetMemoryStatus("Loading saved memories…");
+ if(aviSession&&aviAuthClient&&aviMemorySyncReady){
+  try{
+   const result=await aviAuthClient.from("avi_personal_memories").select("memory").eq("user_id",aviSession.user.id).order("created_at",{ascending:true});
+   if(result.error)throw result.error;
+   const cloud=(result.data||[]).map(row=>row.memory).filter(Boolean);
+   const local=personalMemory.filter(m=>!cloud.some(c=>c.toLowerCase()===m.toLowerCase()));
+   personalMemory=[...cloud,...local].slice(-50);savePersonalMemoryLocalOnly();
+   const synced=await syncAviMemories();
+   aviSetMemoryStatus(synced===false?"Showing saved memories; cloud sync needs attention.":"Synced with your Avi account.");
+  }catch(error){aviSetMemoryStatus("Could not refresh cloud memories. Showing the last saved copy.");}
+ }else aviSetMemoryStatus(aviSession?"Memory sync is still loading.":"Saved on this device. Sign in to sync memories across devices.");
+ aviRenderMemoryManager();
+}
+function aviCloseMemoryManager(){aviMemoryManager.classList.remove("open");document.body.style.overflow="";}
+document.getElementById("aviMemoryClose").addEventListener("click",aviCloseMemoryManager);
+aviMemoryManager.addEventListener("click",event=>{if(event.target===aviMemoryManager)aviCloseMemoryManager();});
+document.addEventListener("keydown",event=>{if(event.key==="Escape"&&aviMemoryManager.classList.contains("open"))aviCloseMemoryManager();});
+document.getElementById("aviMemoryAdd").addEventListener("submit",async event=>{
+ event.preventDefault();const value=aviMemoryInput.value.trim();if(!value)return;
+ if(personalMemory.some(m=>m.toLowerCase()===value.toLowerCase())){aviSetMemoryStatus("That memory is already saved.");return;}
+ if(personalMemory.length>=50){aviSetMemoryStatus("Avi can currently keep up to 50 memories. Delete one before adding another.");return;}
+ personalMemory.push(value);savePersonalMemoryLocalOnly();aviMemoryInput.value="";aviRenderMemoryManager();aviSetMemoryStatus("Saving…");
+ const saved=await savePersonalMemory();
+ if(aviSession&&saved===false)aviSetMemoryStatus("Saved on this device, but cloud sync failed. Please retry.");
+ else aviSetMemoryStatus(aviSession?"Memory added and synced to your account.":"Memory added on this device. Sign in to sync across devices.");
+});
+
 </script>
 <script>
 /* Small UI behaviors; these do not change the AI request logic. */
@@ -2301,12 +2416,12 @@ document.querySelectorAll(".navbutton").forEach(button => {
  button.addEventListener("click", () => {
   document.querySelectorAll(".navbutton").forEach(item => item.classList.remove("active"));
   button.classList.add("active");
+  if (button.dataset.view === "memories") { aviOpenMemoryManager(); return; }
   const prompts = {
    home: null,
    ideas: "Help me brainstorm ideas and plan a project.",
    focus: "Help me plan my day and choose my top priorities.",
-   learn: "Help me learn a topic step by step.",
-   memories: "Let's talk about meaningful memories and things I want to preserve."
+   learn: "Help me learn a topic step by step."
   };
   const prompt = prompts[button.dataset.view];
   if (prompt) {
