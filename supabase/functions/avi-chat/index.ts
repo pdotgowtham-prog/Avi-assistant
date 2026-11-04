@@ -22,7 +22,15 @@ function bearerToken(req: Request) {
 
 async function retrieveAccountMemories(req: Request, message: string) {
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
-  const apiKey = Deno.env.get("SUPABASE_ANON_KEY") || Deno.env.get("SUPABASE_PUBLISHABLE_KEY");
+  let apiKey = Deno.env.get("SUPABASE_ANON_KEY") || Deno.env.get("SUPABASE_PUBLISHABLE_KEY");
+  if (!apiKey) {
+    try {
+      const namedKeys = JSON.parse(Deno.env.get("SUPABASE_PUBLISHABLE_KEYS") || "{}");
+      apiKey = namedKeys.default || Object.values(namedKeys).find((value) => typeof value === "string") || "";
+    } catch {
+      apiKey = "";
+    }
+  }
   const accessToken = bearerToken(req);
   if (!supabaseUrl || !apiKey || !accessToken) {
     return { status: "unavailable", memories: [] as string[] };
