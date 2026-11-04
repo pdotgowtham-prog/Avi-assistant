@@ -1648,8 +1648,10 @@ body {margin:0!important}
  .auth-card p:not(.auth-status){margin-bottom:clamp(12px,2vh,20px)!important}
  .auth-card label{margin-top:clamp(10px,1.5vh,15px)!important}
  .auth-actions{margin-top:clamp(14px,2vh,22px)!important}
- .shell{grid-template-rows:62px minmax(0,1fr)!important}
- .topbar{position:relative!important;z-index:80!important}
+ .shell{grid-template-rows:62px auto minmax(0,1fr)!important}
+ .topbar{grid-row:1!important;position:relative!important;z-index:80!important}
+ .voice-settings{grid-row:2!important}
+ .workspace{grid-row:3!important;min-height:0!important;height:100%!important}
  .top-actions{position:relative!important;z-index:81!important}
  .brandmark{display:grid!important;place-items:center!important;flex:0 0 42px!important;width:42px!important;height:42px!important;border-radius:50%!important}
  .avi-brand-image{width:100%!important;height:100%!important;object-fit:cover!important;border-radius:50%!important}
