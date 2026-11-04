@@ -1309,6 +1309,22 @@ body {margin:0!important}
  .sidebar .navbutton[data-view="home"]{width:50%!important}
  .sidebar .nav{justify-content:space-around!important}
 }
+
+/* Mobile navigation: expose both Home and Memories in the bottom dock. */
+@media (max-width: 880px) {
+ .sidebar .navbutton:not([data-view="home"]):not([data-view="memories"]) {display:none!important}
+ .sidebar .navbutton[data-view="home"],
+ .sidebar .navbutton[data-view="memories"] {
+  display:flex!important;visibility:visible!important;opacity:1!important;
+  flex:1 1 50%!important;width:50%!important;min-width:0!important;
+  height:100%!important;min-height:0!important;justify-content:center!important;
+  align-items:center!important;flex-direction:row!important;gap:7px!important;
+  padding:4px 8px!important;font-size:12px!important;
+ }
+ .sidebar .nav {display:flex!important;flex-direction:row!important;align-items:stretch!important;justify-content:space-between!important;width:100%!important;height:100%!important;gap:5px!important}
+ .sidebar {display:flex!important}
+}
+
 </style>
 <meta name="avi-ui-version" content="avi-approved-mockup-v1">
 </head>
