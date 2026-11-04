@@ -2449,6 +2449,7 @@ try {
 
 let aviConversationSyncReady = false;
 let aviConversationSaveChain = Promise.resolve();
+let aviCloudSyncPollTimer = null;
 let aviConversations = [];
 let activeConversationId = null;
 let aviRealtimeChannel = null;
@@ -2534,7 +2535,7 @@ async function aviLoadCloudConversation() {
     let selected=aviConversations.find(item=>item.id===selectedId)||aviConversations[0];
     // Preserve browser-only history by importing it as a distinct conversation, never merging it into another chat.
     if(!selected && conversationHistory.length){
-      const imported={id:aviMakeId(),user_id:userId,title:aviConversationTitle(conversationHistory),messages:[...conversationHistory],created_at:new Date().toISOString(),updated_at:new Date().toISOString()};
+      const imported={id:aviMakeId(),user_id:userId,title:(current.title && current.title!=="New conversation" ? current.title : aviConversationTitle(conversationHistory)),messages:[...conversationHistory],created_at:new Date().toISOString(),updated_at:new Date().toISOString()};
       try{const saved=await aviWriteCloudConversation(imported);aviConversations.unshift(saved);selected=saved;}
       catch(error){aviConversations.unshift(imported);aviQueueConversationWrite(imported);selected=imported;}
     }
