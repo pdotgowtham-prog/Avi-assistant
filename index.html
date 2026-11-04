@@ -1480,6 +1480,73 @@ body {margin:0!important}
  .chat { height:58svh!important; min-height:390px!important; }
 }
 
+
+/* DESKTOP SETTINGS FIX V2 — reserve a real grid row for the settings panel */
+@media (min-width: 881px) {
+ .shell {
+  display:grid!important;
+  grid-template-rows:62px auto minmax(0,1fr)!important;
+  align-items:stretch!important;
+  min-height:0!important;
+  overflow:hidden!important;
+ }
+ .topbar {
+  grid-row:1!important;
+  min-width:0!important;
+  overflow:visible!important;
+ }
+ .top-actions {
+  display:flex!important;
+  flex:0 0 auto!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:9px!important;
+  min-width:0!important;
+  white-space:nowrap!important;
+ }
+ .top-actions > * { flex-shrink:0!important; }
+ .voice-settings-button {
+  display:inline-flex!important;
+  visibility:visible!important;
+  flex:0 0 auto!important;
+  width:auto!important;
+  min-width:88px!important;
+  height:42px!important;
+  min-height:42px!important;
+  padding:0 13px!important;
+  gap:8px!important;
+  overflow:visible!important;
+  white-space:nowrap!important;
+  font-size:12px!important;
+  line-height:1!important;
+  opacity:1!important;
+  cursor:pointer!important;
+  position:relative!important;
+  z-index:45!important;
+ }
+ .voice-settings-button span { display:inline!important; visibility:visible!important; }
+ .voice-settings {
+  grid-row:2!important;
+  position:relative!important;
+  z-index:30!important;
+  display:grid!important;
+  width:100%!important;
+  min-width:0!important;
+  max-height:min(34vh,280px)!important;
+  overflow-y:auto!important;
+  margin:0!important;
+  box-shadow:0 12px 32px rgba(0,0,0,.28)!important;
+ }
+ .voice-settings[hidden] { display:none!important; }
+ .workspace {
+  grid-row:3!important;
+  height:auto!important;
+  min-height:0!important;
+  overflow:hidden!important;
+ }
+}
+
 </style>
 <meta name="avi-ui-version" content="avi-approved-mockup-v1">
 </head>
