@@ -1678,6 +1678,74 @@ body {margin:0!important}
  .brandmark{display:none!important}
 }
 
+
+/* AVI UNIFIED NAV + PORTRAIT BACKDROP */
+body{position:relative;isolation:isolate}
+body:before{
+ content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+ background:
+  linear-gradient(90deg,rgba(7,8,9,.98) 0%,rgba(9,9,10,.92) 43%,rgba(10,9,8,.66) 72%,rgba(8,8,8,.36) 100%),
+  linear-gradient(0deg,rgba(5,6,7,.66),transparent 34%,rgba(5,6,7,.35)),
+  url("./assets/avi-login-portrait.png") right center / auto 100vh no-repeat;
+ opacity:.78;
+}
+.shell{position:relative;z-index:1}
+.topbar{position:relative!important;overflow:visible!important;z-index:80!important}
+.topbar .brand{display:flex!important;align-items:center!important;gap:10px!important}
+.topbar .brandmark{display:grid!important;flex:0 0 48px!important;width:48px!important;height:48px!important}
+.topbar .brandtag{display:none!important}
+.top-actions{display:flex!important;align-items:center!important;gap:9px!important;margin-left:auto!important}
+.top-actions .home-button,#accountChip,#installAvi,#signOutAvi,.top-actions .connection,.top-actions .voice-settings-button{display:none!important}
+.top-actions>.new-chat-button{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:42px!important;height:42px!important;padding:0 15px!important;gap:8px!important;font-size:12px!important;border-radius:13px!important;white-space:nowrap!important}
+.avi-main-menu{
+ position:absolute;z-index:120;left:16px;top:calc(100% + 10px);width:min(320px,calc(100vw - 28px));
+ padding:13px;border:1px solid rgba(197,139,78,.35);border-radius:19px;
+ background:linear-gradient(155deg,rgba(28,24,21,.97),rgba(10,11,12,.98));
+ box-shadow:0 24px 65px rgba(0,0,0,.58),inset 0 1px rgba(255,255,255,.045);
+ backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+ color:#f5eee5;transform-origin:top left;animation:aviMenuIn .18s ease-out both;
+}
+.avi-main-menu[hidden]{display:none!important}
+@keyframes aviMenuIn{from{opacity:0;transform:translateY(-7px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.avi-menu-account{display:flex;align-items:center;gap:11px;padding:7px 8px 14px;border-bottom:1px solid rgba(197,139,78,.2)}
+.avi-menu-avatar{display:grid;place-items:center;width:39px;height:39px;flex:0 0 auto;border-radius:13px;background:linear-gradient(145deg,#a76a35,#f0bf75);color:#1a1009;font-size:16px;font-weight:800}
+.avi-menu-account-copy{display:flex;flex-direction:column;gap:4px;min-width:0}
+.avi-menu-account-copy strong{font-size:13px;color:#fff}
+.avi-menu-account-copy small{font-size:11px;color:#c5b3a1;overflow-wrap:anywhere}
+.avi-menu-section-label{padding:13px 9px 6px;color:#9e8a76;font-size:9px;font-weight:750;letter-spacing:.15em}
+.avi-menu-item{display:flex;align-items:center;gap:11px;width:100%;min-height:40px;padding:8px 9px;border:0;border-radius:11px;background:transparent;color:#eee3d7;text-align:left;font:500 12px var(--body-font);cursor:pointer;transition:background .16s,color .16s}
+.avi-menu-item:hover,.avi-menu-item:focus-visible{background:rgba(197,139,78,.13);color:#ffc879;outline:none}
+.avi-menu-icon{display:grid;place-items:center;width:27px;height:27px;flex:0 0 auto;border:1px solid rgba(197,139,78,.22);border-radius:9px;color:#e7ad65;font-size:15px}
+.avi-menu-item small{margin-left:auto;color:#998777;font-size:9px}
+.avi-menu-status{display:flex;align-items:center;gap:9px;padding:10px 10px;color:#cdbba8;font-size:11px}
+.avi-menu-status strong{margin-left:auto;color:#d7c4b0;font-size:10px;font-weight:600}
+.avi-status-dot{width:7px;height:7px;border-radius:50%;background:#ba8c55;box-shadow:0 0 10px rgba(197,139,78,.4)}
+.avi-status-dot.is-connected{background:#51d9a4;box-shadow:0 0 10px rgba(81,217,164,.55)}
+.avi-menu-logout{margin-top:8px;padding-top:11px;border-top:1px solid rgba(197,139,78,.2);color:#f0a68d}
+@media(min-width:881px){
+ body:before{background-size:auto 100vh;background-position:right center}
+ .topbar{min-height:64px!important;padding:8px 15px!important}
+ .topbar .brandmark{width:46px!important;height:46px!important;flex-basis:46px!important}
+}
+@media(max-width:1100px) and (min-width:881px){
+ body:before{background-size:auto 78vh;background-position:right bottom;background-repeat:no-repeat;opacity:.58}
+}
+@media(max-width:880px){
+ body:before{
+  background:
+   linear-gradient(180deg,rgba(7,8,9,.78),rgba(7,8,9,.94) 42%,rgba(7,8,9,.98)),
+   url("./assets/avi-login-portrait.png") right 70px / auto 48vh no-repeat;
+  opacity:.65;
+ }
+ .topbar .brandmark{width:40px!important;height:40px!important;flex-basis:40px!important}
+ .top-actions>.new-chat-button{width:40px!important;min-width:40px!important;padding:0!important;font-size:0!important}
+ .top-actions>.new-chat-button span{display:none!important}
+ .avi-main-menu{left:8px;top:calc(100% + 8px);width:min(310px,calc(100vw - 24px))}
+}
+@media(max-width:420px){
+ body:before{background-size:auto 40vh;background-position:right 86px}
+}
+
 </style>
 <meta name="avi-ui-version" content="avi-approved-mockup-v1">
 </head>
@@ -1708,6 +1776,21 @@ body {margin:0!important}
   <div class="brand">
    <button class="brandmark" id="brandProfileButton" type="button" title="Open Avi profile menu" aria-label="Open Avi profile menu"><img class="avi-brand-image" src="./avi-app-icon.jpg?v=2" alt=""></button>
    <div><div class="brandname">AVI<span>.</span></div><div class="brandtag">LOYAL. ALERT. YOURS.</div></div>
+  </div>
+  <div class="avi-main-menu" id="aviMainMenu" hidden role="menu" aria-label="Avi navigation and account">
+   <div class="avi-menu-account">
+    <span class="avi-menu-avatar" id="aviMenuAvatar">A</span>
+    <span class="avi-menu-account-copy"><strong>My Account</strong><small id="aviMenuEmail">Not signed in</small></span>
+   </div>
+   <div class="avi-menu-section-label">NAVIGATION</div>
+   <button type="button" class="avi-menu-item" data-avi-menu="home"><span class="avi-menu-icon">⌂</span><span>Home</span></button>
+   <button type="button" class="avi-menu-item" data-avi-menu="memories"><span class="avi-menu-icon">◇</span><span>Memories</span></button>
+   <button type="button" class="avi-menu-item" data-avi-menu="settings"><span class="avi-menu-icon">⚙</span><span>Settings</span></button>
+   <div class="avi-menu-section-label">APP & ACCOUNT</div>
+   <button type="button" class="avi-menu-item" data-avi-menu="install"><span class="avi-menu-icon">⇩</span><span>Install App</span><small id="aviInstallHint">Add to device</small></button>
+   <div class="avi-menu-status"><span class="avi-status-dot"></span><span>Connection</span><strong id="aviMenuConnection">Checking…</strong></div>
+   <button type="button" class="avi-menu-item" data-avi-menu="export"><span class="avi-menu-icon">⇧</span><span>Download / Export</span></button>
+   <button type="button" class="avi-menu-item avi-menu-logout" data-avi-menu="logout"><span class="avi-menu-icon">↪</span><span>Logout</span></button>
   </div>
   <div class="top-actions">
    <button class="iconbutton home-button" id="homeAvi" type="button" title="Home" aria-label="Home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9M9 21v-7h6v7"/></svg></button>
@@ -2096,7 +2179,69 @@ document.getElementById("homeAvi").addEventListener("click", () => {
  window.scrollTo({top:0,behavior:"smooth"});
 });
 const brandProfileButton = document.getElementById("brandProfileButton");
-if (brandProfileButton) brandProfileButton.addEventListener("click", () => accountChip.click());
+const aviMainMenu = document.getElementById("aviMainMenu");
+const aviMenuEmail = document.getElementById("aviMenuEmail");
+const aviMenuAvatar = document.getElementById("aviMenuAvatar");
+const aviMenuConnection = document.getElementById("aviMenuConnection");
+const aviInstallHint = document.getElementById("aviInstallHint");
+function aviRefreshMenuDetails() {
+ const email = aviSession?.user?.email || "Not signed in";
+ aviMenuEmail.textContent = email;
+ aviMenuAvatar.textContent = email === "Not signed in" ? "A" : email.charAt(0).toUpperCase();
+ const connectionText = document.querySelector("#connectionStatus .connection-text")?.textContent?.trim() || "Status unavailable";
+ aviMenuConnection.textContent = connectionText;
+ const connected = /connected|ready/i.test(connectionText) && !/disconnected|not connected/i.test(connectionText);
+ aviMainMenu.querySelector(".avi-status-dot").classList.toggle("is-connected", connected);
+ aviInstallHint.textContent = aviInstallPrompt ? "Ready" : "Browser menu";
+}
+function aviCloseMainMenu() {
+ aviMainMenu.hidden = true;
+ brandProfileButton.setAttribute("aria-expanded","false");
+}
+brandProfileButton.setAttribute("aria-haspopup","menu");
+brandProfileButton.setAttribute("aria-expanded","false");
+brandProfileButton.addEventListener("click", () => {
+ aviRefreshMenuDetails();
+ aviMainMenu.hidden = !aviMainMenu.hidden;
+ brandProfileButton.setAttribute("aria-expanded",String(!aviMainMenu.hidden));
+});
+aviMainMenu.addEventListener("click", async event => {
+ const action = event.target.closest("[data-avi-menu]")?.dataset.aviMenu;
+ if (!action) return;
+ aviCloseMainMenu();
+ if (action === "home") document.querySelector('[data-view="home"]')?.click();
+ if (action === "memories") document.querySelector('[data-view="memories"]')?.click();
+ if (action === "settings") {
+  if (voiceSettingsPanel.hidden) voiceSettingsToggle.click();
+  voiceSettingsPanel.scrollIntoView({behavior:"smooth",block:"nearest"});
+ }
+ if (action === "install") installAviButton.click();
+ if (action === "logout") {
+  if (aviAuthClient) await aviAuthClient.auth.signOut();
+ }
+ if (action === "export") {
+  const entries = [...document.querySelectorAll(".messages .message")].map(node => ({
+   role: node.classList.contains("user") ? "user" : "avi",
+   text: node.innerText.trim()
+  })).filter(item => item.text);
+  const payload = {
+   app: "Avi AI",
+   exportedAt: new Date().toISOString(),
+   account: aviSession?.user?.email || null,
+   scope: "Current visible conversation",
+   messages: entries
+  };
+  const blob = new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url; link.download = "avi-conversation-"+new Date().toISOString().slice(0,10)+".json";
+  document.body.appendChild(link); link.click(); link.remove(); URL.revokeObjectURL(url);
+ }
+});
+document.addEventListener("click", event => {
+ if (!aviMainMenu.hidden && !aviMainMenu.contains(event.target) && !brandProfileButton.contains(event.target)) aviCloseMainMenu();
+});
+document.addEventListener("keydown", event => { if(event.key === "Escape") aviCloseMainMenu(); });
 accountChip.addEventListener("click", () => {
  if (!aviSession) {
   document.getElementById("authGate").hidden = false;
