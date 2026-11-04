@@ -2213,7 +2213,7 @@ authForm.addEventListener("submit", async event => {
   authModeToggle.disabled = false;
  }
 });
-async function aviApplySession(session) {
+async function aviApplySessionInternal(session) {
   const previousUserId = aviSession?.user?.id || null;
   const nextUserId = session?.user?.id || null;
   if(previousUserId===nextUserId && nextUserId && aviConversationSyncReady && aviMemorySyncReady) return;
@@ -2282,12 +2282,26 @@ async function aviApplySession(session) {
   await syncAviMemories();
   try{localStorage.setItem(importKey,"yes");}catch(error){}
   aviStartMemoryRealtime(session.user.id);
+  aviStartMemorySyncPolling(session.user.id);
   await aviLoadCloudConversation();
   aviStartCloudSyncPolling();
  } catch(error) {
   console.error("Could not load Avi cloud memory:",error);
   authStatus.textContent = "Signed in, but memory sync could not load: " + error.message;
  }
+}
+let aviSessionApplyPromise=null;
+let aviSessionApplyUserId=null;
+async function aviApplySession(session){
+ const userId=session?.user?.id||null;
+ if(userId&&aviSession?.user?.id===userId&&aviConversationSyncReady&&aviMemorySyncReady)return;
+ if(userId&&aviSessionApplyPromise&&aviSessionApplyUserId===userId)return aviSessionApplyPromise;
+ const task=aviApplySessionInternal(session);
+ if(userId){
+  aviSessionApplyUserId=userId;aviSessionApplyPromise=task;
+  try{return await task;}finally{if(aviSessionApplyPromise===task){aviSessionApplyPromise=null;aviSessionApplyUserId=null;}}
+ }
+ return task;
 }
 function savePersonalMemoryLocalOnly() {
  try { localStorage.setItem(PROFILE_MEMORY_KEY,JSON.stringify(personalMemory.slice(-50))); } catch(error) {}
@@ -2304,15 +2318,13 @@ async function syncAviMemories() {
   if (!aviSession || aviSession.user.id !== userId) throw new Error("Avi account changed during memory sync.");
   const existing = await aviAuthClient.from("avi_personal_memories").select("memory").eq("user_id",userId);
   if(existing.error)throw existing.error;
-  const desiredSet=new Set(desired.map(value=>value.toLowerCase()));
-  const stale=(existing.data||[]).map(row=>row.memory).filter(value=>!desiredSet.has(String(value).toLowerCase()));
-  if(stale.length){
-   const removed=await aviAuthClient.from("avi_personal_memories").delete().eq("user_id",userId).in("memory",stale);
-   if(removed.error)throw removed.error;
-  }
-  if(desired.length){
+  // Never let an older device cache delete another device's cloud memories.
+  // Explicit Forget/Delete actions are the only paths that remove cloud rows.
+  const existingSet=new Set((existing.data||[]).map(row=>String(row.memory).toLowerCase()));
+  const missing=desired.filter(value=>!existingSet.has(value.toLowerCase()));
+  if(missing.length){
    const saved=await aviAuthClient.from("avi_personal_memories").upsert(
-    desired.map(memory=>({user_id:userId,memory})),
+    missing.map(memory=>({user_id:userId,memory})),
     {onConflict:"user_id,memory",ignoreDuplicates:true}
    );
    if(saved.error)throw saved.error;
@@ -2341,7 +2353,16 @@ function aviStartMemoryRealtime(userId){
  if(aviMemoryRealtimeChannel)aviAuthClient.removeChannel(aviMemoryRealtimeChannel);
  aviMemoryRealtimeChannel=aviAuthClient.channel("avi-personal-memories-"+userId)
   .on("postgres_changes",{event:"*",schema:"public",table:"avi_personal_memories",filter:"user_id=eq."+userId},()=>{void aviRefreshCloudMemories(userId).catch(error=>console.warn("Avi memory realtime refresh failed:",error));})
-  .subscribe();
+  .subscribe((state)=>{if(state==="CHANNEL_ERROR"||state==="TIMED_OUT"||state==="CLOSED")console.warn("AVI memory realtime status:",state);});
+}
+let aviMemorySyncPollTimer=null;
+function aviStartMemorySyncPolling(userId){
+ if(aviMemorySyncPollTimer)window.clearInterval(aviMemorySyncPollTimer);
+ aviMemorySyncPollTimer=window.setInterval(()=>{
+  if(aviSession?.user?.id===userId&&document.visibilityState==="visible"){
+   void aviRefreshCloudMemories(userId).catch(error=>console.warn("AVI memory refresh failed:",error));
+  }
+ },15000);
 }
 async function deleteCloudMemories(memories) {
  if (!aviSession) return null;
@@ -2459,6 +2480,15 @@ if (aviAuthClient) {
  authStatus.textContent = "Avi could not load the Supabase sign-in library. Check your connection and reload the page.";
 }
 
+if(aviAuthClient){
+ window.setTimeout(async()=>{
+  try{
+   const restored=await aviAuthClient.auth.getSession();
+   if(restored.error)throw restored.error;
+   if(restored.data?.session)await aviApplySession(restored.data.session);
+  }catch(error){console.error("AVI session bootstrap failed:",error);authStatus.textContent="Could not restore your signed-in session: "+(error.message||"Please sign in again.");}
+ },0);
+}
 const messages = document.getElementById("messages");
 const form = document.getElementById("chatForm");
 const input = document.getElementById("chatInput");
@@ -2594,6 +2624,21 @@ function aviRenderCurrentConversation() {
   if(conversationHistory.length)restoreConversationHistory();
   else addMessage("Hey, I'm Avi. 💠 What's on your mind?","avi");
 }
+async function aviHydrateCloudConversations(rows,userId){
+ const conversations=Array.isArray(rows)?rows:[];
+ if(!conversations.length)return conversations;
+ const ids=conversations.map(row=>row.id);
+ const result=await aviAuthClient.from("avi_chat_messages")
+  .select("id,conversation_id,user_id,sequence,role,content,created_at")
+  .eq("user_id",userId).in("conversation_id",ids).order("sequence",{ascending:true});
+ if(result.error)throw result.error;
+ const grouped=new Map();
+ (result.data||[]).forEach(message=>{
+  if(!grouped.has(message.conversation_id))grouped.set(message.conversation_id,[]);
+  grouped.get(message.conversation_id).push({id:message.id,role:message.role==="assistant"?"model":message.role,text:message.content,timestamp:message.created_at});
+ });
+ return conversations.map(row=>({...row,messages:grouped.get(row.id)?.length?grouped.get(row.id):(Array.isArray(row.messages)?row.messages:[])}));
+}
 async function aviLoadCloudConversation() {
   if(!aviAuthClient||!aviSession)return;
   const userId=aviSession.user.id;
@@ -2601,7 +2646,7 @@ async function aviLoadCloudConversation() {
     const result=await aviAuthClient.from("avi_chat_conversations").select("id,user_id,title,messages,created_at,updated_at").eq("user_id",userId).order("updated_at",{ascending:false});
     if(result.error)throw result.error;
     if(!aviSession||aviSession.user.id!==userId)return;
-    aviConversations=result.data||[];
+    aviConversations=await aviHydrateCloudConversations(result.data||[],userId);
     let selectedId=null;
     try{selectedId=localStorage.getItem(AVI_ACTIVE_CONVERSATION_KEY);}catch(error){}
     let selected=aviConversations.find(item=>item.id===selectedId)||aviConversations[0];
@@ -2645,13 +2690,13 @@ async function aviRefreshCloudConversations() {
     const result=await aviAuthClient.from("avi_chat_conversations").select("id,user_id,title,messages,created_at,updated_at").eq("user_id",userId).order("updated_at",{ascending:false});
     if(result.error)throw result.error;
     if(!aviSession||aviSession.user.id!==userId)return;
-    aviConversations=result.data||[];
+    aviConversations=await aviHydrateCloudConversations(result.data||[],userId);
     aviCacheConversations();
     const active=aviConversations.find(item=>item.id===activeConversationId);
     if(active && document.visibilityState==="visible"){
       const localLatest=conversationHistory[conversationHistory.length-1];
       const remoteLatest=(active.messages||[])[(active.messages||[]).length-1];
-      if((active.messages||[]).length>conversationHistory.length || (remoteLatest?.timestamp||"")>(localLatest?.timestamp||"")){
+      if(JSON.stringify(active.messages||[])!==JSON.stringify(conversationHistory||[])){
         conversationHistory=active.messages||[];
         try{localStorage.setItem(MEMORY_KEY,JSON.stringify(conversationHistory));}catch(error){}
         aviRenderCurrentConversation();
@@ -2682,7 +2727,7 @@ function aviStartConversationRealtime(userId) {
       }
       aviCacheConversations();
       if(aviRecentManager?.classList.contains("open"))aviRenderRecentConversations();
-    }).subscribe();
+    }).subscribe((state)=>{if(state==="CHANNEL_ERROR"||state==="TIMED_OUT"||state==="CLOSED")console.warn("AVI conversation realtime status:",state);});
 }
 function aviStartCloudSyncPolling() {
   if(aviCloudSyncPollTimer)window.clearInterval(aviCloudSyncPollTimer);
