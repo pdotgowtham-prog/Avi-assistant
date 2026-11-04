@@ -1,0 +1,26 @@
+name: AVI Phase 4A checks
+
+on:
+  push:
+    branches:
+      - phase-4a-memory-consistency
+  pull_request:
+    branches:
+      - main
+      - phase-4a-memory-consistency
+
+permissions:
+  contents: read
+
+jobs:
+  memory-consistency:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Parse frontend scripts and verify memory invariants
+        run: node scripts/check-avi-memory.mjs
