@@ -1863,7 +1863,7 @@ body:before{
  .sidebar .navbutton:not([data-view="home"]):not([data-view="conversations"]):not([data-view="memories"]){display:none!important}
  .sidebar .navbutton[data-view="home"],.sidebar .navbutton[data-view="conversations"],.sidebar .navbutton[data-view="memories"]{
   display:flex!important;visibility:visible!important;opacity:1!important;flex:1 1 33.333%!important;width:33.333%!important;min-width:0!important;height:100%!important;min-height:0!important;
-  justify-content:center!important;align-items:center!important;flex-direction:row!important;gap:5px!important;padding:3px!important;font-size:10px!important;white-space:nowrap!important
+  justify-content:center!important;align-items:center!important;flex-direction:column!important;gap:1px!important;padding:2px!important;font-size:9px!important;white-space:normal!important;text-align:center!important;line-height:1.1!important
  }
  .sidebar .navbutton .navicon{width:22px!important;height:22px!important;flex:0 0 22px!important;font-size:15px!important}
  .recent-toolbar{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:8px!important}
@@ -2652,7 +2652,7 @@ async function aviLoadCloudConversation() {
   try{
     const result=await aviAuthClient.from("avi_chat_conversations").select("id,user_id,title,messages,created_at,updated_at").eq("user_id",userId).order("updated_at",{ascending:false});
     if(result.error)throw result.error;
-    if(!aviSession||aviSession.user.id!==userId)return;
+    if(!aviSession||aviSession.user.id!==userId)return false;
     aviConversations=await aviHydrateCloudConversations(result.data||[],userId);
     let selectedId=null;
     try{selectedId=localStorage.getItem(AVI_ACTIVE_CONVERSATION_KEY);}catch(error){}
@@ -2690,7 +2690,7 @@ async function aviLoadCloudConversation() {
   }
 }
 async function aviRefreshCloudConversations() {
-  if(!aviSession||!aviAuthClient||aviCloudRefreshBusy)return;
+  if(!aviSession||!aviAuthClient||aviCloudRefreshBusy)return false;
   aviCloudRefreshBusy=true;
   const userId=aviSession.user.id;
   try{
@@ -2715,7 +2715,8 @@ async function aviRefreshCloudConversations() {
       }
     }
     if(aviRecentManager?.classList.contains("open"))aviRenderRecentConversations();
-  }catch(error){console.warn("AVI conversation refresh failed:",error);}
+    return true;
+  }catch(error){console.warn("AVI conversation refresh failed:",error);return false;}
   finally{aviCloudRefreshBusy=false;}
 }
 function aviStartConversationRealtime(userId) {
@@ -2766,7 +2767,7 @@ async function saveConversationHistory() {
     return true;
   });
   try{await aviConversationSaveChain;return true;}
-  catch(error){aviQueueConversationWrite(snapshot);console.error("Avi conversation sync failed:",error);if(typeof status!=="undefined")status.textContent="Memory sync failed – retry available.";return false;}
+  catch(error){aviQueueConversationWrite(snapshot);console.error("Avi conversation sync failed:",error);if(typeof status!=="undefined")status.textContent="Conversation cloud sync failed – retry available.";return false;}
 }
 async function aviStartNewConversation() {
   if(!aviSession){authGate.hidden=false;return;}
@@ -2825,8 +2826,9 @@ function aviRenderRecentConversations(){
 async function aviOpenRecentConversations(){
  aviRecentManager.classList.add("open");document.body.style.overflow="hidden";
  aviRecentStatus.textContent="Loading conversations from your account…";
- await aviRefreshCloudConversations();aviRenderRecentConversations();
- aviRecentStatus.textContent=aviSession?"Synced conversation history.":"Sign in to access cloud conversations.";
+ if(!aviSession){aviRecentStatus.textContent="Sign in to access your cloud conversations.";aviRenderRecentConversations();return;}
+ const synced=await aviRefreshCloudConversations();aviRenderRecentConversations();
+ aviRecentStatus.textContent=synced?"Cloud conversations are up to date.":"Could not refresh cloud history. Check your connection and try again.";
 }
 async function aviOpenConversation(id){
  const row=aviConversations.find(item=>item.id===id);if(!row)return;
