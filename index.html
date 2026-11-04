@@ -3392,7 +3392,23 @@ function aviRenderMemoryManager(){
   const cloud=document.createElement("div");cloud.className="memory-item-dates";cloud.textContent=op.server_record?"Latest cloud version: "+op.server_record.memory:"The cloud record is unavailable.";panel.append(note,cloud);
   const actions=document.createElement("div");actions.className="memory-item-actions";
   const keep=document.createElement("button");keep.type="button";keep.className="memory-action";keep.textContent="Keep cloud version";keep.addEventListener("click",()=>void aviResolveMemoryConflict(op.operation_id,"cloud"));actions.append(keep);
-  if(op.conflict_status!=="duplicate_conflict"&&op.server_record&&!op.server_record.deleted_at){const apply=document.createElement("button");apply.type="button";apply.className="memory-action";apply.textContent="Apply my version";apply.addEventListener("click",()=>void aviResolveMemoryConflict(op.operation_id,"mine"));actions.append(apply);}
+  if(op.conflict_status==="duplicate_conflict"){
+   const editConflict=document.createElement("textarea");editConflict.className="memory-inline-editor";editConflict.rows=2;editConflict.maxLength=2000;editConflict.value=op.memory||"";editConflict.setAttribute("aria-label","Change duplicate memory text");
+   const retryText=document.createElement("button");retryText.type="button";retryText.className="memory-action";retryText.textContent="Retry with different text";
+   retryText.addEventListener("click",async()=>{
+    const clean=editConflict.value.trim();if(!clean){aviSetMemoryStatus("A memory cannot be empty.");return;}
+    if(personalMemory.some(value=>value.toLowerCase()===clean.toLowerCase()&&value!==op.memory)){aviSetMemoryStatus("That text is already saved. Choose different wording.");return;}
+    if(!op.server_record||op.server_record.deleted_at){aviSetMemoryStatus("The cloud record is no longer available.");return;}
+    const queue=aviReadMemoryQueue(aviSession.user.id),pending=queue.find(item=>item.operation_id===op.operation_id);if(!pending)return;
+    pending.operation_id=aviMakeId();pending.memory=clean;pending.base_memory=pending.server_record.memory;pending.base_revision=Number(pending.server_record.revision)||1;pending.sync_status="pending";
+    delete pending.server_record;delete pending.conflict_status;delete pending.last_error;
+    if(!aviWriteMemoryQueue(aviSession.user.id,queue)){aviSetMemoryStatus("Could not save this conflict resolution.");return;}
+    await aviRefreshCloudMemories(aviSession.user.id);await aviFlushMemoryQueue(aviSession.user.id);
+   });
+   panel.append(editConflict,retryText);
+  }else if(op.server_record&&!op.server_record.deleted_at){
+   const apply=document.createElement("button");apply.type="button";apply.className="memory-action";apply.textContent="Apply my version";apply.addEventListener("click",()=>void aviResolveMemoryConflict(op.operation_id,"mine"));actions.append(apply);
+  }
   panel.append(actions);aviMemoryList.append(panel);
  });
  if(!indexed.length&&!conflicts.length){const empty=document.createElement("div");empty.className="memory-empty";empty.textContent=personalMemory.length?"No memories match this search or filter.":"No saved memories yet. Add a detail above, or tell Avi: “Remember that …”";aviMemoryList.append(empty);return;}
