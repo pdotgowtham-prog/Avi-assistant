@@ -2591,8 +2591,15 @@ function aviQueueConversationWrite(conversation) {
 }
 async function aviWriteCloudConversation(conversation) {
   if(!aviAuthClient||!aviSession) throw new Error("Sign in to sync this conversation.");
-  const payload={id:conversation.id,user_id:aviSession.user.id,title:conversation.title||aviConversationTitle(conversation.messages),messages:(conversation.messages||[]),created_at:conversation.created_at||new Date().toISOString(),updated_at:new Date().toISOString()};
-  const result=await aviAuthClient.from("avi_chat_conversations").upsert(payload,{onConflict:"id"}).select("id,user_id,title,messages,last_message_preview,created_at,updated_at").single();
+  const messagesWithIds=(conversation.messages||[]).map(item=>({
+   ...item,id:item.id||aviMakeId(),timestamp:item.timestamp||new Date().toISOString()
+  }));
+  const result=await aviAuthClient.rpc("avi_save_chat_conversation",{
+   p_id:conversation.id,
+   p_title:conversation.title||aviConversationTitle(messagesWithIds),
+   p_messages:messagesWithIds,
+   p_created_at:conversation.created_at||new Date().toISOString()
+  }).single();
   if(result.error) throw result.error;
   return result.data;
 }
@@ -2754,6 +2761,7 @@ async function saveConversationHistory() {
   if(!aviSession||!aviAuthClient||!activeConversationId)return false;
   const userId=aviSession.user.id;
   const current=aviConversations.find(item=>item.id===activeConversationId)||{id:activeConversationId,user_id:userId,created_at:new Date().toISOString()};
+  conversationHistory=conversationHistory.map(item=>({...item,id:item.id||aviMakeId(),timestamp:item.timestamp||new Date().toISOString()}));
   const snapshot={...current,id:activeConversationId,user_id:userId,title:(current.title && current.title!=="New conversation" ? current.title : aviConversationTitle(conversationHistory)),messages:[...conversationHistory],created_at:current.created_at||new Date().toISOString(),updated_at:new Date().toISOString()};
   aviConversations=[snapshot,...aviConversations.filter(item=>item.id!==snapshot.id)];
   aviCacheConversations();
@@ -2761,6 +2769,8 @@ async function saveConversationHistory() {
   aviConversationSaveChain=aviConversationSaveChain.then(async()=>{
     if(!aviSession||aviSession.user.id!==userId)throw new Error("Account changed before sync.");
     const saved=await aviWriteCloudConversation(snapshot);
+    conversationHistory=saved.messages||conversationHistory;
+    try{localStorage.setItem(MEMORY_KEY,JSON.stringify(conversationHistory));}catch(error){}
     const index=aviConversations.findIndex(item=>item.id===saved.id);
     if(index>=0)aviConversations[index]=saved;else aviConversations.unshift(saved);
     aviCacheConversations();
