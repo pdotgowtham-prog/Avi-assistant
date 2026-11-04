@@ -2377,6 +2377,16 @@ async function aviUpdateMemory(previous,next){
  const clean=String(next||"").trim(),meta=aviMemoryRecords.get(previous);
  if(!clean)throw new Error("A memory cannot be empty.");
  if(!aviSession){const index=personalMemory.indexOf(previous);if(index>=0)personalMemory[index]=clean;aviMemoryRecords.delete(previous);aviMemoryRecords.set(clean,{created_at:meta?.created_at||new Date().toISOString(),updated_at:new Date().toISOString()});savePersonalMemoryLocalOnly();return true;}
+ if(meta?.conflictOpId){
+  const queue=aviReadMemoryQueue(aviSession.user.id),op=queue.find(item=>item.operation_id===meta.conflictOpId);
+  if(!op||op.sync_status!=="conflict"||!op.server_record||op.server_record.deleted_at)throw new Error("The conflicted cloud record is no longer available.");
+  op.operation_id=aviMakeId();op.memory=clean;op.base_memory=op.server_record.memory;op.base_revision=Number(op.server_record.revision)||1;op.sync_status="pending";
+  delete op.server_record;delete op.conflict_status;delete op.last_error;
+  if(!aviWriteMemoryQueue(aviSession.user.id,queue))throw new Error("Could not persist conflict resolution.");
+  const index=personalMemory.indexOf(previous);if(index>=0)personalMemory[index]=clean;
+  aviMemoryRecords.delete(previous);aviMemoryRecords.set(clean,{id:op.memory_id,revision:op.base_revision,created_at:meta.created_at,updated_at:new Date().toISOString(),pending:true});
+  savePersonalMemoryLocalOnly();if(navigator.onLine)await aviFlushMemoryQueue(aviSession.user.id);return true;
+ }
  if(!meta?.id)throw new Error("Cloud record metadata is missing. Refresh and try again.");
  aviQueueMemoryOperation("update",meta,clean,meta.revision||1,previous);
  const index=personalMemory.indexOf(previous);if(index>=0)personalMemory[index]=clean;aviMemoryRecords.delete(previous);aviMemoryRecords.set(clean,{id:meta.id,revision:meta.revision||1,created_at:meta.created_at,updated_at:new Date().toISOString(),pending:true});savePersonalMemoryLocalOnly();
@@ -2396,7 +2406,7 @@ async function aviResolveMemoryConflict(operationId,choice){
  const op=queue[index],server=op.server_record;
  if(choice==="cloud"){
   const ids=new Set(queue.slice(index).filter(item=>item.memory_id===op.memory_id).map(item=>item.operation_id));
-  aviWriteMemoryQueue(userId,queue.filter(item=>!ids.has(item.operation_id)));await aviRefreshCloudMemories(userId);aviSetMemoryStatus("Kept the latest cloud version.");return;
+  aviWriteMemoryQueue(userId,queue.filter(item=>!ids.has(item.operation_id)));await aviRefreshCloudMemories(userId);aviSetMemoryStatus("Kept the latest cloud version.");await aviFlushMemoryQueue(userId);return;
  }
  if(choice==="mine"){
   if(op.conflict_status==="duplicate_conflict"){aviSetMemoryStatus("This text already exists in another memory. Edit it to different text before retrying.");return;}
@@ -3341,7 +3351,7 @@ function aviRenderMemoryManager(){
   const value=document.createElement("div");value.className="memory-item-text";value.textContent=memory;
   const dates=document.createElement("div");dates.className="memory-item-dates";dates.textContent=(meta.pending?"Pending sync · ":"")+(meta.created_at?"Added "+aviMemoryDate(meta.created_at)+(meta.updated_at&&meta.updated_at!==meta.created_at?" · Updated "+aviMemoryDate(meta.updated_at):""):"Saved on this device");
   body.append(value,dates);const actions=document.createElement("div");actions.className="memory-item-actions";
-  const edit=document.createElement("button");edit.type="button";edit.className="memory-action";edit.textContent="Edit";edit.disabled=!!meta.conflict;
+  const edit=document.createElement("button");edit.type="button";edit.className="memory-action";edit.textContent="Edit";edit.disabled=false;
   edit.addEventListener("click",()=>{aviMemoryEditIndex=aviMemoryEditIndex===index?-1:index;aviRenderMemoryManager();const editor=aviMemoryList.querySelector('[data-memory-editor="'+index+'"]');if(editor){editor.focus();editor.setSelectionRange(editor.value.length,editor.value.length);}});
   const remove=document.createElement("button");remove.type="button";remove.className="memory-action delete";remove.textContent="Delete";
   remove.addEventListener("click",async()=>{if(!window.confirm("Delete this saved memory?"))return;try{await aviDeleteMemory(memory);aviMemoryEditIndex=-1;aviRenderMemoryManager();aviSetMemoryStatus(aviSession?(navigator.onLine?"Deletion synced or queued.":"Deletion queued until connection returns."):"Memory deleted from this device.");}catch(error){aviSetMemoryStatus("Could not queue deletion: "+(error.message||""));}});
