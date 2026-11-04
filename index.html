@@ -2319,6 +2319,10 @@ function aviLoadCachedMemoryState(userId){
   personalMemory=personalMemory.slice(-50);savePersonalMemoryLocalOnly();return true;
  }catch(error){console.warn("AVI could not restore the account memory cache:",error);return false;}
 }
+function aviMakeMemoryUuid(){
+ if(window.crypto&&typeof window.crypto.randomUUID==="function")return window.crypto.randomUUID();
+ return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{const r=Math.floor(Math.random()*16);return (c==="x"?r:(r&3|8)).toString(16);});
+}
 const AVI_MEMORY_QUEUE_PREFIX="avi_memory_ops_v1_";
 function aviMemoryQueueKey(userId){return AVI_MEMORY_QUEUE_PREFIX+userId;}
 function aviReadMemoryQueue(userId){
@@ -2330,7 +2334,7 @@ function aviWriteMemoryQueue(userId,queue){
 function aviQueueMemoryOperation(action,meta,memory,baseRevision=0,baseMemory=null){
  const userId=aviSession?.user?.id;if(!userId)throw new Error("Sign in before creating a cloud memory operation.");
  const queue=aviReadMemoryQueue(userId);
- const op={operation_id:aviMakeId(),memory_id:meta?.id||aviMakeId(),action,memory:memory??null,base_memory:baseMemory,base_revision:Number(baseRevision)||0,created_at:new Date().toISOString(),sync_status:"pending"};
+ const op={operation_id:aviMakeMemoryUuid(),memory_id:meta?.id||aviMakeMemoryUuid(),action,memory:memory??null,base_memory:baseMemory,base_revision:Number(baseRevision)||0,created_at:new Date().toISOString(),sync_status:"pending"};
  queue.push(op);if(!aviWriteMemoryQueue(userId,queue))throw new Error("Could not persist the pending memory operation.");
  return op;
 }
@@ -2419,7 +2423,7 @@ async function aviCreateMemory(memory){
  if(personalMemory.length>=50)throw new Error("Avi can currently keep up to 50 memories. Delete one before adding another.");
  if(!aviSession){personalMemory.push(clean);aviMemoryRecords.set(clean,{created_at:new Date().toISOString(),updated_at:new Date().toISOString()});savePersonalMemoryLocalOnly();return true;}
  if(!aviMemorySyncReady)throw new Error("Your cloud memory list is still loading. Try again in a moment.");
- const op=aviQueueMemoryOperation("create",{id:aviMakeId()},clean,0,null);
+ const op=aviQueueMemoryOperation("create",{id:aviMakeMemoryUuid()},clean,0,null);
  personalMemory.push(clean);aviMemoryRecords.set(clean,{id:op.memory_id,revision:0,created_at:op.created_at,updated_at:op.created_at,pending:true});savePersonalMemoryLocalOnly();
  if(navigator.onLine)await aviFlushMemoryQueue(aviSession.user.id);return true;
 }
@@ -2430,7 +2434,7 @@ async function aviUpdateMemory(previous,next){
  if(meta?.conflictOpId){
   const queue=aviReadMemoryQueue(aviSession.user.id),op=queue.find(item=>item.operation_id===meta.conflictOpId);
   if(!op||op.sync_status!=="conflict"||!op.server_record||op.server_record.deleted_at)throw new Error("The conflicted cloud record is no longer available.");
-  op.operation_id=aviMakeId();op.memory=clean;op.base_memory=op.server_record.memory;op.base_revision=Number(op.server_record.revision)||1;op.sync_status="pending";
+  op.operation_id=aviMakeMemoryUuid();op.memory=clean;op.base_memory=op.server_record.memory;op.base_revision=Number(op.server_record.revision)||1;op.sync_status="pending";
   delete op.server_record;delete op.conflict_status;delete op.last_error;
   if(!aviWriteMemoryQueue(aviSession.user.id,queue))throw new Error("Could not persist conflict resolution.");
   const index=personalMemory.indexOf(previous);if(index>=0)personalMemory[index]=clean;
@@ -2461,7 +2465,7 @@ async function aviResolveMemoryConflict(operationId,choice){
  if(choice==="mine"){
   if(op.conflict_status==="duplicate_conflict"){aviSetMemoryStatus("This text already exists in another memory. Edit it to different text before retrying.");return;}
   if(!server||server.deleted_at){aviSetMemoryStatus("The cloud memory is deleted. The pending change cannot overwrite that deletion.");return;}
-  op.operation_id=aviMakeId();op.base_revision=Number(server.revision)||1;op.base_memory=server.memory;op.sync_status="pending";delete op.server_record;delete op.conflict_status;delete op.last_error;
+  op.operation_id=aviMakeMemoryUuid();op.base_revision=Number(server.revision)||1;op.base_memory=server.memory;op.sync_status="pending";delete op.server_record;delete op.conflict_status;delete op.last_error;
   aviWriteMemoryQueue(userId,queue);aviSetMemoryStatus("Retrying your version against the latest cloud revision…");await aviFlushMemoryQueue(userId);
  }
 }
@@ -3401,7 +3405,7 @@ function aviRenderMemoryManager(){
     if(personalMemory.some(value=>value.toLowerCase()===clean.toLowerCase()&&value!==op.memory)){aviSetMemoryStatus("That text is already saved. Choose different wording.");return;}
     if(!op.server_record||op.server_record.deleted_at){aviSetMemoryStatus("The cloud record is no longer available.");return;}
     const queue=aviReadMemoryQueue(aviSession.user.id),pending=queue.find(item=>item.operation_id===op.operation_id);if(!pending)return;
-    pending.operation_id=aviMakeId();pending.memory=clean;pending.base_memory=pending.server_record.memory;pending.base_revision=Number(pending.server_record.revision)||1;pending.sync_status="pending";
+    pending.operation_id=aviMakeMemoryUuid();pending.memory=clean;pending.base_memory=pending.server_record.memory;pending.base_revision=Number(pending.server_record.revision)||1;pending.sync_status="pending";
     delete pending.server_record;delete pending.conflict_status;delete pending.last_error;
     if(!aviWriteMemoryQueue(aviSession.user.id,queue)){aviSetMemoryStatus("Could not save this conflict resolution.");return;}
     await aviRefreshCloudMemories(aviSession.user.id);await aviFlushMemoryQueue(aviSession.user.id);
