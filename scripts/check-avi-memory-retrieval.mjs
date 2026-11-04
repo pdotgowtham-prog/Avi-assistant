@@ -30,7 +30,7 @@ assert.ok(bounded.join("").length <= 1000, "Result text must respect the context
 
 const html = readFileSync("index.html", "utf8");
 const edge = readFileSync("supabase/functions/avi-chat/index.ts", "utf8");
-assert.match(html, /Authorization:\s*["']Bearer ["']\s*\+\s*sessionData\.session\.access_token/,
+assert.ok(html.includes('Authorization: "Bearer " + sessionData.session.access_token'),
   "Browser must send the current authenticated session JWT");
 assert.match(html, /body:\s*JSON\.stringify\(\{\s*message:\s*text,\s*history:/,
   "Browser request must not include its local saved-memory list");
