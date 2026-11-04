@@ -3042,30 +3042,28 @@ window.addEventListener("offline",()=>aviSetConnectionState("disconnected"));
 window.addEventListener("online",()=>aviSetConnectionState("disconnected"));
 async function respondToText(text) {
   aviSetConnectionState("connecting");
-  const response = await fetch(
-    SUPABASE_FUNCTION_URL,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "apikey": SUPABASE_PUBLISHABLE_KEY,
-        "Authorization": "Bearer " + SUPABASE_PUBLISHABLE_KEY
-      },
-      body: JSON.stringify({ message: text, history: conversationHistory.slice(-12), memory: personalMemory })
-    }
-  );
+  const { data: sessionData, error: sessionError } = await aviAuthClient.auth.getSession();
+  if (sessionError || !sessionData?.session?.access_token) {
+    aviSetConnectionState("disconnected");
+    throw new Error("Please sign in again to use your private Avi assistant.");
+  }
+  const response = await fetch(SUPABASE_FUNCTION_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": SUPABASE_PUBLISHABLE_KEY,
+      "Authorization": "Bearer " + sessionData.session.access_token
+    },
+    // Saved memories are retrieved by the authenticated backend, never supplied by the browser.
+    body: JSON.stringify({ message: text, history: conversationHistory.slice(-12) })
+  });
 
   const data = await response.json();
-
   if (!response.ok) {
     console.error("Avi AI error:", data);
     throw new Error(data.error || "AI request failed");
   }
-
-  if (!data.reply) {
-    throw new Error("No reply received from Avi.");
-  }
-
+  if (!data.reply) throw new Error("No reply received from Avi.");
   aviSetConnectionState("connected");
   return data.reply;
 }
