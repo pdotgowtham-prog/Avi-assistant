@@ -2671,7 +2671,7 @@ async function saveConversationHistory() {
   if(!aviSession||!aviAuthClient||!activeConversationId)return false;
   const userId=aviSession.user.id;
   const current=aviConversations.find(item=>item.id===activeConversationId)||{id:activeConversationId,user_id:userId,created_at:new Date().toISOString()};
-  const snapshot={...current,id:activeConversationId,user_id:userId,title:aviConversationTitle(conversationHistory),messages:[...conversationHistory],created_at:current.created_at||new Date().toISOString(),updated_at:new Date().toISOString()};
+  const snapshot={...current,id:activeConversationId,user_id:userId,title:(current.title && current.title!=="New conversation" ? current.title : aviConversationTitle(conversationHistory)),messages:[...conversationHistory],created_at:current.created_at||new Date().toISOString(),updated_at:new Date().toISOString()};
   aviConversations=[snapshot,...aviConversations.filter(item=>item.id!==snapshot.id)];
   aviCacheConversations();
   if(!aviConversationSyncReady||!navigator.onLine){aviQueueConversationWrite(snapshot);if(typeof status!=="undefined")status.textContent="Saved locally – waiting for connection.";return false;}
